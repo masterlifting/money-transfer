@@ -5,7 +5,7 @@ import { TransactionStatus } from './TransactionTypes';
 
 export interface ITransaction {
   id: number;
-  staus: TransactionStatus;
+  status: TransactionStatus;
   from: IUser;
   to: IUser;
   amount: number;

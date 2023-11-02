@@ -31,7 +31,7 @@ export const Transaction = ({ transaction }: ITransactionProps) => {
         <span>{transaction.from.name}</span>
         <span>${transaction.amount}</span>
         <span>{transaction.to.name}</span>
-        <span>{transaction.staus}</span>
+        <span>{transaction.status}</span>
       </div>
       {details && <TransactionDetails />}
     </div>

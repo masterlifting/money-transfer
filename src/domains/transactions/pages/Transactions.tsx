@@ -7,7 +7,7 @@ export const Transactions = () => {
   const transactions: ITransaction[] = [
     {
       id: 1,
-      staus: 'pending',
+      status: 'pending',
       date: '2021-01-01',
       amount: 100,
       from: {
@@ -21,7 +21,7 @@ export const Transactions = () => {
     },
     {
       id: 2,
-      staus: 'pending',
+      status: 'pending',
       date: '2021-01-02',
       amount: 200,
       from: {
@@ -35,7 +35,7 @@ export const Transactions = () => {
     },
     {
       id: 3,
-      staus: 'pending',
+      status: 'pending',
       date: '2021-01-03',
       amount: 300,
       from: {
