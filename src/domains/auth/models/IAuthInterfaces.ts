@@ -1,8 +1,6 @@
 /** @format */
 
 export interface IUser {
-  id: string;
+  id: number;
   name: string;
-  email: string;
-  avatar: string;
 }
