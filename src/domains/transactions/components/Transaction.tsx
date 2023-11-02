@@ -10,30 +10,39 @@ interface ITransactionProps {
 
 export const Transaction = ({ transaction }: ITransactionProps) => {
   const [details, setDetails] = useState(false);
-  const className = `
+
+  const transactionRowClassName = `
   flex 
-  justify-between 
-  items-center 
-  border-b-2 
-  border-gray-200 
+  justify-between
+  items-center
   p-2 
+  rounded-md
   text-gray-600 
   text-sm 
-  hover:bg-gray-100 
+  hover:bg-yellow-200 
   cursor-pointer 
-  transition-all 
+  transition-all
+  ${details ? 'bg-yellow-100' : ''}
   duration-500 ease-in-out`;
 
+  const repeatButtonClassName = `
+  bg-blue-300
+  text-white
+  p-1
+  rounded-md
+  hover:bg-blue-500`;
+
   return (
-    <div>
-      <div onClick={() => setDetails(!details)} className={className}>
+    <>
+      <div className={transactionRowClassName} onClick={() => setDetails(!details)}>
         <span>{transaction.date}</span>
         <span>{transaction.from.name}</span>
         <span>${transaction.amount}</span>
         <span>{transaction.to.name}</span>
         <span>{transaction.status}</span>
+        <button className={repeatButtonClassName}>repeat</button>
       </div>
       {details && <TransactionDetails />}
-    </div>
+    </>
   );
 };

@@ -1,11 +1,10 @@
 /** @format */
 
 import { IUser } from '../../auth/models/IAuthInterfaces';
-import { TransactionStatus } from './TransactionTypes';
 
 export interface ITransaction {
   id: number;
-  status: TransactionStatus;
+  status: 'pending' | 'completed' | 'failed';
   from: IUser;
   to: IUser;
   amount: number;
