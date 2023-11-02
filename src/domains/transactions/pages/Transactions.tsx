@@ -57,7 +57,7 @@ export const Transactions = () => {
         <span>from</span>
         <span>amount</span>
         <span>to</span>
-        <span>staus</span>
+        <span>status</span>
       </div>
       {transactions.map(x => (
         <Transaction key={x.id} transaction={x} />
