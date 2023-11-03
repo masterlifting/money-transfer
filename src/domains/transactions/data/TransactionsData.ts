@@ -1,9 +1,9 @@
 /** @format */
 
-import { ITransaction } from '../models/TransactionInterfaces';
+import { ITransactionGet, ITransactionPost, ITransactionPostResponse } from '../models/TransactionInterfaces';
 
-export const fetchTransactions = async (limit: number): Promise<ITransaction[]> => {
-  const data: ITransaction[] = [
+export const getTransactions = async (limit: number): Promise<ITransactionGet[]> => {
+  return [
     {
       id: 1,
       status: 'pending',
@@ -47,6 +47,19 @@ export const fetchTransactions = async (limit: number): Promise<ITransaction[]> 
       },
     },
   ];
+};
 
-  return data;
+export const postTransaction = async (transaction: ITransactionPost): Promise<ITransactionPostResponse> => {
+  return {
+    status: 'success',
+    error: null,
+    data: {
+      id: 4,
+      status: 'pending',
+      date: '2021-01-01',
+      amount: transaction.amount,
+      from: transaction.from,
+      to: transaction.to,
+    },
+  };
 };

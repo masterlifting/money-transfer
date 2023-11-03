@@ -4,6 +4,6 @@ interface IErrorProps {
   message: string;
 }
 
-export const Error = ({ message }: IErrorProps) => {
+export const CustomError = ({ message }: IErrorProps) => {
   return <p className='text-red-500 text-sm'>{message}</p>;
 };
