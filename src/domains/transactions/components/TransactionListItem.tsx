@@ -41,7 +41,7 @@ export const TransactionListItem = ({ transaction, addTransaction }: ITransactio
   return (
     <>
       {modalTitle === currentModalKey && isModalOpen && (
-        <CustomModal title='Repetition of the money transfer.' onClose={closeModal}>
+        <CustomModal title={modalTitle} onClose={closeModal}>
           <TransactionNew transaction={transaction} addTransaction={addTransaction} />
         </CustomModal>
       )}
