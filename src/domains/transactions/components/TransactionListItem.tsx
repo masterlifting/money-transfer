@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { TransactionListItemDetails } from './TransactionListItemDetails';
-import { CustomModal } from '../../../components/CustomModal';
+import { CustomModal } from '../../../components/modal/CustomModal';
 import { TransactionNew } from './TransactionNew';
 import { ITransactionGet } from '../models/TransactionInterfaces';
+import { useCustomModal } from '../../../components/modal/CustomModalHooks';
 
 interface ITransactionProps {
   transaction: ITransactionGet;
@@ -13,7 +14,8 @@ interface ITransactionProps {
 
 export const TransactionListItem = ({ transaction, addTransaction }: ITransactionProps) => {
   const [details, setDetails] = useState(false);
-  const [repeatTransaction, setRepeatTransaction] = useState(false);
+  const modalTitle = 'Repetition of the money transfer.';
+  const { currentModalKey, isModalOpen, openModal, closeModal } = useCustomModal();
 
   const transactionRowClassName = `
   flex 
@@ -38,9 +40,9 @@ export const TransactionListItem = ({ transaction, addTransaction }: ITransactio
 
   return (
     <>
-      {repeatTransaction && (
-        <CustomModal title='Repetition of the money transfer.'>
-          <TransactionNew closeModal={() => setRepeatTransaction(false)} transaction={transaction} addTransaction={addTransaction} />
+      {modalTitle === currentModalKey && isModalOpen && (
+        <CustomModal title='Repetition of the money transfer.' onClose={closeModal}>
+          <TransactionNew transaction={transaction} addTransaction={addTransaction} />
         </CustomModal>
       )}
       <div className={transactionRowClassName} onClick={() => setDetails(!details)}>
@@ -53,7 +55,7 @@ export const TransactionListItem = ({ transaction, addTransaction }: ITransactio
           className={repeatButtonClassName}
           onClick={event => {
             event.stopPropagation();
-            setRepeatTransaction(true);
+            openModal(modalTitle);
           }}
         >
           <svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' strokeWidth={1} stroke='currentColor' className='w-3 h-3'>

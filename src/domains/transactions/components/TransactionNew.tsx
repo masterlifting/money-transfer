@@ -4,14 +4,16 @@ import { useState } from 'react';
 import { ITransactionGet, ITransactionPost } from '../models/TransactionInterfaces';
 import { CustomError } from '../../../components/CustomError';
 import { postTransaction } from '../data/TransactionsData';
+import { useCustomModal } from '../../../components/modal/CustomModalHooks';
 
 interface ITransactionProps {
   transaction?: ITransactionGet;
-  closeModal: () => void;
   addTransaction: (transaction: ITransactionGet) => void;
 }
 
-export const TransactionNew = ({ addTransaction, transaction, closeModal }: ITransactionProps) => {
+export const TransactionNew = ({ addTransaction, transaction }: ITransactionProps) => {
+  const { closeModal } = useCustomModal();
+
   const [amount, setAmount] = useState(transaction?.amount);
   const [from, setFrom] = useState(transaction?.from);
   const [to, setTo] = useState(transaction?.to);
