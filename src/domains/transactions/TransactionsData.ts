@@ -1,6 +1,7 @@
 /** @format */
 
-import { ITransactionGet, ITransactionPost, ITransactionPostResponse } from './TransactionsInterfaces';
+import { IWebApiPostResponse } from '../WebApiInterfaces';
+import { ITransactionGet, ITransactionPost } from './TransactionsInterfaces';
 
 export const getTransactions = async (limit: number): Promise<ITransactionGet[]> => {
   return [
@@ -49,10 +50,9 @@ export const getTransactions = async (limit: number): Promise<ITransactionGet[]>
   ];
 };
 
-export const postTransaction = async (transaction: ITransactionPost): Promise<ITransactionPostResponse> => {
+export const postTransaction = async (transaction: ITransactionPost): Promise<IWebApiPostResponse<ITransactionGet>> => {
   return {
-    status: 'success',
-    error: null,
+    isSuccess: true,
     data: {
       id: 4,
       status: 'pending',

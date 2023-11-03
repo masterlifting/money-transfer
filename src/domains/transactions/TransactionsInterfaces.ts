@@ -1,30 +1,17 @@
 /** @format */
 
-import { IUser } from '../auth/AuthInterfaces';
+import { IUserGet } from '../auth/AuthInterfaces';
 
 interface ITransaction {
-  from: IUser;
-  to: IUser;
+  from: IUserGet;
+  to: IUserGet;
   amount: number;
 }
 
 export interface ITransactionGet extends ITransaction {
   id: number;
   status: 'pending' | 'completed' | 'failed';
-  from: IUser;
-  to: IUser;
-  amount: number;
   date: string;
 }
 
-export interface ITransactionPost extends ITransaction {
-  from: IUser;
-  to: IUser;
-  amount: number;
-}
-
-export interface ITransactionPostResponse {
-  status: 'success' | 'error';
-  error: string | null;
-  data?: ITransactionGet;
-}
+export interface ITransactionPost extends ITransaction {}

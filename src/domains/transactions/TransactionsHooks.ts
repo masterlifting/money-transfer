@@ -29,5 +29,3 @@ export const useTransactions = () => {
 
   return { transactions, addTransaction, loading, error };
 };
-
-export const useTransactionCreate = (transaction?: ITransactionGet) => {};

@@ -34,15 +34,15 @@ export const TransactionNew = ({ addTransaction, transaction }: ITransactionProp
 
     const newTransactionResponse = await postTransaction({ from, to, amount } as ITransactionPost);
 
-    if (newTransactionResponse.status === 'error') {
-      setValidationError(newTransactionResponse.error);
-    } else {
+    if (newTransactionResponse.isSuccess) {
       closeModal();
       addTransaction(newTransactionResponse.data as ITransactionGet);
+    } else {
+      setValidationError(newTransactionResponse.error!);
     }
   };
 
-  const setAmountHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onAmountHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
 
     if (value && isNaN(Number(value))) {
@@ -56,7 +56,7 @@ export const TransactionNew = ({ addTransaction, transaction }: ITransactionProp
   return (
     <form onSubmit={submitHandler}>
       <div className='flex justify-between items-center mb-2'>
-        <input className={inputClassName} type='text' placeholder='Enter amount' value={amount} onChange={setAmountHandler} />
+        <input className={inputClassName} type='text' placeholder='Enter amount' value={amount} onChange={onAmountHandler} />
         <input className={inputClassName} type='text' placeholder='From' value={transaction?.from.name} />
         <input className={inputClassName} type='text' placeholder='To' value={transaction?.to.name} />
       </div>

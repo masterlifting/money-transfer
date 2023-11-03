@@ -1,29 +1,32 @@
 /** @format */
 
 import { createContext, useState } from 'react';
-import { IUser } from './AuthInterfaces';
+import { IUserGet } from './AuthInterfaces';
 
 interface IAuthContext {
   isAuthorised: boolean;
-  user?: IUser;
+  user?: IUserGet;
+  setState: (user?: IUserGet) => void;
 }
 
-export const CustomModalContext = createContext<ICustomModalContext>({
-  currentModalTitle: '',
-  isModalOpen: false,
-  openModal: (key: string) => {},
-  closeModal: () => {},
+export const AuthContext = createContext<IAuthContext>({
+  isAuthorised: false,
+  setState: (user?: IUserGet) => {},
 });
 
-export const CustomModalState = ({ children }: { children: React.ReactNode }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentModalTitle, setCurrentModalTitle] = useState<string>('');
+export const AuthState = ({ children }: { children: React.ReactNode }) => {
+  const [isAuthorised, setIsAuthorized] = useState(false);
+  const [user, setUser] = useState<IUserGet>();
 
-  const openModal = (key: string) => {
-    setCurrentModalTitle(key);
-    setIsModalOpen(true);
+  const setState = (user?: IUserGet) => {
+    if (user) {
+      setIsAuthorized(true);
+      setUser(user);
+    } else {
+      setIsAuthorized(false);
+      setUser(undefined);
+    }
   };
-  const closeModal = () => setIsModalOpen(false);
 
-  return <CustomModalContext.Provider value={{ currentModalTitle, isModalOpen, openModal, closeModal }}>{children}</CustomModalContext.Provider>;
+  return <AuthContext.Provider value={{ isAuthorised, user, setState }}>{children}</AuthContext.Provider>;
 };
