@@ -8,7 +8,7 @@ export const loginUser = async (user: IUserPost): Promise<IWebApiPostResponse<IU
     isSuccess: true,
     data: {
       id: 1,
-      name: 'Test user',
+      email: 'Test user',
     },
   };
 };

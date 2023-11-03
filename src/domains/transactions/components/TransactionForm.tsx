@@ -57,8 +57,8 @@ export const TransactionNew = ({ addTransaction, transaction }: ITransactionProp
     <form onSubmit={submitHandler}>
       <div className='flex justify-between items-center mb-2'>
         <input className={inputClassName} type='text' placeholder='Enter amount' value={amount} onChange={onAmountHandler} />
-        <input className={inputClassName} type='text' placeholder='From' value={transaction?.from.name} />
-        <input className={inputClassName} type='text' placeholder='To' value={transaction?.to.name} />
+        <input className={inputClassName} type='text' placeholder='From' value={transaction?.from.email} />
+        <input className={inputClassName} type='text' placeholder='To' value={transaction?.to.email} />
       </div>
       {validationError !== null && <CustomError message={validationError} />}
       <div className='flex justify-end gap-2'>

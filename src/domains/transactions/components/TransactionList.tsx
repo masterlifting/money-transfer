@@ -3,7 +3,7 @@
 import { CustomError } from '../../../components/CustomError';
 import { CustomLoader } from '../../../components/CustomLoader';
 import { TransactionListItem } from './TransactionListItem';
-import { TransactionNew } from './TransactionNew';
+import { TransactionNew } from './TransactionForm';
 import { CustomModal } from '../../../components/modal/CustomModal';
 import { useTransactions } from '../TransactionsHooks';
 import { useCustomModal } from '../../../components/modal/CustomModalHooks';

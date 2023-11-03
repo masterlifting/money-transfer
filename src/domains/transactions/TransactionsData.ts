@@ -1,50 +1,39 @@
 /** @format */
 
+import { randomUUID } from 'crypto';
 import { IWebApiPostResponse } from '../WebApiInterfaces';
 import { ITransactionGet, ITransactionPost } from './TransactionsInterfaces';
 
 export const getTransactions = async (limit: number): Promise<ITransactionGet[]> => {
   return [
     {
-      id: 1,
+      id: randomUUID(),
       status: 'pending',
-      date: '2021-01-01',
+      date: new Date(),
       amount: 100,
-      from: {
-        id: 1,
-        name: 'John',
-      },
       to: {
         id: 2,
-        name: 'Jane',
+        email: 'Jane',
       },
     },
     {
-      id: 2,
+      id: randomUUID(),
       status: 'pending',
-      date: '2021-01-02',
+      date: new Date(),
       amount: 200,
-      from: {
-        id: 1,
-        name: 'John',
-      },
       to: {
         id: 3,
-        name: 'Bob',
+        email: 'Bob',
       },
     },
     {
-      id: 3,
+      id: randomUUID(),
       status: 'pending',
-      date: '2021-01-03',
+      date: new Date(),
       amount: 300,
-      from: {
-        id: 1,
-        name: 'John',
-      },
       to: {
         id: 4,
-        name: 'Alice',
+        email: 'Alice',
       },
     },
   ];
@@ -52,13 +41,11 @@ export const getTransactions = async (limit: number): Promise<ITransactionGet[]>
 
 export const postTransaction = async (transaction: ITransactionPost): Promise<IWebApiPostResponse<ITransactionGet>> => {
   return {
-    isSuccess: true,
     data: {
-      id: 4,
+      id: randomUUID(),
       status: 'pending',
-      date: '2021-01-01',
+      date: new Date(),
       amount: transaction.amount,
-      from: transaction.from,
       to: transaction.to,
     },
   };

@@ -4,18 +4,18 @@ import { createContext, useState } from 'react';
 import { IUserGet } from './AuthInterfaces';
 
 interface IAuthContext {
-  isAuthorised: boolean;
+  isAuthorized: boolean;
   user?: IUserGet;
   setState: (user?: IUserGet) => void;
 }
 
 export const AuthContext = createContext<IAuthContext>({
-  isAuthorised: false,
+  isAuthorized: false,
   setState: (user?: IUserGet) => {},
 });
 
 export const AuthState = ({ children }: { children: React.ReactNode }) => {
-  const [isAuthorised, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const [user, setUser] = useState<IUserGet>();
 
   const setState = (user?: IUserGet) => {
@@ -28,5 +28,5 @@ export const AuthState = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  return <AuthContext.Provider value={{ isAuthorised, user, setState }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ isAuthorized, user, setState }}>{children}</AuthContext.Provider>;
 };

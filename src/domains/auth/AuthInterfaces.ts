@@ -1,14 +1,15 @@
 /** @format */
 
 export interface IUser {
-  name: string;
+  id: number;
+  email: string;
 }
 
 export interface IUserGet extends IUser {
-  id: number;
+  token: string;
+  refreshToken: string;
 }
 
-export interface IUserPost {
-  email: string;
+export interface IUserPost extends IUser {
   password: string;
 }

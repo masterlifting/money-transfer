@@ -1,7 +1,9 @@
 /** @format */
 
+type Error = {
+  message: string;
+};
+
 export interface IWebApiPostResponse<T> {
-  isSuccess: boolean;
-  error?: string;
-  data?: T;
+  data: T | Error;
 }
