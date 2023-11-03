@@ -1,6 +1,6 @@
 /** @format */
 
-import { IUser } from '../../auth/models/IAuthInterfaces';
+import { IUser } from '../auth/AuthInterfaces';
 
 interface ITransaction {
   from: IUser;

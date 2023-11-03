@@ -1,8 +1,8 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { ITransactionGet } from '../models/TransactionInterfaces';
-import { getTransactions } from '../data/TransactionsData';
+import { ITransactionGet } from './TransactionsInterfaces';
+import { getTransactions } from './TransactionsData';
 
 export const useTransactions = () => {
   const [transactions, setTransactions] = useState<ITransactionGet[]>([]);

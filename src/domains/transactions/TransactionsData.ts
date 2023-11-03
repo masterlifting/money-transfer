@@ -1,6 +1,6 @@
 /** @format */
 
-import { ITransactionGet, ITransactionPost, ITransactionPostResponse } from '../models/TransactionInterfaces';
+import { ITransactionGet, ITransactionPost, ITransactionPostResponse } from './TransactionsInterfaces';
 
 export const getTransactions = async (limit: number): Promise<ITransactionGet[]> => {
   return [

@@ -1,11 +1,20 @@
 /** @format */
 
-import { TransactionList } from './domains/transactions/components/TransactionList';
+import { Route, Routes } from 'react-router-dom';
+import { Home } from './pages/Home';
+import { Login } from './pages/Login';
+import { UpBar } from './pages/components/UpBar';
 
 export default function App() {
   return (
-    <div className='container mx-auto max-w-2xl pt-5'>
-      <TransactionList />
-    </div>
+    <>
+      <UpBar />
+      <div className='container mx-auto max-w-2xl pt-5'>
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+        </Routes>
+      </div>
+    </>
   );
 }

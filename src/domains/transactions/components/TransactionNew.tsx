@@ -1,9 +1,9 @@
 /** @format */
 
 import { useState } from 'react';
-import { ITransactionGet, ITransactionPost } from '../models/TransactionInterfaces';
+import { ITransactionGet, ITransactionPost } from '../TransactionsInterfaces';
 import { CustomError } from '../../../components/CustomError';
-import { postTransaction } from '../data/TransactionsData';
+import { postTransaction } from '../TransactionsData';
 import { useCustomModal } from '../../../components/modal/CustomModalHooks';
 
 interface ITransactionProps {

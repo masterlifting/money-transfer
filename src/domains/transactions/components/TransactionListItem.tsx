@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { TransactionListItemDetails } from './TransactionListItemDetails';
 import { CustomModal } from '../../../components/modal/CustomModal';
 import { TransactionNew } from './TransactionNew';
-import { ITransactionGet } from '../models/TransactionInterfaces';
+import { ITransactionGet } from '../TransactionsInterfaces';
 import { useCustomModal } from '../../../components/modal/CustomModalHooks';
 
 interface ITransactionProps {
@@ -13,9 +13,10 @@ interface ITransactionProps {
 }
 
 export const TransactionListItem = ({ transaction, addTransaction }: ITransactionProps) => {
-  const [details, setDetails] = useState(false);
   const modalTitle = 'Repetition of the money transfer.';
-  const { currentModalKey, isModalOpen, openModal, closeModal } = useCustomModal();
+
+  const [details, setDetails] = useState(false);
+  const { openModal, closeModal } = useCustomModal();
 
   const transactionRowClassName = `
   flex 
@@ -40,11 +41,10 @@ export const TransactionListItem = ({ transaction, addTransaction }: ITransactio
 
   return (
     <>
-      {modalTitle === currentModalKey && isModalOpen && (
-        <CustomModal title={modalTitle} onClose={closeModal}>
-          <TransactionNew transaction={transaction} addTransaction={addTransaction} />
-        </CustomModal>
-      )}
+      <CustomModal title={modalTitle} onClose={closeModal}>
+        <TransactionNew transaction={transaction} addTransaction={addTransaction} />
+      </CustomModal>
+
       <div className={transactionRowClassName} onClick={() => setDetails(!details)}>
         <span>{transaction.date}</span>
         <span>{transaction.from.name}</span>

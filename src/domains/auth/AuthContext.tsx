@@ -1,12 +1,11 @@
 /** @format */
 
 import { createContext, useState } from 'react';
+import { IUser } from './AuthInterfaces';
 
-interface ICustomModalContext {
-  currentModalTitle: string;
-  isModalOpen: boolean;
-  openModal: (key: string) => void;
-  closeModal: () => void;
+interface IAuthContext {
+  isAuthorised: boolean;
+  user?: IUser;
 }
 
 export const CustomModalContext = createContext<ICustomModalContext>({
