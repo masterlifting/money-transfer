@@ -14,6 +14,14 @@ interface ITransactionProps {
 export const TransactionCreate = ({ transaction, addTransaction }: ITransactionProps) => {
   const { closeModal } = useCustomModal();
 
+  const [transactionPost, setTransactionPost] = useState<ITransactionPost>({
+    amount: transaction?.amount || 0,
+    user: {
+      id: transaction?.user.id || '',
+      email: transaction?.user.email || '',
+    },
+  });
+
   const [amount, setAmount] = useState(transaction?.amount);
 
   const validationErrorInitial = amount === undefined;

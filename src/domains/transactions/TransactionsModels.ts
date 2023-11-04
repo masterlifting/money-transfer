@@ -14,6 +14,4 @@ export interface ITransactionGet extends ITransaction {
   status: 'created' | 'pending' | 'completed' | 'failed';
 }
 
-export interface ITransactionPost extends ITransaction {
-  recepientId: string;
-}
+export interface ITransactionPost extends ITransaction {}

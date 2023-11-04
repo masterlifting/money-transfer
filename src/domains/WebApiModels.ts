@@ -4,14 +4,14 @@ type WebApiError = {
   message: string;
 };
 
-export interface IWebApiResponseSuccess<T> {
+export interface IWebApiSuccessResponse<T> {
   isSuccess: true;
   data: T;
 }
 
-export interface IWebApiResponseError {
+export interface IWebApiErrorResponse {
   isSuccess: false;
   error: WebApiError;
 }
 
-export type WebApiResponse<T> = IWebApiResponseSuccess<T> | IWebApiResponseError;
+export type WebApiResponse<T> = IWebApiSuccessResponse<T> | IWebApiErrorResponse;
