@@ -29,6 +29,7 @@ export const TransactionList = () => {
       <div className='flex justify-between items-center border-b-2 border-black p-2 text-gray-600 text-sm'>
         <span>date</span>
         <span>amount</span>
+        <span>direction</span>
         <span>user</span>
         <span>status</span>
         <span></span>

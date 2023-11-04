@@ -15,7 +15,7 @@ interface ITransactionProps {
 }
 
 export const TransactionListItem = ({ transaction, updateTransactions }: ITransactionProps) => {
-  const modalTitle = 'Repetition of the money transfer.';
+  const modalTitle = `Repeat for ${transaction.user.email}`;
 
   const [showDetails, setShowDetails] = useState(false);
   const { openModal, closeModal } = useCustomModal();
@@ -44,14 +44,13 @@ export const TransactionListItem = ({ transaction, updateTransactions }: ITransa
       >
         <span>{transaction.date.toDateString()}</span>
         <span>${transaction.amount}</span>
-        <span>
-          {transaction.type === 'income' ? 'from' : 'to'} {transaction.user.email}
-        </span>
+        <span>{transaction.type}</span>
+        <span>{transaction.user.email}</span>
         <span>{transaction.status}</span>
 
         {transaction.type === 'outcome' ? (
           <button
-            className={ButtonStyle.info}
+            className={ButtonStyle.success}
             onClick={event => {
               event.stopPropagation();
               openModal(modalTitle);
