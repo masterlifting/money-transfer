@@ -4,7 +4,7 @@ import { CustomError } from '../../../shared/CustomError';
 import { CustomLoader } from '../../../shared/CustomLoader';
 import { CustomModal } from '../../../shared/modal/CustomModal';
 import { useCustomModal } from '../../../shared/modal/CustomModalHooks';
-import { useTransactions } from '../TransactionsHooks';
+import { useTransactionList } from '../TransactionsHooks';
 import { TransactionCreate } from './TransactionCreate';
 import { TransactionListItem } from './TransactionListItem';
 
@@ -12,12 +12,12 @@ export const TransactionList = () => {
   const newTransaction = 'New money transfer.';
   const { openModal } = useCustomModal();
 
-  const { transactions, addTransaction, loading, error } = useTransactions();
+  const { transactions, updateTransactions, loading, error } = useTransactionList();
 
   return (
     <div>
       <CustomModal title={newTransaction}>
-        <TransactionCreate addTransaction={addTransaction} />
+        <TransactionCreate updateTransactions={updateTransactions} />
       </CustomModal>
 
       <div className='flex justify-between items-center mb-2'>
@@ -28,9 +28,8 @@ export const TransactionList = () => {
       </div>
       <div className='flex justify-between items-center border-b-2 border-black p-2 text-gray-600 text-sm'>
         <span>date</span>
-        <span>from</span>
         <span>amount</span>
-        <span>to</span>
+        <span>user</span>
         <span>status</span>
         <span></span>
       </div>
@@ -38,7 +37,7 @@ export const TransactionList = () => {
         {loading && <CustomLoader />}
         {error && <CustomError message={error} />}
         {transactions.map(x => (
-          <TransactionListItem key={x.id} transaction={x} addTransaction={addTransaction} />
+          <TransactionListItem key={x.id} transaction={x} updateTransactions={updateTransactions} />
         ))}
       </div>
     </div>

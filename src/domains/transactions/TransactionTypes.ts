@@ -1,6 +1,6 @@
 /** @format */
 
-import { IUserGet } from '../auth/AuthModels';
+import { IUserGet } from '../auth/AuthTypes';
 
 interface ITransaction {
   user: IUserGet;

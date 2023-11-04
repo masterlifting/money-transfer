@@ -3,12 +3,12 @@
 import { Route, Routes } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
-import { UpBar } from './pages/components/UpBar';
+import { TopBar } from './shared/bars/TopBar';
 
 export default function App() {
   return (
     <>
-      <UpBar />
+      <TopBar />
       <div className='container mx-auto max-w-2xl pt-5'>
         <Routes>
           <Route path='/' element={<Home />} />

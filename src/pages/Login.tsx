@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { useAuthState } from '../domains/auth/AuthHooks';
-import { IAuthUserPost } from '../domains/auth/AuthModels';
-import { CustomError } from '../components/CustomError';
+import { IAuthUserPost } from '../domains/auth/AuthTypes';
 import { authorizeUser } from '../domains/auth/AuthData';
 import { useNavigate } from 'react-router-dom';
+import { CustomError } from '../shared/CustomError';
 
 export const Login = () => {
-  const { setState } = useAuthState();
+  const { setAuthState } = useAuthState();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
@@ -28,10 +28,10 @@ export const Login = () => {
     const userLoginResponse = await authorizeUser({ email, password } as IAuthUserPost);
 
     if (userLoginResponse.isSuccess) {
-      setState(userLoginResponse.data);
+      setAuthState(userLoginResponse.data);
       navigate('/');
     } else {
-      setValidationError(userLoginResponse.error!);
+      setValidationError(userLoginResponse.error.message);
     }
   };
 

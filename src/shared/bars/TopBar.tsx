@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAuthState } from '../../domains/auth/AuthHooks';
 
 export const TopBar = () => {
-  const { isAuthorized: isAuthorised, user, setState } = useAuthState();
+  const { isAuthorized: isAuthorised, authUser, setAuthState } = useAuthState();
 
   return (
     <nav className='h-10 bg-gray-800 flex justify-between items-center px-5'>
@@ -15,8 +15,8 @@ export const TopBar = () => {
         </Link>
         {isAuthorised ? (
           <div className='flex gap-2'>
-            <p className='text-white'>{user?.email}</p>
-            <button onClick={() => setState()} className='text-white hover:text-gray-300'>
+            <p className='text-white'>{authUser?.email}</p>
+            <button onClick={() => setAuthState()} className='text-white hover:text-gray-300'>
               Logout
             </button>
           </div>

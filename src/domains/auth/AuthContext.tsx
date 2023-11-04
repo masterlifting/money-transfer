@@ -1,7 +1,7 @@
 /** @format */
 
 import { createContext, useState } from 'react';
-import { IAuthUserGet } from './AuthModels';
+import { IAuthUserGet } from './AuthTypes';
 
 interface IAuthContext {
   isAuthorized: boolean;
