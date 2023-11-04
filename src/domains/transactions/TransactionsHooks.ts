@@ -58,7 +58,7 @@ export const useTransactionCreate = (transaction: ITransactionGet | undefined, u
         setValidation({ message: x.error.message, isValid: false });
       }
     });
-  });
+  }, []);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
