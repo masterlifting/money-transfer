@@ -1,7 +1,7 @@
 /** @format */
 
 interface ITransactionDetailsProps {
-  transactionId: number;
+  transactionId: string;
 }
 
 export const TransactionListItemDetails = ({ transactionId }: ITransactionDetailsProps) => {

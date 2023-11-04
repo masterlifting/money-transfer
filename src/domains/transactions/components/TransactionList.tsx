@@ -1,28 +1,28 @@
 /** @format */
 
-import { CustomError } from '../../../components/CustomError';
-import { CustomLoader } from '../../../components/CustomLoader';
-import { TransactionListItem } from './TransactionListItem';
-import { TransactionNew } from './TransactionForm';
-import { CustomModal } from '../../../components/modal/CustomModal';
+import { CustomError } from '../../../shared/CustomError';
+import { CustomLoader } from '../../../shared/CustomLoader';
+import { CustomModal } from '../../../shared/modal/CustomModal';
+import { useCustomModal } from '../../../shared/modal/CustomModalHooks';
 import { useTransactions } from '../TransactionsHooks';
-import { useCustomModal } from '../../../components/modal/CustomModalHooks';
+import { TransactionCreate } from './TransactionCreate';
+import { TransactionListItem } from './TransactionListItem';
 
 export const TransactionList = () => {
-  const modalTitle = 'New money transfer.';
+  const newTransaction = 'New money transfer.';
   const { openModal } = useCustomModal();
 
   const { transactions, addTransaction, loading, error } = useTransactions();
 
   return (
     <div>
-      <CustomModal title={modalTitle}>
-        <TransactionNew addTransaction={addTransaction} />
+      <CustomModal title={newTransaction}>
+        <TransactionCreate addTransaction={addTransaction} />
       </CustomModal>
 
       <div className='flex justify-between items-center mb-2'>
         <h1 className='align-middle text-xl font-bold'>Transactions</h1>
-        <button className='w-20 bg-blue-300 text-white p-1 rounded-md hover:bg-green-300' onClick={() => openModal(modalTitle)}>
+        <button className='w-20 bg-blue-300 text-white p-1 rounded-md hover:bg-green-300' onClick={() => openModal(newTransaction)}>
           New
         </button>
       </div>

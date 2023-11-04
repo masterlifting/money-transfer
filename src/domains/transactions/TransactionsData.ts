@@ -1,52 +1,60 @@
 /** @format */
 
 import { randomUUID } from 'crypto';
-import { IWebApiPostResponse } from '../WebApiInterfaces';
-import { ITransactionGet, ITransactionPost } from './TransactionsInterfaces';
+import { WebApiResponse } from '../WebApiModels';
+import { ITransactionGet, ITransactionPost } from './TransactionsModels';
 
-export const getTransactions = async (limit: number): Promise<ITransactionGet[]> => {
-  return [
-    {
-      id: randomUUID(),
-      status: 'pending',
-      date: new Date(),
-      amount: 100,
-      to: {
-        id: 2,
-        email: 'Jane',
+export const fetchTransactions = async (): Promise<WebApiResponse<ITransactionGet[]>> => {
+  return {
+    isSuccess: true,
+    data: [
+      {
+        id: randomUUID(),
+        type: 'income',
+        status: 'completed',
+        date: new Date(),
+        amount: 100,
+        user: {
+          id: randomUUID(),
+          email: 'jack@gmail.com',
+        },
       },
-    },
-    {
-      id: randomUUID(),
-      status: 'pending',
-      date: new Date(),
-      amount: 200,
-      to: {
-        id: 3,
-        email: 'Bob',
+      {
+        id: randomUUID(),
+        type: 'outcome',
+        status: 'pending',
+        date: new Date(),
+        amount: 200,
+        user: {
+          id: randomUUID(),
+          email: 'bob@gmail.com',
+        },
       },
-    },
-    {
-      id: randomUUID(),
-      status: 'pending',
-      date: new Date(),
-      amount: 300,
-      to: {
-        id: 4,
-        email: 'Alice',
+      {
+        id: randomUUID(),
+        type: 'outcome',
+        status: 'failed',
+        date: new Date(),
+        amount: 300,
+        user: {
+          id: randomUUID(),
+          email: 'alice@gmail.com',
+        },
       },
-    },
-  ];
+    ],
+  };
 };
 
-export const postTransaction = async (transaction: ITransactionPost): Promise<IWebApiPostResponse<ITransactionGet>> => {
+export const commitTransaction = async (transaction: ITransactionPost): Promise<WebApiResponse<ITransactionGet>> => {
   return {
+    isSuccess: true,
     data: {
       id: randomUUID(),
-      status: 'pending',
       date: new Date(),
+      type: 'outcome',
+      status: 'created',
       amount: transaction.amount,
-      to: transaction.to,
+      user: transaction.user,
     },
   };
 };

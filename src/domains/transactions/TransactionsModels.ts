@@ -1,19 +1,19 @@
 /** @format */
 
-import { UUID } from 'crypto';
-import { IUser, IUserGet } from '../auth/AuthInterfaces';
+import { IUserGet } from '../auth/AuthModels';
 
 interface ITransaction {
-  to: IUser;
+  user: IUserGet;
   amount: number;
 }
 
 export interface ITransactionGet extends ITransaction {
-  id: UUID;
-  status: 'pending' | 'completed' | 'failed';
+  id: string;
   date: Date;
+  type: 'income' | 'outcome';
+  status: 'created' | 'pending' | 'completed' | 'failed';
 }
 
 export interface ITransactionPost extends ITransaction {
-  from: IUserGet;
+  recepientId: string;
 }

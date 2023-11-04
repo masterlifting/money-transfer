@@ -1,8 +1,9 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { ITransactionGet } from './TransactionsInterfaces';
-import { getTransactions } from './TransactionsData';
+import { ITransactionGet } from './TransactionsModels';
+import { fetchTransactions } from './TransactionsData';
+import { WebApiResponse } from '../WebApiModels';
 
 export const useTransactions = () => {
   const [transactions, setTransactions] = useState<ITransactionGet[]>([]);
@@ -16,14 +17,14 @@ export const useTransactions = () => {
   useEffect(() => {
     setLoading(true);
 
-    getTransactions(3).then(x => {
-      try {
-        setTransactions(x);
-      } catch (e: any) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
+    fetchTransactions().then((x: WebApiResponse<ITransactionGet[]>) => {
+      if (x.isSuccess) {
+        setTransactions(x.data);
+      } else {
+        setError(x.error.message);
       }
+
+      setLoading(false);
     });
   }, []);
 

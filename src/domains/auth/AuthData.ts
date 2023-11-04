@@ -1,14 +1,17 @@
 /** @format */
 
-import { IWebApiPostResponse } from '../WebApiInterfaces';
-import { IUserGet, IUserPost } from './AuthInterfaces';
+import { randomUUID } from 'crypto';
+import { WebApiResponse } from '../WebApiModels';
+import { IAuthUserGet, IAuthUserPost } from './AuthModels';
 
-export const loginUser = async (user: IUserPost): Promise<IWebApiPostResponse<IUserGet>> => {
+export const authorizeUser = async (user: IAuthUserPost): Promise<WebApiResponse<IAuthUserGet>> => {
   return {
     isSuccess: true,
     data: {
-      id: 1,
-      email: 'Test user',
+      id: randomUUID(),
+      email: user.email,
+      token: randomUUID(),
+      refreshToken: randomUUID(),
     },
   };
 };

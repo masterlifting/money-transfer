@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { useAuthState } from '../domains/auth/AuthHooks';
-import { IUserPost } from '../domains/auth/AuthInterfaces';
+import { IAuthUserPost } from '../domains/auth/AuthModels';
 import { CustomError } from '../components/CustomError';
-import { loginUser } from '../domains/auth/AuthData';
+import { authorizeUser } from '../domains/auth/AuthData';
 import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
@@ -25,7 +25,7 @@ export const Login = () => {
 
     event.preventDefault();
 
-    const userLoginResponse = await loginUser({ email, password } as IUserPost);
+    const userLoginResponse = await authorizeUser({ email, password } as IAuthUserPost);
 
     if (userLoginResponse.isSuccess) {
       setState(userLoginResponse.data);

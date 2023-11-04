@@ -3,7 +3,7 @@
 import { Link } from 'react-router-dom';
 import { useAuthState } from '../../domains/auth/AuthHooks';
 
-export const UpBar = () => {
+export const TopBar = () => {
   const { isAuthorized: isAuthorised, user, setState } = useAuthState();
 
   return (

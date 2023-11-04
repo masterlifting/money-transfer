@@ -1,9 +1,9 @@
 /** @format */
 
 import { useState } from 'react';
-import { ITransactionGet, ITransactionPost } from '../TransactionsInterfaces';
+import { ITransactionGet, ITransactionPost } from '../TransactionsModels';
 import { CustomError } from '../../../components/CustomError';
-import { postTransaction } from '../TransactionsData';
+import { commitTransaction } from '../TransactionsData';
 import { useCustomModal } from '../../../components/modal/CustomModalHooks';
 
 interface ITransactionProps {
@@ -11,14 +11,12 @@ interface ITransactionProps {
   addTransaction: (transaction: ITransactionGet) => void;
 }
 
-export const TransactionNew = ({ addTransaction, transaction }: ITransactionProps) => {
+export const TransactionCreate = ({ transaction, addTransaction }: ITransactionProps) => {
   const { closeModal } = useCustomModal();
 
   const [amount, setAmount] = useState(transaction?.amount);
-  const [from, setFrom] = useState(transaction?.from);
-  const [to, setTo] = useState(transaction?.to);
 
-  const validationErrorInitial = amount === undefined || from === undefined || to === undefined;
+  const validationErrorInitial = amount === undefined;
 
   const [validationError, setValidationError] = useState<string | null>(validationErrorInitial ? 'Fill the form' : null);
 
@@ -32,7 +30,7 @@ export const TransactionNew = ({ addTransaction, transaction }: ITransactionProp
 
     event.preventDefault();
 
-    const newTransactionResponse = await postTransaction({ from, to, amount } as ITransactionPost);
+    const newTransactionResponse = await commitTransaction({ from, user: to, amount } as ITransactionPost);
 
     if (newTransactionResponse.isSuccess) {
       closeModal();
@@ -58,7 +56,7 @@ export const TransactionNew = ({ addTransaction, transaction }: ITransactionProp
       <div className='flex justify-between items-center mb-2'>
         <input className={inputClassName} type='text' placeholder='Enter amount' value={amount} onChange={onAmountHandler} />
         <input className={inputClassName} type='text' placeholder='From' value={transaction?.from.email} />
-        <input className={inputClassName} type='text' placeholder='To' value={transaction?.to.email} />
+        <input className={inputClassName} type='text' placeholder='To' value={transaction?.user.email} />
       </div>
       {validationError !== null && <CustomError message={validationError} />}
       <div className='flex justify-end gap-2'>

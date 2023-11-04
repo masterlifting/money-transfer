@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { TransactionListItemDetails } from './TransactionListItemDetails';
 import { CustomModal } from '../../../components/modal/CustomModal';
-import { TransactionNew } from './TransactionForm';
-import { ITransactionGet } from '../TransactionsInterfaces';
+import { TransactionCreate } from './TransactionCreate';
+import { ITransactionGet } from '../TransactionsModels';
 import { useCustomModal } from '../../../components/modal/CustomModalHooks';
 import { SvgIcons } from '../../../shared/SvgIcons';
 
@@ -45,14 +45,14 @@ export const TransactionListItem = ({ transaction, addTransaction }: ITransactio
   return (
     <>
       <CustomModal title={modalTitle} onClose={closeModal}>
-        <TransactionNew transaction={transaction} addTransaction={addTransaction} />
+        <TransactionCreate transaction={transaction} addTransaction={addTransaction} />
       </CustomModal>
 
       <div className={Style.transactionRow(showDetails)} onClick={() => setShowDetails(!showDetails)}>
         <span>{transaction.date}</span>
         <span>{transaction.from.email}</span>
         <span>${transaction.amount}</span>
-        <span>{transaction.to.email}</span>
+        <span>{transaction.user.email}</span>
         <span>{transaction.status}</span>
 
         <button

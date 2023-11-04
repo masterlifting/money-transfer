@@ -1,24 +1,24 @@
 /** @format */
 
 import { createContext, useState } from 'react';
-import { IUserGet } from './AuthInterfaces';
+import { IAuthUserGet } from './AuthModels';
 
 interface IAuthContext {
   isAuthorized: boolean;
-  user?: IUserGet;
-  setState: (user?: IUserGet) => void;
+  authUser?: IAuthUserGet;
+  setAuthState: (user?: IAuthUserGet) => void;
 }
 
 export const AuthContext = createContext<IAuthContext>({
   isAuthorized: false,
-  setState: (user?: IUserGet) => {},
+  setAuthState: (user?: IAuthUserGet) => {},
 });
 
 export const AuthState = ({ children }: { children: React.ReactNode }) => {
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [user, setUser] = useState<IUserGet>();
+  const [authUser, setUser] = useState<IAuthUserGet>();
 
-  const setState = (user?: IUserGet) => {
+  const setAuthState = (user?: IAuthUserGet) => {
     if (user) {
       setIsAuthorized(true);
       setUser(user);
@@ -28,5 +28,5 @@ export const AuthState = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  return <AuthContext.Provider value={{ isAuthorized, user, setState }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ isAuthorized, authUser, setAuthState }}>{children}</AuthContext.Provider>;
 };
