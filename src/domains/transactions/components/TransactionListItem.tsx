@@ -36,7 +36,7 @@ export const TransactionListItem = ({ transaction, updateTransactions }: ITransa
       >
         <td className='text-left'>{transaction.date.toDateString()}</td>
         <td className='text-left'>${transaction.amount}</td>
-        <td className='text-left'>{transaction.type}</td>
+        <td className='text-left'>{transaction.type === 'outcome' ? 'to' : 'from'}</td>
         <td className='text-left'>{transaction.user.email}</td>
         <td className='text-left'>{transaction.status}</td>
         <td className='text-left'>

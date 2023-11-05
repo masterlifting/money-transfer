@@ -1,22 +1,28 @@
 /** @format */
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuthState } from '../../domains/auth/AuthHooks';
 
 export const TopBar = () => {
-  const { isAuthorized: isAuthorised, authUser, setAuthState } = useAuthState();
+  const navigate = useNavigate();
+  const { isAuthorized, authUser, setAuthState } = useAuthState();
 
   return (
     <nav className='h-10 bg-gray-800 flex justify-between items-center px-5'>
-      <h5 className='text-xl font-bold text-white'>internal money</h5>
+      <Link to='/' className='text-xl font-bold text-white'>
+        internal money
+      </Link>
       <div className='flex gap-2'>
-        <Link to='/' className='text-white hover:text-gray-300'>
-          Home
-        </Link>
-        {isAuthorised ? (
+        {isAuthorized ? (
           <div className='flex gap-2'>
             <p className='text-white'>{authUser?.email}</p>
-            <button onClick={() => setAuthState()} className='text-white hover:text-gray-300'>
+            <button
+              onClick={() => {
+                setAuthState();
+                navigate('/login');
+              }}
+              className='text-white hover:text-gray-300'
+            >
               Logout
             </button>
           </div>

@@ -6,58 +6,54 @@ import { IAuthUserPost } from '../domains/auth/AuthTypes';
 import { authorizeUser } from '../domains/auth/AuthData';
 import { useNavigate } from 'react-router-dom';
 import { ValidationError } from '../shared/errors/ErrorComponents';
+import { IValidation } from '../domains/ValidationTypes';
+import { ButtonStyle } from '../styles/Buttons';
 
 export const Login = () => {
   const { setAuthState } = useAuthState();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [validation, setValidation] = useState<IValidation>({ message: '', isValid: true });
+  const [authUserPostModel, setauthUserPostModel] = useState<IAuthUserPost>({ email: '', password: '' });
 
-  const [validationError, setValidationError] = useState<string | null>(null);
-
-  const buttonClassName = 'w-20 text-white p-1 rounded-md';
-  const commitButtonClassName = `${buttonClassName} ${validationError === null ? 'bg-blue-300 hover:bg-green-300' : 'bg-gray-300 disabled:cursor-not-allowed'}`;
   const inputClassName = 'w-40 border p-2 m-2 outline-0 rounded-md';
 
-  const submitHandler = async (event: React.FormEvent<HTMLFormElement>) => {
-    setValidationError(null);
-
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const userLoginResponse = await authorizeUser({ email, password } as IAuthUserPost);
+    setValidation({ message: '', isValid: true });
 
-    if (userLoginResponse.isSuccess) {
-      setAuthState(userLoginResponse.data);
+    const authorizedUserResponse = await authorizeUser(authUserPostModel);
+
+    if (authorizedUserResponse.isSuccess) {
+      setAuthState(authorizedUserResponse.data);
       navigate('/');
     } else {
-      setValidationError(userLoginResponse.error.message);
+      setValidation({ message: authorizedUserResponse.error.message, isValid: false });
     }
   };
 
-  const onEmailHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setEmail(value);
+    setauthUserPostModel({ ...authUserPostModel, email: value });
   };
 
-  const onPasswordHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setPassword(value);
+    setauthUserPostModel({ ...authUserPostModel, password: value });
   };
 
   return (
-    <form onSubmit={submitHandler}>
-      <div className='flex justify-between items-center mb-2'>
-        <input className={inputClassName} type='email' placeholder='email' value={email} onChange={onEmailHandler} />
-        <input className={inputClassName} type='password' placeholder='password' value={password} onChange={onPasswordHandler} />
-        <input className={inputClassName} type='password' placeholder='password' value={password} onChange={onPasswordHandler} />
-      </div>
-      <div className='flex justify-end'>
-        <button type='submit' className={commitButtonClassName} disabled={validationError !== null}>
+    <form onSubmit={onSubmit}>
+      <div className='flex flex-col items-center mt-6'>
+        <input className={inputClassName} type='email' placeholder='email' value={authUserPostModel.email} onChange={onChangeEmail} />
+        <input className={inputClassName} type='password' placeholder='password' value={authUserPostModel.password} onChange={onChangePassword} />
+        <input className={inputClassName} type='password' placeholder='password' value={authUserPostModel.password} onChange={onChangePassword} />
+        <button disabled={!validation} className={validation ? ButtonStyle.success : ButtonStyle.disable}>
           Login
         </button>
       </div>
-      {validationError !== null && <ValidationError message={validationError} />}
+      {!validation.isValid && <ValidationError message={validation.message} />}
     </form>
   );
 };

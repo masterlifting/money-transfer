@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { ITransactionGet, ITransactionPost } from './TransactionTypes';
-import { commitTransaction, fetchRecipients, fetchTransactions } from './TransactionsData';
+import { commitTransaction, fetchRecipients, fetchTransactions, fetchTransactionsStatuses } from './TransactionsData';
 import { WebApiResponse } from '../WebApiTypes';
 import { useCustomModal } from '../../shared/modals/CustomModalHooks';
 import { IUserGet } from '../auth/AuthTypes';
@@ -13,8 +13,31 @@ export const useTransactionList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const updateTransactions = (transaction: ITransactionGet) => {
-    setTransactions(prev => [...prev, transaction]);
+  const updateTransactions = async (transaction: ITransactionGet) => {
+    setLoading(true);
+
+    const transactionsStatusesResponse = await fetchTransactionsStatuses(transactions);
+
+    if (transactionsStatusesResponse.isSuccess) {
+      setTransactions(prev => {
+        const prevMap = new Map(prev.map(x => [x.id, x]));
+
+        for (let i = 0; i < transactionsStatusesResponse.data.length; i++) {
+          const transactionStatus = transactionsStatusesResponse.data[i];
+          const targetTransaction = prevMap.get(transactionStatus.id);
+
+          if (targetTransaction) {
+            targetTransaction.status = transactionStatus.status;
+          }
+        }
+
+        return [...prev, transaction];
+      });
+    } else {
+      setError(transactionsStatusesResponse.error.message);
+    }
+
+    setLoading(false);
   };
 
   useEffect(() => {

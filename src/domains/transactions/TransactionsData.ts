@@ -50,7 +50,7 @@ export const fetchTransactionsStatuses = async (transactions: ITransactionGet[])
     isSuccess: true,
     data: transactions.map(transaction => ({
       id: transaction.id,
-      status: transaction.status,
+      status: 'completed',
     })),
   };
 };
