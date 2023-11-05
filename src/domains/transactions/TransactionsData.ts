@@ -1,7 +1,7 @@
 /** @format */
 
 import { WebApiResponse } from '../WebApiTypes';
-import { ITransactionGet, ITransactionPost } from './TransactionTypes';
+import { ITransactionGet, ITransactionPost, ITransactionStatusGet } from './TransactionTypes';
 import { IUserGet } from '../auth/AuthTypes';
 
 export const fetchTransactions = async (): Promise<WebApiResponse<ITransactionGet[]>> => {
@@ -42,6 +42,16 @@ export const fetchTransactions = async (): Promise<WebApiResponse<ITransactionGe
         },
       },
     ],
+  };
+};
+
+export const fetchTransactionsStatuses = async (transactions: ITransactionGet[]): Promise<WebApiResponse<ITransactionStatusGet[]>> => {
+  return {
+    isSuccess: true,
+    data: transactions.map(transaction => ({
+      id: transaction.id,
+      status: transaction.status,
+    })),
   };
 };
 

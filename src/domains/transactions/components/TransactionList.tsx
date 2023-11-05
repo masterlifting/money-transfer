@@ -1,9 +1,9 @@
 /** @format */
 
-import { CustomError } from '../../../shared/CustomError';
-import { CustomLoader } from '../../../shared/CustomLoader';
-import { CustomModal } from '../../../shared/modal/CustomModal';
-import { useCustomModal } from '../../../shared/modal/CustomModalHooks';
+import { ValidationError } from '../../../shared/errors/ErrorComponents';
+import { CircleLoader } from '../../../shared/loaders/LoaderComponents';
+import { CustomModal } from '../../../shared/modals/CustomModal';
+import { useCustomModal } from '../../../shared/modals/CustomModalHooks';
 import { useTransactionList } from '../TransactionsHooks';
 import { TransactionCreate } from './TransactionCreate';
 import { TransactionListItem } from './TransactionListItem';
@@ -26,21 +26,25 @@ export const TransactionList = () => {
           New
         </button>
       </div>
-      <div className='flex justify-between items-center border-b-2 border-black p-2 text-gray-600 text-sm'>
-        <span>date</span>
-        <span>amount</span>
-        <span>direction</span>
-        <span>user</span>
-        <span>status</span>
-        <span></span>
-      </div>
-      <div>
-        {loading && <CustomLoader />}
-        {error && <CustomError message={error} />}
-        {transactions.map(x => (
-          <TransactionListItem key={x.id} transaction={x} updateTransactions={updateTransactions} />
-        ))}
-      </div>
+      <table className='table-auto w-full'>
+        <thead>
+          <tr className='border-b-2 border-black'>
+            <th className='text-left'>date</th>
+            <th className='text-left'>amount</th>
+            <th className='text-left'>type</th>
+            <th className='text-left'>user</th>
+            <th className='text-left'>status</th>
+            <th className='text-left'></th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading && <CircleLoader />}
+          {error && <ValidationError message={error} />}
+          {transactions.map(x => (
+            <TransactionListItem key={x.id} transaction={x} updateTransactions={updateTransactions} />
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

@@ -1,8 +1,8 @@
 /** @format */
 
 import { ITransactionGet } from '../TransactionTypes';
-import { useCustomModal } from '../../../shared/modal/CustomModalHooks';
-import { CustomError } from '../../../shared/CustomError';
+import { useCustomModal } from '../../../shared/modals/CustomModalHooks';
+import { ValidationError } from '../../../shared/errors/ErrorComponents';
 import { useTransactionCreate } from '../TransactionsHooks';
 import { ButtonStyle } from '../../../styles/Buttons';
 
@@ -27,7 +27,7 @@ export const TransactionCreate = ({ transaction, updateTransactions }: ITransact
           ))}
         </select>
       </div>
-      {!validation.isValid && <CustomError message={validation.message} />}
+      {!validation.isValid && <ValidationError message={validation.message} />}
       <div className='flex justify-end gap-2'>
         <button className={ButtonStyle.secondary} onClick={closeModal}>
           Close

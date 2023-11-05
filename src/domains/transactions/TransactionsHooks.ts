@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ITransactionGet, ITransactionPost } from './TransactionTypes';
 import { commitTransaction, fetchRecipients, fetchTransactions } from './TransactionsData';
 import { WebApiResponse } from '../WebApiTypes';
-import { useCustomModal } from '../../shared/modal/CustomModalHooks';
+import { useCustomModal } from '../../shared/modals/CustomModalHooks';
 import { IUserGet } from '../auth/AuthTypes';
 import { IValidation } from '../ValidationTypes';
 

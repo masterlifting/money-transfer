@@ -5,7 +5,7 @@ import { useAuthState } from '../domains/auth/AuthHooks';
 import { IAuthUserPost } from '../domains/auth/AuthTypes';
 import { authorizeUser } from '../domains/auth/AuthData';
 import { useNavigate } from 'react-router-dom';
-import { CustomError } from '../shared/CustomError';
+import { ValidationError } from '../shared/errors/ErrorComponents';
 
 export const Login = () => {
   const { setAuthState } = useAuthState();
@@ -57,7 +57,7 @@ export const Login = () => {
           Login
         </button>
       </div>
-      {validationError !== null && <CustomError message={validationError} />}
+      {validationError !== null && <ValidationError message={validationError} />}
     </form>
   );
 };

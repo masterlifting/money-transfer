@@ -6,17 +6,13 @@ interface ITransactionDetailsProps {
 
 export const TransactionListItemDetails = ({ transactionId }: ITransactionDetailsProps) => {
   return (
-    <div
+    <td
+      colSpan={6}
       className={`
-        border-b-2
-        rounded-b-md
-        border-gray-200
         p-2
-        text-gray-600
-        text-sm
-        bg-yellow-100`}
+        text-sm`}
     >
       <p>Details for transactionId: {transactionId}</p>
-    </div>
+    </td>
   );
 };
