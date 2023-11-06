@@ -83,10 +83,30 @@ export const useTransactionCreate = (transaction: ITransactionGet | undefined, u
     });
   }, []);
 
+  useEffect(() => {
+    setValidation({ message: '', isValid: true });
+
+    if (transactionPostModel.amount <= 0) {
+      setValidation({ message: 'Amount must be greater than 0', isValid: false });
+    }
+
+    if (!transactionPostModel.user.id || transactionPostModel.user.id.length === 0) {
+      setValidation({ message: 'Choose a recipient', isValid: false });
+    }
+  }, [recipients, transactionPostModel, transactionPostModel.amount, transactionPostModel.user.id]);
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setValidation({ message: '', isValid: true });
+    if (!validation.isValid) {
+      return;
+    }
+
+    const recipient = recipients.find(x => x.id === transactionPostModel.user.id);
+
+    if (recipient) {
+      transactionPostModel.user.email = recipient.email;
+    }
 
     const commitTransactionResponse = await commitTransaction(transactionPostModel);
 
@@ -99,23 +119,11 @@ export const useTransactionCreate = (transaction: ITransactionGet | undefined, u
   };
 
   const onChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = Number(event.target.value);
-
-    if (value > 0) {
-      setTransactionPostModel({ ...transactionPostModel, amount: Number(value) });
-    } else {
-      setValidation({ message: 'Amount must be a number', isValid: false });
-    }
+    setTransactionPostModel({ ...transactionPostModel, amount: Number(event.target.value) });
   };
 
   const onChangeRecipient = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value;
-
-    if (recipients.find(x => x.email === value)) {
-      setTransactionPostModel({ ...transactionPostModel, user: { id: '', email: value } });
-    } else {
-      setValidation({ message: 'Recipient not found', isValid: false });
-    }
+    setTransactionPostModel({ ...transactionPostModel, user: { ...transactionPostModel.user, id: event.target.value } });
   };
 
   return { transactionPost: transactionPostModel, recipients, validation, onChangeAmount, onChangeRecipient, onSubmit };

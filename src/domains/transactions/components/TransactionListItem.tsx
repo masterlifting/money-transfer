@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { TransactionListItemDetails } from './TransactionListItemDetails';
 import { TransactionCreate } from './TransactionCreate';
 import { ITransactionGet } from '../TransactionTypes';
-import { SvgIcons } from '../../../shared/icons/SvgIcons';
 import { useCustomModal } from '../../../shared/modals/CustomModalHooks';
 import { CustomModal } from '../../../shared/modals/CustomModal';
-import { ButtonStyle } from '../../../styles/Buttons';
+import { SvgIcons } from '../../../shared/icons/SvgIcons';
+import { SvgIcon } from '../../../shared/icons/SvgIcon';
 
 interface ITransactionProps {
   transaction: ITransactionGet;
@@ -39,19 +39,7 @@ export const TransactionListItem = ({ transaction, updateTransactions }: ITransa
         <td className='text-left'>{transaction.type === 'outcome' ? 'to' : 'from'}</td>
         <td className='text-left'>{transaction.user.email}</td>
         <td className='text-left'>{transaction.status}</td>
-        <td className='text-left'>
-          {transaction.type === 'outcome' ? (
-            <button
-              className={ButtonStyle.success}
-              onClick={event => {
-                event.stopPropagation();
-                openModal(modalTitle);
-              }}
-            >
-              {SvgIcons.repeat}
-            </button>
-          ) : null}
-        </td>
+        <td className='text-left'>{transaction.type === 'outcome' ? <SvgIcon icon={SvgIcons.repeat} handleClick={() => openModal(modalTitle)} /> : null}</td>
       </tr>
       <tr>{showDetails && <TransactionListItemDetails transactionId={transaction.id} />}</tr>
     </>

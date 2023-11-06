@@ -9,7 +9,7 @@ export const TopBar = () => {
 
   return (
     <nav className='h-10 bg-gray-800 flex justify-between items-center px-5'>
-      <Link to='/' className='text-xl font-bold text-white'>
+      <Link to='/' className='text-xl font-bold text-white hover:text-gray-300'>
         internal money
       </Link>
       <div className='flex gap-2'>
@@ -27,9 +27,14 @@ export const TopBar = () => {
             </button>
           </div>
         ) : (
-          <Link to='/login' className='text-white hover:text-gray-300'>
-            Login
-          </Link>
+          <div className='flex gap-2'>
+            <Link to='/register' className='text-white hover:text-gray-300'>
+              Register
+            </Link>
+            <Link to='/login' className='text-white hover:text-gray-300'>
+              Login
+            </Link>
+          </div>
         )}
       </div>
     </nav>

@@ -11,17 +11,13 @@ interface IModalProps {
 export const CustomModal = ({ children, title, onClose }: IModalProps) => {
   const { isModalOpen, currentModalTitle } = useCustomModal();
 
-  return (
+  return isModalOpen && currentModalTitle === title ? (
     <>
-      {isModalOpen && currentModalTitle === title && (
-        <>
-          <div className='fixed bg-black/50 top-0 bottom-0 left-0 right-0' onClick={onClose} />
-          <div className='absolute bg-white p-5 rounded-md left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/3'>
-            <h1 className='text-xl font-bold mb-2'>{currentModalTitle}</h1>
-            {children}
-          </div>
-        </>
-      )}
+      <div className='fixed bg-black/50 top-0 bottom-0 left-0 right-0' onClick={onClose} />
+      <div className='absolute bg-white p-5 rounded-md left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/3'>
+        <h1 className='text-xl font-bold mb-2'>{currentModalTitle}</h1>
+        {children}
+      </div>
     </>
-  );
+  ) : null;
 };
