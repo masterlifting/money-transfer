@@ -57,13 +57,16 @@ export const useTransactionList = () => {
   return { transactions, updateTransactions, loading, error };
 };
 
-export const useTransactionCreate = (transaction: ITransactionGet | undefined, updateTransactions: (transaction: ITransactionGet) => void) => {
+export const useTransactionCreate = (
+  transaction: ITransactionGet | undefined,
+  updateTransactions: (transaction: ITransactionGet) => void,
+) => {
   const { closeModal } = useCustomModal();
   const [transactionPostModel, setTransactionPostModel] = useState<ITransactionPost>(
     transaction && transaction.type === 'outcome'
       ? transaction
       : {
-          amount: 0,
+          amount: 100,
           user: {
             id: '',
             email: '',
@@ -73,6 +76,7 @@ export const useTransactionCreate = (transaction: ITransactionGet | undefined, u
   const [recipients, setRecipients] = useState<IUserGet[]>([]);
   const [validation, setValidation] = useState<IValidation>({ message: '', isValid: true });
 
+  // Fetch recipients
   useEffect(() => {
     fetchRecipients().then((x: WebApiResponse<IUserGet[]>) => {
       if (x.isSuccess) {
@@ -83,6 +87,17 @@ export const useTransactionCreate = (transaction: ITransactionGet | undefined, u
     });
   }, []);
 
+  // Set default recipient for a new outcome transaction
+  useEffect(() => {
+    if (!transaction && recipients.length > 0) {
+      setTransactionPostModel({
+        ...transactionPostModel,
+        user: { ...transactionPostModel.user, id: recipients[0].id, email: recipients[0].email },
+      });
+    }
+  }, [recipients, recipients.length, transaction, transactionPostModel]);
+
+  // Validate transaction post model
   useEffect(() => {
     setValidation({ message: '', isValid: true });
 

@@ -4,8 +4,8 @@ import { ITransactionGet } from '../TransactionTypes';
 import { useCustomModal } from '../../../shared/modals/CustomModalHooks';
 import { ValidationError } from '../../../shared/errors/ErrorComponents';
 import { useTransactionCreate } from '../TransactionsHooks';
-import { ButtonStyle } from '../../../styles/Buttons';
-import { InputStyle } from '../../../styles/Inputs';
+import { buttonStyle } from '../../../styles/Button';
+import { inputStyle } from '../../../styles/Input';
 
 interface ITransactionProps {
   transaction?: ITransactionGet;
@@ -14,15 +14,29 @@ interface ITransactionProps {
 
 export const TransactionCreate = ({ transaction, updateTransactions }: ITransactionProps) => {
   const { closeModal } = useCustomModal();
-  const { transactionPost, recipients, validation, onChangeAmount, onChangeRecipient, onSubmit } = useTransactionCreate(transaction, updateTransactions);
+  const { transactionPost, recipients, validation, onChangeAmount, onChangeRecipient, onSubmit } = useTransactionCreate(
+    transaction,
+    updateTransactions,
+  );
 
   return (
     <form onSubmit={onSubmit}>
       {!validation.isValid && <ValidationError message={validation.message} />}
       <div className='flex gap-2'>
-        <input className={'w-20 ' + InputStyle.text} type='number' placeholder='Amount' value={transactionPost.amount} onChange={onChangeAmount} />
-        <select className={'w-60 cursor-pointer ' + InputStyle.text} value={transactionPost.user.id} onChange={onChangeRecipient} placeholder='Choose a recipient'>
-          <option value=''>Choose a recipient</option>
+        <input
+          className={'w-20 ' + inputStyle.text}
+          type='number'
+          placeholder='Amount'
+          value={transactionPost.amount}
+          onChange={onChangeAmount}
+        />
+        <select
+          title='Choose a recipient'
+          className={inputStyle.select.base + 'w-60'}
+          value={transactionPost.user.id}
+          onChange={onChangeRecipient}
+          placeholder='Choose a recipient'
+        >
           {recipients.map(x => (
             <option key={x.id} value={x.id}>
               {x.email}
@@ -31,10 +45,10 @@ export const TransactionCreate = ({ transaction, updateTransactions }: ITransact
         </select>
       </div>
       <div className='flex justify-end gap-2'>
-        <button className={ButtonStyle.secondary} onClick={closeModal}>
+        <button className={buttonStyle.secondary} onClick={closeModal}>
           Close
         </button>
-        <button disabled={!validation.isValid} className={validation.isValid ? ButtonStyle.success : ButtonStyle.disable}>
+        <button disabled={!validation.isValid} className={validation.isValid ? buttonStyle.success : buttonStyle.disable}>
           Commit
         </button>
       </div>

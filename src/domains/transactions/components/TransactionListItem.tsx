@@ -6,7 +6,7 @@ import { TransactionCreate } from './TransactionCreate';
 import { ITransactionGet } from '../TransactionTypes';
 import { useCustomModal } from '../../../shared/modals/CustomModalHooks';
 import { CustomModal } from '../../../shared/modals/CustomModal';
-import { SvgIcons } from '../../../shared/icons/SvgIcons';
+import { svgIcons } from '../../../shared/icons/SvgIcons';
 import { SvgIcon } from '../../../shared/icons/SvgIcon';
 
 interface ITransactionProps {
@@ -39,7 +39,9 @@ export const TransactionListItem = ({ transaction, updateTransactions }: ITransa
         <td className='text-left'>{transaction.type === 'outcome' ? 'to' : 'from'}</td>
         <td className='text-left'>{transaction.user.email}</td>
         <td className='text-left'>{transaction.status}</td>
-        <td className='text-left'>{transaction.type === 'outcome' ? <SvgIcon icon={SvgIcons.repeat} handleClick={() => openModal(modalTitle)} /> : null}</td>
+        <td className='text-left'>
+          {transaction.type === 'outcome' ? <SvgIcon icon={svgIcons.repeat} handleClick={() => openModal(modalTitle)} /> : null}
+        </td>
       </tr>
       <tr>{showDetails && <TransactionListItemDetails transactionId={transaction.id} />}</tr>
     </>

@@ -4,6 +4,7 @@ import { ValidationError } from '../../../shared/errors/ErrorComponents';
 import { CircleLoader } from '../../../shared/loaders/LoaderComponents';
 import { CustomModal } from '../../../shared/modals/CustomModal';
 import { useCustomModal } from '../../../shared/modals/CustomModalHooks';
+import { buttonStyle } from '../../../styles/Button';
 import { useTransactionList } from '../TransactionsHooks';
 import { TransactionCreate } from './TransactionCreate';
 import { TransactionListItem } from './TransactionListItem';
@@ -22,7 +23,7 @@ export const TransactionList = () => {
 
       <div className='flex justify-between items-center mb-2'>
         <h1 className='align-middle text-xl font-bold'>Transactions</h1>
-        <button className='w-20 bg-blue-300 text-white p-1 rounded-md hover:bg-green-300' onClick={() => openModal(newTransaction)}>
+        <button className={buttonStyle.primary} onClick={() => openModal(newTransaction)}>
           New
         </button>
       </div>
