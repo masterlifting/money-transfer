@@ -1,25 +1,25 @@
 /** @format */
 
-import { IUserGet } from '../auth/AuthTypes';
+import { IUserGet } from '../types/UserTypes';
 
 type TransactionType = 'income' | 'outcome';
 type TransactionStatus = 'created' | 'pending' | 'completed' | 'failed';
 
-interface ITransaction {
+interface IUserTransaction {
   user: IUserGet;
   amount: number;
 }
 
-export interface ITransactionGet extends ITransaction {
+export interface IUserTransactionGet extends IUserTransaction {
   id: string;
   date: Date;
   type: TransactionType;
   status: TransactionStatus;
 }
 
-export interface ITransactionStatusGet {
+export interface IUserTransactionStatusGet {
   id: string;
   status: TransactionStatus;
 }
 
-export interface ITransactionPost extends ITransaction {}
+export interface IUserTransactionPost extends IUserTransaction {}

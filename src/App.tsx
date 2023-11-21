@@ -3,7 +3,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { UserLogin } from './pages/UserLogin';
-import { TopBar } from './shared/bars/TopBar';
+import { TopBar } from './shared/components/bars/TopBarComponent';
 import { UserRegister } from './pages/UserRegister';
 
 export default function App() {

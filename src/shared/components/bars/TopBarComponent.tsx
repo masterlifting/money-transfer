@@ -1,7 +1,7 @@
 /** @format */
 
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthState } from '../../domains/auth/AuthHooks';
+import { useAuthState } from '../../../domains/auth/AuthHooks';
 
 export const TopBar = () => {
   const navigate = useNavigate();

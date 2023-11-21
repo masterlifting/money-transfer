@@ -1,6 +1,6 @@
 /** @format */
 
-interface IErrorProps {
+export interface IErrorProps {
   message: string;
 }
 

@@ -1,17 +1,17 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { ValidationError } from '../../../shared/errors/ErrorComponents';
-import { inputStyle } from '../../../styles/Input';
-import { useAuthUser } from '../AuthHooks';
-import { buttonStyle } from '../../../styles/Button';
+import { ValidationError } from '../../shared/components/errors/ErrorValidationComponent';
+import { InputTextStyle } from '../../shared/styles/Input';
+import { useAuthorizeUser } from './AuthHooks';
+import { ButtonStyle } from '../../shared/styles/Button';
 
 interface IAuthUserProps {
   type: 'Login' | 'Register';
 }
 
-export const AuthUser = ({ type }: IAuthUserProps) => {
-  const { validation, authUserPostModel, onSubmit, onChangeEmail, onChangePassword, setValidation } = useAuthUser();
+export const Auth = ({ type }: IAuthUserProps) => {
+  const { validation, authUserPostModel, onSubmit, onChangeEmail, onChangePassword, setValidation } = useAuthorizeUser();
   const [confirmedPassword, setConfirmedPassword] = useState('');
 
   useEffect(() => {
@@ -29,12 +29,12 @@ export const AuthUser = ({ type }: IAuthUserProps) => {
   };
 
   return (
-    <form onSubmit={onSubmit} className='absolute rounded-md left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/3'>
+    <form onSubmit={onSubmit} className='w-80 absolute rounded-md left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/3'>
       <h1 className='text-2xl font-bold mb-2'>{type}</h1>
       {!validation.isValid && <ValidationError message={validation.message} />}
       <div className='flex flex-col items-center'>
         <input
-          className={inputStyle.text}
+          className={InputTextStyle.Text}
           type='email'
           placeholder='email'
           value={authUserPostModel.email}
@@ -42,7 +42,7 @@ export const AuthUser = ({ type }: IAuthUserProps) => {
           autoComplete='email'
         />
         <input
-          className={inputStyle.text}
+          className={InputTextStyle.Text}
           type='password'
           placeholder='password'
           value={authUserPostModel.password}
@@ -51,7 +51,7 @@ export const AuthUser = ({ type }: IAuthUserProps) => {
         />
         {type === 'Register' && (
           <input
-            className={inputStyle.text}
+            className={InputTextStyle.Text}
             type='password'
             placeholder='password'
             required={true}
@@ -65,7 +65,7 @@ export const AuthUser = ({ type }: IAuthUserProps) => {
         <button
           type='submit'
           disabled={!validation.isValid}
-          className={validation.isValid ? buttonStyle.success : buttonStyle.disable}
+          className={validation.isValid ? ButtonStyle.Success : ButtonStyle.Disable}
         >
           {type}
         </button>

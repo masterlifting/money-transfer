@@ -1,6 +1,6 @@
 /** @format */
 
-import { WebApiResponse } from '../WebApiTypes';
+import { WebApiResponse } from '../../shared/types/WebApiTypes';
 import { IAuthUserGet, IAuthUserPost } from './AuthTypes';
 
 export const authorizeUser = async (user: IAuthUserPost): Promise<WebApiResponse<IAuthUserGet>> => {

@@ -1,5 +1,5 @@
 /** @format */
 
-import { AuthUser } from '../domains/auth/components/AuthUser';
+import { Auth } from '../domains/auth/AuthComponent';
 
-export const UserLogin = () => <AuthUser type='Login' />;
+export const UserLogin = () => <Auth type='Login' />;

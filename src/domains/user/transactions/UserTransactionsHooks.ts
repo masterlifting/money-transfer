@@ -1,22 +1,27 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { ITransactionGet, ITransactionPost } from './TransactionTypes';
-import { commitTransaction, fetchRecipients, fetchTransactions, fetchTransactionsStatuses } from './TransactionsData';
-import { WebApiResponse } from '../WebApiTypes';
-import { useCustomModal } from '../../shared/modals/CustomModalHooks';
-import { IUserGet } from '../auth/AuthTypes';
-import { IValidation } from '../ValidationTypes';
+import { IUserTransactionGet, IUserTransactionPost } from './UserTransactionsTypes';
+import {
+  commitUserTransaction,
+  fetchRecipients,
+  fetchUserTransactions,
+  fetchUserTransactionsStatuses,
+} from './UserTransactionsData';
+import { WebApiResponse } from '../../../shared/types/WebApiTypes';
+import { IUserGet } from '../types/UserTypes';
+import { IValidation } from '../../../shared/types/ValidationTypes';
+import { useModal } from '../../../shared/components/modals/ModalHooks';
 
-export const useTransactionList = () => {
-  const [transactions, setTransactions] = useState<ITransactionGet[]>([]);
+export const useTransactions = () => {
+  const [transactions, setTransactions] = useState<IUserTransactionGet[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const updateTransactions = async (transaction: ITransactionGet) => {
+  const updateTransactions = async (transaction: IUserTransactionGet) => {
     setLoading(true);
 
-    const transactionsStatusesResponse = await fetchTransactionsStatuses(transactions);
+    const transactionsStatusesResponse = await fetchUserTransactionsStatuses(transactions);
 
     if (transactionsStatusesResponse.isSuccess) {
       setTransactions(prev => {
@@ -43,7 +48,7 @@ export const useTransactionList = () => {
   useEffect(() => {
     setLoading(true);
 
-    fetchTransactions().then((x: WebApiResponse<ITransactionGet[]>) => {
+    fetchUserTransactions().then((x: WebApiResponse<IUserTransactionGet[]>) => {
       if (x.isSuccess) {
         setTransactions(x.data);
       } else {
@@ -58,11 +63,11 @@ export const useTransactionList = () => {
 };
 
 export const useTransactionCreate = (
-  transaction: ITransactionGet | undefined,
-  updateTransactions: (transaction: ITransactionGet) => void,
+  transaction: IUserTransactionGet | undefined,
+  updateTransactions: (transaction: IUserTransactionGet) => void,
 ) => {
-  const { closeModal } = useCustomModal();
-  const [transactionPostModel, setTransactionPostModel] = useState<ITransactionPost>(
+  const { closeModal } = useModal();
+  const [transactionPostModel, setTransactionPostModel] = useState<IUserTransactionPost>(
     transaction && transaction.type === 'outcome'
       ? transaction
       : {
@@ -76,26 +81,22 @@ export const useTransactionCreate = (
   const [recipients, setRecipients] = useState<IUserGet[]>([]);
   const [validation, setValidation] = useState<IValidation>({ message: '', isValid: true });
 
-  // Fetch recipients
+  // Fetch recipients and set default recipient
   useEffect(() => {
     fetchRecipients().then((x: WebApiResponse<IUserGet[]>) => {
       if (x.isSuccess) {
         setRecipients(x.data);
+        if (!transaction && x.data.length > 0) {
+          setTransactionPostModel({
+            ...transactionPostModel,
+            user: { ...transactionPostModel.user, id: x.data[0].id, email: x.data[0].email },
+          });
+        }
       } else {
         setValidation({ message: x.error.message, isValid: false });
       }
     });
   }, []);
-
-  // Set default recipient for a new outcome transaction
-  useEffect(() => {
-    if (!transaction && recipients.length > 0) {
-      setTransactionPostModel({
-        ...transactionPostModel,
-        user: { ...transactionPostModel.user, id: recipients[0].id, email: recipients[0].email },
-      });
-    }
-  }, [recipients, recipients.length, transaction, transactionPostModel]);
 
   // Validate transaction post model
   useEffect(() => {
@@ -123,7 +124,7 @@ export const useTransactionCreate = (
       transactionPostModel.user.email = recipient.email;
     }
 
-    const commitTransactionResponse = await commitTransaction(transactionPostModel);
+    const commitTransactionResponse = await commitUserTransaction(transactionPostModel);
 
     if (commitTransactionResponse.isSuccess) {
       closeModal();

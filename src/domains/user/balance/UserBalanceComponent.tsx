@@ -1,5 +1,5 @@
 /** @format */
 
-export const BalanceItem = () => {
+export const UserBalance = () => {
   return <div>BalanceItem</div>;
 };

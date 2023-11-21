@@ -1,14 +1,14 @@
 /** @format */
 
-export const svgIcons = {
-  repeat: (
+export const SvgIcons = {
+  Repeat: (
     <svg
       xmlns='http://www.w3.org/2000/svg'
       fill='none'
       viewBox='0 0 24 24'
       strokeWidth={1}
       stroke='currentColor'
-      className='w-3 h-3 cursor-pointer'
+      className='w-4 h-4 cursor-pointer'
     >
       <path
         strokeLinecap='round'

@@ -4,15 +4,14 @@ interface ITransactionDetailsProps {
   transactionId: string;
 }
 
-export const TransactionListItemDetails = ({ transactionId }: ITransactionDetailsProps) => {
+export const UserTransactionDetails = ({ transactionId }: ITransactionDetailsProps) => {
   return (
-    <td
-      colSpan={6}
+    <div
       className={`
         p-2
         text-sm`}
     >
       <p>Details for transactionId: {transactionId}</p>
-    </td>
+    </div>
   );
 };

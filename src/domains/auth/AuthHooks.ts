@@ -1,6 +1,6 @@
 /** @format */
 
-import { IValidation } from '../ValidationTypes';
+import { IValidation } from '../../shared/types/ValidationTypes';
 import { AuthContext } from './AuthContext';
 import { useContext, useEffect, useState } from 'react';
 import { IAuthUserPost } from './AuthTypes';
@@ -8,11 +8,8 @@ import { authorizeUser } from './AuthData';
 import { useNavigate } from 'react-router-dom';
 
 /** @format */
-export const useAuthState = () => {
-  return useContext(AuthContext);
-};
 
-export const useWithAuth = () => {
+export const useAuthRedirection = () => {
   const navigate = useNavigate();
   const { isAuthorized } = useAuthState();
 
@@ -25,7 +22,11 @@ export const useWithAuth = () => {
   return { isAuthorized };
 };
 
-export const useAuthUser = () => {
+export const useAuthState = () => {
+  return useContext(AuthContext);
+};
+
+export const useAuthorizeUser = () => {
   const navigate = useNavigate();
   const { setAuthState } = useAuthState();
 

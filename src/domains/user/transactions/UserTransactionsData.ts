@@ -1,15 +1,17 @@
 /** @format */
 
-import { WebApiResponse } from '../WebApiTypes';
-import { ITransactionGet, ITransactionPost, ITransactionStatusGet } from './TransactionTypes';
-import { IUserGet } from '../auth/AuthTypes';
+import { v4 as uuidv4 } from 'uuid';
+import { WebApiResponse } from '../../../shared/types/WebApiTypes';
+import { IUserTransactionGet, IUserTransactionPost, IUserTransactionStatusGet } from './UserTransactionsTypes';
+import { IUserGet } from '../types/UserTypes';
 
-export const fetchTransactions = async (): Promise<WebApiResponse<ITransactionGet[]>> => {
+export const fetchUserTransactions = async (): Promise<WebApiResponse<IUserTransactionGet[]>> => {
   return {
     isSuccess: true,
+
     data: [
       {
-        id: '1',
+        id: uuidv4(),
         type: 'income',
         status: 'completed',
         date: new Date(),
@@ -20,7 +22,7 @@ export const fetchTransactions = async (): Promise<WebApiResponse<ITransactionGe
         },
       },
       {
-        id: '2',
+        id: uuidv4(),
         type: 'outcome',
         status: 'pending',
         date: new Date(),
@@ -31,7 +33,7 @@ export const fetchTransactions = async (): Promise<WebApiResponse<ITransactionGe
         },
       },
       {
-        id: '3',
+        id: uuidv4(),
         type: 'outcome',
         status: 'failed',
         date: new Date(),
@@ -45,7 +47,9 @@ export const fetchTransactions = async (): Promise<WebApiResponse<ITransactionGe
   };
 };
 
-export const fetchTransactionsStatuses = async (transactions: ITransactionGet[]): Promise<WebApiResponse<ITransactionStatusGet[]>> => {
+export const fetchUserTransactionsStatuses = async (
+  transactions: IUserTransactionGet[],
+): Promise<WebApiResponse<IUserTransactionStatusGet[]>> => {
   return {
     isSuccess: true,
     data: transactions.map(transaction => ({
@@ -55,14 +59,14 @@ export const fetchTransactionsStatuses = async (transactions: ITransactionGet[])
   };
 };
 
-export const commitTransaction = async (transaction: ITransactionPost): Promise<WebApiResponse<ITransactionGet>> => {
+export const commitUserTransaction = async (transaction: IUserTransactionPost): Promise<WebApiResponse<IUserTransactionGet>> => {
   return {
     isSuccess: true,
     data: {
-      id: '4',
+      id: uuidv4(),
       date: new Date(),
       type: 'outcome',
-      status: 'created',
+      status: 'pending',
       amount: transaction.amount,
       user: transaction.user,
     },

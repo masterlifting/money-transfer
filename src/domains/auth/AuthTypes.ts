@@ -1,12 +1,6 @@
 /** @format */
 
-export interface IUser {
-  email: string;
-}
-
-export interface IUserGet extends IUser {
-  id: string;
-}
+import { IUser, IUserGet } from '../user/types/UserTypes';
 
 export interface IAuthUserGet extends IUserGet {
   token: string;

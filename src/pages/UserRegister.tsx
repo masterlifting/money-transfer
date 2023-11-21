@@ -1,5 +1,5 @@
 /** @format */
 
-import { AuthUser } from '../domains/auth/components/AuthUser';
+import { Auth } from '../domains/auth/AuthComponent';
 
-export const UserRegister = () => <AuthUser type='Register' />;
+export const UserRegister = () => <Auth type='Register' />;
