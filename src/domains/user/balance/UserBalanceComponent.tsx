@@ -10,25 +10,20 @@ interface IUserBalanceProps {
 }
 
 export const UserBalance = ({ user }: IUserBalanceProps) => {
-  const [balance, setBalance] = useState<IUserBalanceGet>({
-    balance: 0,
-    currency: 'USD',
-    symbol: '$',
-  });
+  const [balance, setBalance] = useState<IUserBalanceGet | undefined>();
 
   useEffect(() => {
-    const fetchUserBalanceData = async () => {
-      const userBalance = await fetchUserBalance(user);
-      setBalance(userBalance);
-    };
-
-    fetchUserBalanceData();
+    fetchUserBalance(user).then(x => {
+      if (x.isSuccess) {
+        setBalance(x.data);
+      }
+    });
   }, [user]);
 
-  return (
+  return balance ? (
     <span className='text-yellow-400 font-bold'>
       {balance.symbol}
       {balance.balance}
     </span>
-  );
+  ) : null;
 };

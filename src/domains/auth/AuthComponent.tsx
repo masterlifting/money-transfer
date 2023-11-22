@@ -5,9 +5,10 @@ import { ValidationError } from '../../shared/components/errors/ErrorValidationC
 import { InputTextStyle } from '../../shared/styles/Input';
 import { useAuthorizeUser } from './AuthHooks';
 import { ButtonStyle } from '../../shared/styles/Button';
+import { IAuthType } from './AuthTypes';
 
 interface IAuthUserProps {
-  type: 'Login' | 'Register';
+  type: IAuthType;
 }
 
 export const Auth = ({ type }: IAuthUserProps) => {
@@ -15,7 +16,7 @@ export const Auth = ({ type }: IAuthUserProps) => {
   const [confirmedPassword, setConfirmedPassword] = useState('');
 
   useEffect(() => {
-    if (type === 'Register') {
+    if (type === 'register') {
       if (authUserPostModel.password !== confirmedPassword) {
         setValidation({ isValid: false, message: 'Passwords do not match' });
       } else {
@@ -29,7 +30,10 @@ export const Auth = ({ type }: IAuthUserProps) => {
   };
 
   return (
-    <form onSubmit={onSubmit} className='w-80 absolute rounded-md left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/3'>
+    <form
+      onSubmit={event => onSubmit(event, type)}
+      className='w-80 absolute rounded-md left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/3'
+    >
       <h1 className='text-2xl font-bold mb-2'>{type}</h1>
       {!validation.isValid && <ValidationError message={validation.message} />}
       <div className='flex flex-col items-center'>
@@ -49,7 +53,7 @@ export const Auth = ({ type }: IAuthUserProps) => {
           onChange={onChangePassword}
           autoComplete='new-password'
         />
-        {type === 'Register' && (
+        {type === 'register' && (
           <input
             className={InputTextStyle.Text}
             type='password'

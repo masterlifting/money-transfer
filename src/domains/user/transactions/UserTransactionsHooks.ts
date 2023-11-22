@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { IUserTransactionGet, IUserTransactionPost } from './UserTransactionsTypes';
 import {
   commitUserTransaction,
-  fetchRecipients,
+  fetchUserTransactionRecipients,
   fetchUserTransactions,
   fetchUserTransactionsStatuses,
 } from './UserTransactionsData';
@@ -12,6 +12,7 @@ import { WebApiResponse } from '../../../shared/types/WebApiTypes';
 import { IUserGet } from '../types/UserTypes';
 import { IValidation } from '../../../shared/types/ValidationTypes';
 import { useModal } from '../../../shared/components/modals/ModalHooks';
+import { useAuthState } from '../../auth/AuthHooks';
 
 export const useTransactions = () => {
   const [transactions, setTransactions] = useState<IUserTransactionGet[]>([]);
@@ -66,6 +67,7 @@ export const useTransactionCreate = (
   transaction: IUserTransactionGet | undefined,
   updateTransactions: (transaction: IUserTransactionGet) => void,
 ) => {
+  const { authUser } = useAuthState();
   const { closeModal } = useModal();
   const [transactionPostModel, setTransactionPostModel] = useState<IUserTransactionPost>(
     transaction && transaction.type === 'outcome'
@@ -83,17 +85,17 @@ export const useTransactionCreate = (
 
   // Fetch recipients and set default recipient
   useEffect(() => {
-    fetchRecipients().then((x: WebApiResponse<IUserGet[]>) => {
-      if (x.isSuccess) {
-        setRecipients(x.data);
-        if (!transaction && x.data.length > 0) {
+    fetchUserTransactionRecipients(authUser).then(response => {
+      if (response.isSuccess) {
+        setRecipients(response.data);
+        if (!transaction && response.data.length > 0) {
           setTransactionPostModel({
             ...transactionPostModel,
-            user: { ...transactionPostModel.user, id: x.data[0].id, email: x.data[0].email },
+            user: { ...transactionPostModel.user, id: response.data[0].id, email: response.data[0].email },
           });
         }
       } else {
-        setValidation({ message: x.error.message, isValid: false });
+        setValidation({ message: response.error.message, isValid: false });
       }
     });
   }, []);

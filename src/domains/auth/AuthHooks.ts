@@ -3,8 +3,8 @@
 import { IValidation } from '../../shared/types/ValidationTypes';
 import { AuthContext } from './AuthContext';
 import { useContext, useEffect, useState } from 'react';
-import { IAuthUserPost } from './AuthTypes';
-import { authorizeUser } from './AuthData';
+import { IAuthType, IAuthUserPost } from './AuthTypes';
+import { authorizeUser, registerUser } from './AuthData';
 import { useNavigate } from 'react-router-dom';
 
 /** @format */
@@ -45,20 +45,20 @@ export const useAuthorizeUser = () => {
     }
   }, [authUserPostModel.email, authUserPostModel.password]);
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>, type: IAuthType) => {
     event.preventDefault();
 
     if (!validation.isValid) {
       return;
     }
 
-    const authorizedUserResponse = await authorizeUser(authUserPostModel);
+    const authUserResponse = type === 'register' ? await registerUser(authUserPostModel) : await authorizeUser(authUserPostModel);
 
-    if (authorizedUserResponse.isSuccess) {
-      setAuthState(authorizedUserResponse.data);
+    if (authUserResponse.isSuccess) {
+      setAuthState(authUserResponse.data);
       navigate('/');
     } else {
-      setValidation({ message: authorizedUserResponse.error.message, isValid: false });
+      setValidation({ message: authUserResponse.error.message, isValid: false });
     }
   };
 
