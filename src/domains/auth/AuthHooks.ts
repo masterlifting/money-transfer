@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const useAuthRedirection = () => {
   const navigate = useNavigate();
-  const { isAuthorized } = useAuthState();
+  const { isAuthorized, authUser } = useAuthState();
 
   useEffect(() => {
     if (!isAuthorized) {
@@ -19,7 +19,9 @@ export const useAuthRedirection = () => {
     }
   }, [isAuthorized, navigate]);
 
-  return { isAuthorized };
+  const user = authUser!;
+
+  return { authUser: user };
 };
 
 export const useAuthState = () => {

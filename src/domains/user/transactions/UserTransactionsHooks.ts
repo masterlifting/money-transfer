@@ -2,58 +2,23 @@
 
 import { useEffect, useState } from 'react';
 import { IUserTransactionGet, IUserTransactionPost, IUserTransactionsFilter } from './UserTransactionsTypes';
-import {
-  commitUserTransaction,
-  fetchFilteredUserTransactions,
-  fetchUserTransactionRecipients,
-  fetchUserTransactionsStatuses,
-} from './UserTransactionsData';
+import { commitUserTransaction, fetchFilteredUserTransactions, fetchUserTransactionRecipients } from './UserTransactionsData';
 import { IUserGet } from '../types/UserTypes';
 import { IValidation } from '../../../shared/types/ValidationTypes';
-import { useModal } from '../../../shared/components/modals/ModalHooks';
-import { useAuthState } from '../../auth/AuthHooks';
+import { useModalState } from '../../../shared/components/modals/ModalHooks';
 import { PageItemsType } from '../../../shared/components/paginators/PaginationComponent';
-import { useUserBalance } from '../balance/UserBalanceHooks';
+import { useUserBalanceState } from '../balance/UserBalanceHooks';
+import { IAuthUserGet } from '../../auth/AuthTypes';
 
-export const useTransactions = () => {
-  const { authUser } = useAuthState();
-  const { updateUserBalance } = useUserBalance();
+export const useUserTransactions = (user: IAuthUserGet) => {
+  const { updateUserBalance } = useUserBalanceState();
 
   const [transactions, setTransactions] = useState<IUserTransactionGet[]>([]);
   const [transactionsTotalCount, setTransactionsTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const updateTransactions = async (transaction: IUserTransactionGet) => {
-    setLoading(true);
-
-    const transactionsStatusesResponse = await fetchUserTransactionsStatuses(transactions);
-
-    if (transactionsStatusesResponse.isSuccess) {
-      setTransactions(prev => {
-        const prevMap = new Map(prev.map(x => [x.id, x]));
-
-        for (let i = 0; i < transactionsStatusesResponse.data.length; i++) {
-          const transactionStatus = transactionsStatusesResponse.data[i];
-          const targetTransaction = prevMap.get(transactionStatus.id);
-
-          if (targetTransaction) {
-            targetTransaction.status = transactionStatus.status;
-          }
-        }
-
-        return [...prev, transaction];
-      });
-      setTransactionsTotalCount(prev => prev + 1);
-      updateUserBalance(authUser);
-    } else {
-      setError(transactionsStatusesResponse.error.message);
-    }
-
-    setLoading(false);
-  };
-
-  const setTransactionsPerPage = (items: PageItemsType, page: number) => {
+  const setUserTransactions = (items: PageItemsType, page: number) => {
     setLoading(true);
 
     const filter: IUserTransactionsFilter = {
@@ -61,10 +26,11 @@ export const useTransactions = () => {
       page,
     };
 
-    fetchFilteredUserTransactions(filter, authUser).then(response => {
+    fetchFilteredUserTransactions(filter, user).then(response => {
       if (response.isSuccess) {
         setTransactions(response.data.items);
         setTransactionsTotalCount(response.data.totalCount);
+        updateUserBalance(user);
       } else {
         setError(response.error.message);
       }
@@ -73,15 +39,22 @@ export const useTransactions = () => {
     setLoading(false);
   };
 
-  return { transactionsTotalCount, transactions, updateTransactions, setTransactionsPerPage, loading, error };
+  return {
+    userTransactionsTotalCount: transactionsTotalCount,
+    userTransactions: transactions,
+    setUserTransactions,
+    userTransactionsLoading: loading,
+    useUserTransactionsError: error,
+  };
 };
 
-export const useTransactionCreate = (
+export const useUserTransactionCreate = (
+  user: IAuthUserGet,
   transaction: IUserTransactionGet | undefined,
-  updateTransactions: (transaction: IUserTransactionGet) => void,
+  setUserTransactions: (items: PageItemsType, page: number) => void,
 ) => {
-  const { authUser } = useAuthState();
-  const { closeModal } = useModal();
+  const { closeModal } = useModalState();
+
   const [transactionPostModel, setTransactionPostModel] = useState<IUserTransactionPost>(
     transaction && transaction.type === 'outcome'
       ? transaction
@@ -96,22 +69,16 @@ export const useTransactionCreate = (
   const [recipients, setRecipients] = useState<IUserGet[]>([]);
   const [validation, setValidation] = useState<IValidation>({ message: '', isValid: true });
 
-  // Fetch recipients and set default recipient
+  // Fetch recipients
   useEffect(() => {
-    fetchUserTransactionRecipients(authUser).then(response => {
+    fetchUserTransactionRecipients(user).then(response => {
       if (response.isSuccess) {
         setRecipients(response.data);
-        if (!transaction && response.data.length > 0) {
-          setTransactionPostModel({
-            ...transactionPostModel,
-            user: { ...transactionPostModel.user, id: response.data[0].id, email: response.data[0].email },
-          });
-        }
       } else {
         setValidation({ message: response.error.message, isValid: false });
       }
     });
-  }, []);
+  }, [user]);
 
   // Validate transaction post model
   useEffect(() => {
@@ -122,9 +89,9 @@ export const useTransactionCreate = (
     }
 
     if (!transactionPostModel.user.id || transactionPostModel.user.id.length === 0) {
-      setValidation({ message: 'Choose a recipient', isValid: false });
+      setValidation({ message: '', isValid: false });
     }
-  }, [recipients, transactionPostModel, transactionPostModel.amount, transactionPostModel.user.id]);
+  }, [transactionPostModel]);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -143,7 +110,7 @@ export const useTransactionCreate = (
 
     if (commitTransactionResponse.isSuccess) {
       closeModal();
-      updateTransactions(commitTransactionResponse.data);
+      setUserTransactions(10, 1);
     } else {
       setValidation({ message: commitTransactionResponse.error.message, isValid: false });
     }

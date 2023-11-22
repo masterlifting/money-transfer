@@ -11,7 +11,7 @@ export const TopBar = () => {
   const { isAuthorized, authUser, setAuthState } = useAuthState();
 
   return (
-    <nav className='h-10 bg-gray-800 flex justify-between items-center px-5'>
+    <nav className='h-14 bg-gray-800 flex justify-between items-center px-5'>
       <Link to='/' className='text-xl font-bold text-white hover:text-gray-300'>
         internal money
       </Link>

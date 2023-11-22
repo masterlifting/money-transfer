@@ -7,7 +7,7 @@ import { IAuthUserGet } from '../../auth/AuthTypes';
 
 interface IUserBalanceContext {
   userBalance: IUserBalanceGet;
-  updateUserBalance: (user?: IAuthUserGet) => void;
+  updateUserBalance: (user: IAuthUserGet) => void;
 }
 
 export const UserBalanceContext = createContext<IUserBalanceContext>({
@@ -18,11 +18,7 @@ export const UserBalanceContext = createContext<IUserBalanceContext>({
 export const UserBalanceState = ({ children }: { children: React.ReactNode }) => {
   const [userBalance, setBalance] = useState<IUserBalanceGet>({ symbol: '$', value: 0 } as IUserBalanceGet);
 
-  const updateUserBalance = (user?: IAuthUserGet) => {
-    if (!user) {
-      throw new Error('User is not defined');
-    }
-
+  const updateUserBalance = (user: IAuthUserGet) => {
     fetchUserBalance(user).then(x => {
       if (x.isSuccess) {
         setBalance(x.data);

@@ -2,26 +2,29 @@
 
 import { useState } from 'react';
 import { IUserTransactionGet } from '../UserTransactionsTypes';
-import { useModal } from '../../../../shared/components/modals/ModalHooks';
+import { useModalState } from '../../../../shared/components/modals/ModalHooks';
 import { Modal } from '../../../../shared/components/modals/ModalComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';
 import { UserTransactionDetails } from './UserTransactionDetailsComponent';
 import { SvgIcon } from '../../../../shared/components/icons/SvgIconComponent';
 import { SvgIcons } from '../../../../shared/components/icons/SvgIcons';
+import { PageItemsType } from '../../../../shared/components/paginators/PaginationComponent';
+import { IAuthUserGet } from '../../../auth/AuthTypes';
 
 interface ITransactionProps {
+  user: IAuthUserGet;
   transaction: IUserTransactionGet;
-  updateTransactions: (transaction: IUserTransactionGet) => void;
+  setUserTransactions: (items: PageItemsType, page: number) => void;
 }
 
-export const UserTransaction = ({ transaction, updateTransactions }: ITransactionProps) => {
+export const UserTransaction = ({ user, transaction, setUserTransactions }: ITransactionProps) => {
   const [showDetails, setShowDetails] = useState(false);
-  const { openModal, closeModal } = useModal();
+  const { openModal, closeModal } = useModalState();
 
   return (
     <div className='border-b-2 border-gray transition-all duration-500'>
       <Modal id={transaction.id} title={`Repeat transfer for ${transaction.user.email}`} onClose={closeModal}>
-        <UserTransactionCreate transaction={transaction} updateTransactions={updateTransactions} />
+        <UserTransactionCreate user={user} transaction={transaction} setUserTransactions={setUserTransactions} />
       </Modal>
       <div
         className='grid grid-cols-[20%_15%_10%_35%_15%_5%] gap-2 py-1 cursor-pointer hover:bg-gray-100'

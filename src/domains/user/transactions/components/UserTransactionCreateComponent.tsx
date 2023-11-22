@@ -1,22 +1,26 @@
 /** @format */
 
 import { ValidationError } from '../../../../shared/components/errors/ErrorValidationComponent';
-import { useModal } from '../../../../shared/components/modals/ModalHooks';
+import { useModalState } from '../../../../shared/components/modals/ModalHooks';
+import { PageItemsType } from '../../../../shared/components/paginators/PaginationComponent';
 import { ButtonStyle } from '../../../../shared/styles/Button';
 import { InputSelectStyle, InputTextStyle } from '../../../../shared/styles/Input';
-import { useTransactionCreate } from '../UserTransactionsHooks';
+import { IAuthUserGet } from '../../../auth/AuthTypes';
+import { useUserTransactionCreate } from '../UserTransactionsHooks';
 import { IUserTransactionGet } from '../UserTransactionsTypes';
 
 interface ITransactionProps {
+  user: IAuthUserGet;
   transaction?: IUserTransactionGet;
-  updateTransactions: (transaction: IUserTransactionGet) => void;
+  setUserTransactions: (items: PageItemsType, page: number) => void;
 }
 
-export const UserTransactionCreate = ({ transaction, updateTransactions }: ITransactionProps) => {
-  const { closeModal } = useModal();
-  const { transactionPost, recipients, validation, onChangeAmount, onChangeRecipient, onSubmit } = useTransactionCreate(
+export const UserTransactionCreate = ({ user, transaction, setUserTransactions }: ITransactionProps) => {
+  const { closeModal } = useModalState();
+  const { transactionPost, recipients, validation, onChangeAmount, onChangeRecipient, onSubmit } = useUserTransactionCreate(
+    user,
     transaction,
-    updateTransactions,
+    setUserTransactions,
   );
 
   return (
@@ -37,6 +41,10 @@ export const UserTransactionCreate = ({ transaction, updateTransactions }: ITran
           onChange={onChangeRecipient}
           placeholder='Choose a recipient'
         >
+          <option className={InputSelectStyle.Option} style={{ color: 'red' }} value=''>
+            Choose a recipient
+          </option>
+
           {recipients.map(x => (
             <option className={InputSelectStyle.Option} key={x.id} value={x.id}>
               {x.email}

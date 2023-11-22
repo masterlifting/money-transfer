@@ -2,14 +2,14 @@
 
 import { useEffect } from 'react';
 import { IAuthUserGet } from '../../auth/AuthTypes';
-import { useUserBalance } from './UserBalanceHooks';
+import { useUserBalanceState } from './UserBalanceHooks';
 
 interface IUserBalanceProps {
   user: IAuthUserGet;
 }
 
 export const UserBalance = ({ user }: IUserBalanceProps) => {
-  const { userBalance, updateUserBalance } = useUserBalance();
+  const { userBalance, updateUserBalance } = useUserBalanceState();
 
   useEffect(() => {
     updateUserBalance(user);

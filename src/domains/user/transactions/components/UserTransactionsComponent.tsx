@@ -3,27 +3,33 @@
 import { SimpleError } from '../../../../shared/components/errors/ErrorSimpleComponent';
 import { CircleLoader } from '../../../../shared/components/loaders/CircleLoaderComponents';
 import { Modal } from '../../../../shared/components/modals/ModalComponent';
-import { useModal } from '../../../../shared/components/modals/ModalHooks';
+import { useModalState } from '../../../../shared/components/modals/ModalHooks';
 import { Paginator } from '../../../../shared/components/paginators/PaginationComponent';
 import { ButtonStyle } from '../../../../shared/styles/Button';
-import { useTransactions } from '../UserTransactionsHooks';
+import { IAuthUserGet } from '../../../auth/AuthTypes';
+import { useUserTransactions } from '../UserTransactionsHooks';
 import { UserTransaction } from './UserTransactionComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';
 
-export const UserTransactions = () => {
-  const newTransaction = 'New money transfer.';
-  const { openModal } = useModal();
+interface IUserTransactionsProps {
+  user: IAuthUserGet;
+}
 
-  const { transactionsTotalCount, transactions, updateTransactions, setTransactionsPerPage, loading, error } = useTransactions();
+export const UserTransactions = ({ user }: IUserTransactionsProps) => {
+  const newTransaction = 'New money transfer.';
+  const { openModal } = useModalState();
+
+  const { userTransactionsTotalCount, userTransactions, setUserTransactions, userTransactionsLoading, useUserTransactionsError } =
+    useUserTransactions(user);
 
   return (
     <div>
       <Modal id={newTransaction} title={newTransaction}>
-        <UserTransactionCreate updateTransactions={updateTransactions} />
+        <UserTransactionCreate user={user} setUserTransactions={setUserTransactions} />
       </Modal>
 
       <div className='flex justify-between items-center mb-2'>
-        <h1 className='align-middle text-xl font-bold'>Transactions: {transactionsTotalCount}</h1>
+        <h1 className='align-middle text-xl font-bold'>Transactions: {userTransactionsTotalCount}</h1>
         <button className={ButtonStyle.Primary} onClick={() => openModal(newTransaction)}>
           New
         </button>
@@ -36,12 +42,12 @@ export const UserTransactions = () => {
           <span>user</span>
           <span>status</span>
         </div>
-        {loading && <CircleLoader />}
-        {error && <SimpleError message={error} />}
-        {transactions.map(x => (
-          <UserTransaction key={x.id} transaction={x} updateTransactions={updateTransactions} />
+        {userTransactionsLoading && <CircleLoader />}
+        {useUserTransactionsError && <SimpleError message={useUserTransactionsError} />}
+        {userTransactions.map(x => (
+          <UserTransaction user={user} key={x.id} transaction={x} setUserTransactions={setUserTransactions} />
         ))}
-        <Paginator itemsTotalCount={transactionsTotalCount} setItemsPerPage={setTransactionsPerPage} />
+        <Paginator itemsTotalCount={userTransactionsTotalCount} setItemsPerPage={setUserTransactions} />
       </div>
     </div>
   );

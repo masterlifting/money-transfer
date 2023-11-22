@@ -1,6 +1,6 @@
 /** @format */
 
-import { useModal } from './ModalHooks';
+import { useModalState } from './ModalHooks';
 
 interface IModalProps {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ interface IModalProps {
 }
 
 export const Modal = ({ children, id, title, onClose }: IModalProps) => {
-  const { isModalOpen, modalId } = useModal();
+  const { isModalOpen, modalId } = useModalState();
 
   return isModalOpen && modalId === id ? (
     <div className='fixed inset-0 flex items-center justify-center'>

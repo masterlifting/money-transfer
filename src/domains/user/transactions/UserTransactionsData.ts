@@ -18,12 +18,8 @@ import {
 } from '../../../backendMockData';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 
-export const fetchUserTransactions = async (authUser?: IAuthUserGet): Promise<WebApiResponse<IUserTransactionsGet>> => {
+export const fetchUserTransactions = async (authUser: IAuthUserGet): Promise<WebApiResponse<IUserTransactionsGet>> => {
   try {
-    if (!authUser) {
-      throw new Error('User is not authorized');
-    }
-
     return {
       isSuccess: true,
       data: await backendGetTransactions(authUser),
@@ -40,13 +36,9 @@ export const fetchUserTransactions = async (authUser?: IAuthUserGet): Promise<We
 
 export const fetchFilteredUserTransactions = async (
   filter: IUserTransactionsFilter,
-  authUser?: IAuthUserGet,
+  authUser: IAuthUserGet,
 ): Promise<WebApiResponse<IUserTransactionsGet>> => {
   try {
-    if (!authUser) {
-      throw new Error('User is not authorized');
-    }
-
     return {
       isSuccess: true,
       data: await backendGetFilteredUserTransactions(authUser, filter),
@@ -95,12 +87,8 @@ export const fetchUserTransactionsStatuses = async (
   }
 };
 
-export const fetchUserTransactionRecipients = async (authUser?: IAuthUserGet): Promise<WebApiResponse<IUserGet[]>> => {
+export const fetchUserTransactionRecipients = async (authUser: IAuthUserGet): Promise<WebApiResponse<IUserGet[]>> => {
   try {
-    if (!authUser) {
-      throw new Error('User is not authorized');
-    }
-
     var users = await backendGetUsers();
 
     return {
