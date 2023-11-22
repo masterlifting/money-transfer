@@ -1,29 +1,24 @@
 /** @format */
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { IAuthUserGet } from '../../auth/AuthTypes';
-import { IUserBalanceGet } from './UserBalanceTypes';
-import { fetchUserBalance } from './UserBalanceData';
+import { useUserBalance } from './UserBalanceHooks';
 
 interface IUserBalanceProps {
   user: IAuthUserGet;
 }
 
 export const UserBalance = ({ user }: IUserBalanceProps) => {
-  const [balance, setBalance] = useState<IUserBalanceGet | undefined>();
+  const { userBalance, updateUserBalance } = useUserBalance();
 
   useEffect(() => {
-    fetchUserBalance(user).then(x => {
-      if (x.isSuccess) {
-        setBalance(x.data);
-      }
-    });
+    updateUserBalance(user);
   }, [user]);
 
-  return balance ? (
+  return (
     <span className='text-yellow-400 font-bold'>
-      {balance.symbol}
-      {balance.balance}
+      {userBalance.symbol}
+      {userBalance.value}
     </span>
-  ) : null;
+  );
 };

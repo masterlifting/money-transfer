@@ -33,9 +33,7 @@ export const UserTransaction = ({ transaction, updateTransactions }: ITransactio
         <span>{transaction.user.email}</span>
         <span>{transaction.status}</span>
         <div className='flex justify-end items-center'>
-          {transaction.type === 'outcome' ? (
-            <SvgIcon icon={SvgIcons.Repeat} handleClick={() => openModal(transaction.id)} />
-          ) : null}
+          {transaction.type === 'outcome' && <SvgIcon icon={SvgIcons.Repeat} handleClick={() => openModal(transaction.id)} />}
         </div>
       </div>
       {showDetails && <UserTransactionDetails transactionId={transaction.id} />}

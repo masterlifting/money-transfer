@@ -1,21 +1,26 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { IUserTransactionGet, IUserTransactionPost } from './UserTransactionsTypes';
+import { IUserTransactionGet, IUserTransactionPost, IUserTransactionsFilter } from './UserTransactionsTypes';
 import {
   commitUserTransaction,
+  fetchFilteredUserTransactions,
   fetchUserTransactionRecipients,
-  fetchUserTransactions,
   fetchUserTransactionsStatuses,
 } from './UserTransactionsData';
-import { WebApiResponse } from '../../../shared/types/WebApiTypes';
 import { IUserGet } from '../types/UserTypes';
 import { IValidation } from '../../../shared/types/ValidationTypes';
 import { useModal } from '../../../shared/components/modals/ModalHooks';
 import { useAuthState } from '../../auth/AuthHooks';
+import { PageItemsType } from '../../../shared/components/paginators/PaginationComponent';
+import { useUserBalance } from '../balance/UserBalanceHooks';
 
 export const useTransactions = () => {
+  const { authUser } = useAuthState();
+  const { updateUserBalance } = useUserBalance();
+
   const [transactions, setTransactions] = useState<IUserTransactionGet[]>([]);
+  const [transactionsTotalCount, setTransactionsTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -39,6 +44,8 @@ export const useTransactions = () => {
 
         return [...prev, transaction];
       });
+      setTransactionsTotalCount(prev => prev + 1);
+      updateUserBalance(authUser);
     } else {
       setError(transactionsStatusesResponse.error.message);
     }
@@ -46,21 +53,27 @@ export const useTransactions = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
+  const setTransactionsPerPage = (items: PageItemsType, page: number) => {
     setLoading(true);
 
-    fetchUserTransactions().then((x: WebApiResponse<IUserTransactionGet[]>) => {
-      if (x.isSuccess) {
-        setTransactions(x.data);
+    const filter: IUserTransactionsFilter = {
+      items,
+      page,
+    };
+
+    fetchFilteredUserTransactions(filter, authUser).then(response => {
+      if (response.isSuccess) {
+        setTransactions(response.data.items);
+        setTransactionsTotalCount(response.data.totalCount);
       } else {
-        setError(x.error.message);
+        setError(response.error.message);
       }
-
-      setLoading(false);
     });
-  }, []);
 
-  return { transactions, updateTransactions, loading, error };
+    setLoading(false);
+  };
+
+  return { transactionsTotalCount, transactions, updateTransactions, setTransactionsPerPage, loading, error };
 };
 
 export const useTransactionCreate = (

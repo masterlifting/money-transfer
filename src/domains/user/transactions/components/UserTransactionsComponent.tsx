@@ -14,7 +14,7 @@ export const UserTransactions = () => {
   const newTransaction = 'New money transfer.';
   const { openModal } = useModal();
 
-  const { transactions, updateTransactions, loading, error } = useTransactions();
+  const { transactionsTotalCount, transactions, updateTransactions, setTransactionsPerPage, loading, error } = useTransactions();
 
   return (
     <div>
@@ -23,7 +23,7 @@ export const UserTransactions = () => {
       </Modal>
 
       <div className='flex justify-between items-center mb-2'>
-        <h1 className='align-middle text-xl font-bold'>Transactions</h1>
+        <h1 className='align-middle text-xl font-bold'>Transactions: {transactionsTotalCount}</h1>
         <button className={ButtonStyle.Primary} onClick={() => openModal(newTransaction)}>
           New
         </button>
@@ -41,7 +41,7 @@ export const UserTransactions = () => {
         {transactions.map(x => (
           <UserTransaction key={x.id} transaction={x} updateTransactions={updateTransactions} />
         ))}
-        <Paginator page={1} totalPages={1} setPage={() => {}} />
+        <Paginator itemsTotalCount={transactionsTotalCount} setItemsPerPage={setTransactionsPerPage} />
       </div>
     </div>
   );

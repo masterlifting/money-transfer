@@ -2,7 +2,7 @@
 
 export interface IUserBalanceGet {
   userId: string;
-  balance: number;
+  value: number;
   currency: string;
   symbol: string;
 }

@@ -1,21 +1,55 @@
 /** @format */
 
 import { WebApiResponse } from '../../../shared/types/WebApiTypes';
-import { IUserTransactionGet, IUserTransactionPost, IUserTransactionStatusGet } from './UserTransactionsTypes';
+import {
+  IUserTransactionGet,
+  IUserTransactionPost,
+  IUserTransactionStatusGet,
+  IUserTransactionsFilter,
+  IUserTransactionsGet,
+} from './UserTransactionsTypes';
 import { IUserGet } from '../types/UserTypes';
 import {
+  backendGetFilteredUserTransactions,
   backendGetTransactions,
   backendGetUsers,
   backendPostTransaction,
-  beckendGetTransactionsStatuses,
-} from '../../../beckandMockData';
+  backendGetTransactionsStatuses,
+} from '../../../backendMockData';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 
-export const fetchUserTransactions = async (): Promise<WebApiResponse<IUserTransactionGet[]>> => {
+export const fetchUserTransactions = async (authUser?: IAuthUserGet): Promise<WebApiResponse<IUserTransactionsGet>> => {
   try {
+    if (!authUser) {
+      throw new Error('User is not authorized');
+    }
+
     return {
       isSuccess: true,
-      data: await backendGetTransactions(),
+      data: await backendGetTransactions(authUser),
+    };
+  } catch (e: any) {
+    return {
+      isSuccess: false,
+      error: {
+        message: e.message,
+      },
+    };
+  }
+};
+
+export const fetchFilteredUserTransactions = async (
+  filter: IUserTransactionsFilter,
+  authUser?: IAuthUserGet,
+): Promise<WebApiResponse<IUserTransactionsGet>> => {
+  try {
+    if (!authUser) {
+      throw new Error('User is not authorized');
+    }
+
+    return {
+      isSuccess: true,
+      data: await backendGetFilteredUserTransactions(authUser, filter),
     };
   } catch (e: any) {
     return {
@@ -49,7 +83,7 @@ export const fetchUserTransactionsStatuses = async (
   try {
     return {
       isSuccess: true,
-      data: await beckendGetTransactionsStatuses(transactions),
+      data: await backendGetTransactionsStatuses(transactions),
     };
   } catch (e: any) {
     return {
@@ -67,9 +101,11 @@ export const fetchUserTransactionRecipients = async (authUser?: IAuthUserGet): P
       throw new Error('User is not authorized');
     }
 
+    var users = await backendGetUsers();
+
     return {
       isSuccess: true,
-      data: (await backendGetUsers()).filter(x => x.id !== authUser.id),
+      data: users.filter(x => x.id !== authUser.id),
     };
   } catch (e: any) {
     return {

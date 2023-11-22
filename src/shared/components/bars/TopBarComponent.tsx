@@ -3,6 +3,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthState } from '../../../domains/auth/AuthHooks';
 import { UserBalance } from '../../../domains/user/balance/UserBalanceComponent';
+import { SvgIcon } from '../icons/SvgIconComponent';
+import { SvgIcons } from '../icons/SvgIcons';
 
 export const TopBar = () => {
   const navigate = useNavigate();
@@ -15,27 +17,28 @@ export const TopBar = () => {
       </Link>
       <div className='flex gap-2'>
         {isAuthorized ? (
-          <div className='flex gap-2'>
+          <div className='flex gap-4'>
             <p className='text-white'>{authUser!.email}</p>
             <UserBalance user={authUser!} />
-            <button
-              onClick={() => {
+            <SvgIcon
+              icon={SvgIcons.Logout}
+              handleClick={() => {
                 setAuthState();
                 navigate('/login');
               }}
-              className='text-white hover:text-gray-300'
-            >
-              Logout
-            </button>
+            />
           </div>
         ) : (
-          <div className='flex gap-2'>
+          <div className='flex gap-4'>
             <Link to='/register' className='text-white hover:text-gray-300'>
               Register
             </Link>
-            <Link to='/login' className='text-white hover:text-gray-300'>
-              Login
-            </Link>
+            <SvgIcon
+              icon={SvgIcons.Login}
+              handleClick={() => {
+                navigate('/login');
+              }}
+            />
           </div>
         )}
       </div>

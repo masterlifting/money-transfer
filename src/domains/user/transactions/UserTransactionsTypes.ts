@@ -1,5 +1,6 @@
 /** @format */
 
+import { PageItemsType } from '../../../shared/components/paginators/PaginationComponent';
 import { IUserGet } from '../types/UserTypes';
 
 type TransactionType = 'income' | 'outcome';
@@ -17,9 +18,19 @@ export interface IUserTransactionGet extends IUserTransaction {
   status: TransactionStatus;
 }
 
+export interface IUserTransactionsGet {
+  totalCount: number;
+  items: IUserTransactionGet[];
+}
+
 export interface IUserTransactionStatusGet {
   id: string;
   status: TransactionStatus;
 }
 
 export interface IUserTransactionPost extends IUserTransaction {}
+
+export interface IUserTransactionsFilter {
+  items: PageItemsType;
+  page: number;
+}

@@ -1,6 +1,6 @@
 /** @format */
 
-import { backendGetUserBalance } from '../../../beckandMockData';
+import { backendGetUserBalance } from '../../../backendMockData';
 import { WebApiResponse } from '../../../shared/types/WebApiTypes';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 import { IUserBalanceGet } from './UserBalanceTypes';

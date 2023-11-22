@@ -5,16 +5,19 @@ import App from './App';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthState } from './domains/auth/AuthContext';
-import { CustomModalState } from './shared/components/modals/ModalContext';
+import { ModalState } from './shared/components/modals/ModalContext';
+import { UserBalanceState } from './domains/user/balance/UserBalanceContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <BrowserRouter>
-    <AuthState>
-      <CustomModalState>
-        <App />
-      </CustomModalState>
-    </AuthState>
+    <ModalState>
+      <AuthState>
+        <UserBalanceState>
+          <App />
+        </UserBalanceState>
+      </AuthState>
+    </ModalState>
   </BrowserRouter>,
 );

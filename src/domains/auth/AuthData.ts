@@ -1,6 +1,6 @@
 /** @format */
 
-import { backendAuthorizeUser, backendRegisterUser } from '../../beckandMockData';
+import { backendAuthorizeUser, backendRegisterUser } from '../../backendMockData';
 import { WebApiResponse } from '../../shared/types/WebApiTypes';
 import { IAuthUserGet, IAuthUserPost } from './AuthTypes';
 
