@@ -2,7 +2,6 @@
 
 import { ValidationError } from '../../../../shared/components/errors/ErrorValidationComponent';
 import { useModalState } from '../../../../shared/components/modals/ModalHooks';
-import { PageItemsType } from '../../../../shared/components/paginators/PaginationComponent';
 import { ButtonStyle } from '../../../../shared/styles/Button';
 import { InputSelectStyle, InputTextStyle } from '../../../../shared/styles/Input';
 import { IAuthUserGet } from '../../../auth/AuthTypes';
@@ -12,15 +11,13 @@ import { IUserTransactionGet } from '../UserTransactionsTypes';
 interface ITransactionProps {
   user: IAuthUserGet;
   transaction?: IUserTransactionGet;
-  setUserTransactions: (items: PageItemsType, page: number) => void;
 }
 
-export const UserTransactionCreate = ({ user, transaction, setUserTransactions }: ITransactionProps) => {
+export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) => {
   const { closeModal } = useModalState();
   const { transactionPost, recipients, validation, onChangeAmount, onChangeRecipient, onSubmit } = useUserTransactionCreate(
     user,
     transaction,
-    setUserTransactions,
   );
 
   return (

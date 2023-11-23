@@ -1,6 +1,6 @@
 /** @format */
 
-import { PageItemsType } from '../../../shared/components/paginators/PaginationComponent';
+import { IPagination } from '../../../shared/components/paginators/PaginationTypes';
 import { IUserGet } from '../types/UserTypes';
 
 type TransactionType = 'income' | 'outcome';
@@ -30,7 +30,12 @@ export interface IUserTransactionStatusGet {
 
 export interface IUserTransactionPost extends IUserTransaction {}
 
+export interface ISortedData {
+  fieldName: string;
+  direction: 'asc' | 'desc';
+}
+
 export interface IUserTransactionsFilter {
-  items: PageItemsType;
-  page: number;
+  pagination?: IPagination;
+  sorting?: ISortedData;
 }

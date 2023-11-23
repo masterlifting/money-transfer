@@ -15,7 +15,7 @@ import { v4 as guid } from 'uuid';
 const generateRandomTransactions = (users: IUserGet[]): IUserTransactionGet[] => {
   const transactions: IUserTransactionGet[] = [];
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 10; i++) {
     const transaction: IUserTransactionGet = {
       id: guid(),
       type: Math.random() < 0.5 ? 'income' : 'outcome',
@@ -68,6 +68,42 @@ const getUserBalance = (user: IUserGet): IUserBalanceGet => ({
   symbol: '$',
 });
 
+const getUserTransactions = (user: IUserGet, filter: IUserTransactionsFilter): IUserTransactionsGet => {
+  const userTransactions = transactions.filter(x => x.user.id !== user.id);
+
+  const sortedTransactions = userTransactions.sort((a, b) => {
+    const valueA = a[filter.sortField as keyof IUserTransactionGet];
+    const valueB = b[filter.sortField as keyof IUserTransactionGet];
+
+    if (typeof valueA === 'string' && typeof valueB === 'string') {
+      return filter.sortDirection === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+    } else if (typeof valueA === 'number' && typeof valueB === 'number') {
+      return filter.sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+    } else if (typeof valueA === 'boolean' && typeof valueB === 'boolean') {
+      return filter.sortDirection === 'asc' ? (valueA ? 1 : -1) : valueB ? 1 : -1;
+    } else if (valueA instanceof Date && valueB instanceof Date) {
+      return filter.sortDirection === 'asc' ? valueA.getTime() - valueB.getTime() : valueB.getTime() - valueA.getTime();
+    } else if ((valueA as IUserGet) && (valueB as IUserGet)) {
+      const userA = valueA as IUserGet;
+      const userB = valueB as IUserGet;
+      return filter.sortDirection === 'asc' ? userA.email.localeCompare(userB.email) : userB.email.localeCompare(userA.email);
+    }
+
+    return 0;
+  });
+
+  const totalCount = sortedTransactions.length;
+  const items = sortedTransactions.slice(
+    filter.totalItemsCount * (filter.pageNumber - 1),
+    filter.totalItemsCount * filter.pageNumber,
+  );
+
+  return {
+    totalCount,
+    items,
+  };
+};
+
 //Mock controllers
 
 export const backendGetUsers = async (): Promise<IUserGet[]> => users;
@@ -111,16 +147,18 @@ export const backendGetTransactions = async (authUser: IAuthUserGet): Promise<IU
 export const backendGetFilteredUserTransactions = async (
   authUser: IAuthUserGet,
   filter: IUserTransactionsFilter,
-): Promise<IUserTransactionsGet> => {
-  const userTransactions = transactions.filter(x => x.user.id !== authUser.id).map((x, i) => ({ ...x, rowN: i + 1 }));
+): Promise<IUserTransactionsGet> => getUserTransactions(authUser, filter);
 
-  return {
-    totalCount: userTransactions.length,
-    items: userTransactions.slice(filter.items * (filter.page - 1), filter.items * filter.page),
-  };
-};
+export const backendPostTransaction = async (
+  user: IAuthUserGet,
+  transaction: IUserTransactionPost,
+): Promise<IUserTransactionGet> => {
+  const userBalance = getUserBalanceValue(user);
 
-export const backendPostTransaction = async (transaction: IUserTransactionPost): Promise<IUserTransactionGet> => {
+  if (userBalance <= 0 || userBalance < transaction.amount) {
+    throw new Error('Not enough money');
+  }
+
   var transactionGet: IUserTransactionGet = {
     id: guid(),
     date: new Date(),

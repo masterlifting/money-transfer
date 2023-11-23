@@ -8,29 +8,36 @@ import { UserTransactionCreate } from './UserTransactionCreateComponent';
 import { UserTransactionDetails } from './UserTransactionDetailsComponent';
 import { SvgIcon } from '../../../../shared/components/icons/SvgIconComponent';
 import { SvgIcons } from '../../../../shared/components/icons/SvgIcons';
-import { PageItemsType } from '../../../../shared/components/paginators/PaginationComponent';
 import { IAuthUserGet } from '../../../auth/AuthTypes';
 
 interface ITransactionProps {
   user: IAuthUserGet;
   transaction: IUserTransactionGet;
-  setUserTransactions: (items: PageItemsType, page: number) => void;
 }
 
-export const UserTransaction = ({ user, transaction, setUserTransactions }: ITransactionProps) => {
+export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
   const [showDetails, setShowDetails] = useState(false);
   const { openModal, closeModal } = useModalState();
 
   return (
     <div className='border-b-2 border-gray transition-all duration-500'>
       <Modal id={transaction.id} title={`Repeat transfer for ${transaction.user.email}`} onClose={closeModal}>
-        <UserTransactionCreate user={user} transaction={transaction} setUserTransactions={setUserTransactions} />
+        <UserTransactionCreate user={user} transaction={transaction} />
       </Modal>
       <div
         className='grid grid-cols-[20%_15%_10%_35%_15%_5%] gap-2 py-1 cursor-pointer hover:bg-gray-100'
         onClick={() => setShowDetails(!showDetails)}
       >
-        <span>{transaction.date.toDateString()}</span>
+        <span>
+          {transaction.date.toLocaleString('en-US', {
+            year: '2-digit',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          })}
+        </span>
         <span>${transaction.amount}</span>
         <span>{transaction.type === 'outcome' ? 'to' : 'from'}</span>
         <span>{transaction.user.email}</span>

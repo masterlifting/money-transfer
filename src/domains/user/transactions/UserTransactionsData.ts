@@ -53,11 +53,14 @@ export const fetchFilteredUserTransactions = async (
   }
 };
 
-export const commitUserTransaction = async (transaction: IUserTransactionPost): Promise<WebApiResponse<IUserTransactionGet>> => {
+export const commitUserTransaction = async (
+  user: IAuthUserGet,
+  transaction: IUserTransactionPost,
+): Promise<WebApiResponse<IUserTransactionGet>> => {
   try {
     return {
       isSuccess: true,
-      data: await backendPostTransaction(transaction),
+      data: await backendPostTransaction(user, transaction),
     };
   } catch (e: any) {
     return {

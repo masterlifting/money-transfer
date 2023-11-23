@@ -1,29 +1,32 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { IUserTransactionGet, IUserTransactionPost, IUserTransactionsFilter } from './UserTransactionsTypes';
+import { ISortedData, IUserTransactionGet, IUserTransactionPost, IUserTransactionsFilter } from './UserTransactionsTypes';
 import { commitUserTransaction, fetchFilteredUserTransactions, fetchUserTransactionRecipients } from './UserTransactionsData';
 import { IUserGet } from '../types/UserTypes';
 import { IValidation } from '../../../shared/types/ValidationTypes';
 import { useModalState } from '../../../shared/components/modals/ModalHooks';
-import { PageItemsType } from '../../../shared/components/paginators/PaginationComponent';
 import { useUserBalanceState } from '../balance/UserBalanceHooks';
 import { IAuthUserGet } from '../../auth/AuthTypes';
+import { IPagination } from '../../../shared/components/paginators/PaginationTypes';
 
 export const useUserTransactions = (user: IAuthUserGet) => {
+  const { isModalOpen } = useModalState();
   const { updateUserBalance } = useUserBalanceState();
 
   const [transactions, setTransactions] = useState<IUserTransactionGet[]>([]);
+  const [sorting, setSorting] = useState<ISortedData>({ fieldName: 'date', direction: 'desc' });
+  const [pagination, setPagination] = useState<IPagination>({ pageNumber: 1, pageItemsCount: 10 });
   const [transactionsTotalCount, setTransactionsTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const setUserTransactions = (items: PageItemsType, page: number) => {
+  useEffect(() => {
     setLoading(true);
 
     const filter: IUserTransactionsFilter = {
-      items,
-      page,
+      pagination: pagination,
+      sorting: sorting,
     };
 
     fetchFilteredUserTransactions(filter, user).then(response => {
@@ -37,24 +40,23 @@ export const useUserTransactions = (user: IAuthUserGet) => {
     });
 
     setLoading(false);
-  };
+  }, [transactionsFilter, isModalOpen]);
 
   return {
     userTransactionsTotalCount: transactionsTotalCount,
     userTransactions: transactions,
-    setUserTransactions,
+    userTransactionsFilter: transactionsFilter,
+    setTransactionsFilter,
     userTransactionsLoading: loading,
     useUserTransactionsError: error,
   };
 };
 
-export const useUserTransactionCreate = (
-  user: IAuthUserGet,
-  transaction: IUserTransactionGet | undefined,
-  setUserTransactions: (items: PageItemsType, page: number) => void,
-) => {
-  const { closeModal } = useModalState();
+export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserTransactionGet | undefined) => {
+  const { closeModal, openModal } = useModalState();
 
+  const [recipients, setRecipients] = useState<IUserGet[]>([]);
+  const [validation, setValidation] = useState<IValidation>({ message: '', isValid: true });
   const [transactionPostModel, setTransactionPostModel] = useState<IUserTransactionPost>(
     transaction && transaction.type === 'outcome'
       ? transaction
@@ -66,19 +68,21 @@ export const useUserTransactionCreate = (
           },
         },
   );
-  const [recipients, setRecipients] = useState<IUserGet[]>([]);
-  const [validation, setValidation] = useState<IValidation>({ message: '', isValid: true });
 
   // Fetch recipients
   useEffect(() => {
-    fetchUserTransactionRecipients(user).then(response => {
-      if (response.isSuccess) {
-        setRecipients(response.data);
-      } else {
-        setValidation({ message: response.error.message, isValid: false });
-      }
-    });
-  }, [user]);
+    if (transaction && transaction.type === 'outcome') {
+      setRecipients([transaction.user]);
+    } else {
+      fetchUserTransactionRecipients(user).then(response => {
+        if (response.isSuccess) {
+          setRecipients(response.data);
+        } else {
+          setValidation({ message: response.error.message, isValid: false });
+        }
+      });
+    }
+  }, [user, transaction, openModal]);
 
   // Validate transaction post model
   useEffect(() => {
@@ -106,11 +110,10 @@ export const useUserTransactionCreate = (
       transactionPostModel.user.email = recipient.email;
     }
 
-    const commitTransactionResponse = await commitUserTransaction(transactionPostModel);
+    const commitTransactionResponse = await commitUserTransaction(user, transactionPostModel);
 
     if (commitTransactionResponse.isSuccess) {
       closeModal();
-      setUserTransactions(10, 1);
     } else {
       setValidation({ message: commitTransactionResponse.error.message, isValid: false });
     }
