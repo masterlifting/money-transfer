@@ -1,0 +1,13 @@
+# @format
+
+version: '3'
+
+services:
+  sharp-dev-react-app:
+    image: sharp-dev-react-app-image
+    container_name: sharp-dev-react-web
+    build:
+      context: .
+    ports:
+      - '3000:3000'
+# docker-compose -p sharp-dev-react-app up -d --build
