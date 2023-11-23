@@ -3,7 +3,7 @@
 import { SimpleError } from '../../../../shared/components/errors/ErrorSimpleComponent';
 import { CircleLoader } from '../../../../shared/components/loaders/CircleLoaderComponents';
 import { Modal } from '../../../../shared/components/modals/ModalComponent';
-import { useModalState } from '../../../../shared/components/modals/ModalHooks';
+import { useModalContext } from '../../../../shared/components/modals/ModalHooks';
 import { Paginator } from '../../../../shared/components/paginators/PaginationComponent';
 import { ButtonStyle } from '../../../../shared/styles/Button';
 import { IAuthUserGet } from '../../../auth/AuthTypes';
@@ -14,21 +14,25 @@ import { UserTransactionCreate } from './UserTransactionCreateComponent';
 interface IUserTransactionsProps {
   user: IAuthUserGet;
 }
+const sortingDateield = 'date';
+const sortingAmountField = 'amount';
+const sortingTypeField = 'type';
+const sortingUserField = 'user';
+const sortingStatusField = 'status';
 
 export const UserTransactions = ({ user }: IUserTransactionsProps) => {
   const newTransaction = 'New money transfer.';
-  const { openModal } = useModalState();
+  const { openModal } = useModalContext();
 
   const {
-    userTransactionsTotalCount,
     userTransactions,
-    userTransactionsFilter,
-    setTransactionsFilter,
     userTransactionsLoading,
-    useUserTransactionsError,
+    userTransactionsError,
+    userTransactionsPagination,
+    userTransactionsSorting,
+    userTransactionsSetPagination,
+    userTransactionsSetSorting,
   } = useUserTransactions(user);
-
-  console.log(userTransactions);
 
   return (
     <div>
@@ -37,7 +41,7 @@ export const UserTransactions = ({ user }: IUserTransactionsProps) => {
       </Modal>
 
       <div className='flex justify-between items-center mb-2'>
-        <h1 className='align-middle text-xl font-bold'>Transactions: {userTransactionsTotalCount}</h1>
+        <h1 className='align-middle text-xl font-bold'>Transactions: {userTransactions.totalCount}</h1>
         <button className={ButtonStyle.Primary} onClick={() => openModal(newTransaction)}>
           New
         </button>
@@ -46,75 +50,74 @@ export const UserTransactions = ({ user }: IUserTransactionsProps) => {
         <div className={`border-b-2 border-black grid grid-cols-[20%_15%_10%_35%_20%] pb-1 gap-2 font-bold`}>
           <span
             onClick={() =>
-              setTransactionsFilter(prev => ({
+              userTransactionsSetSorting(prev => ({
                 ...prev,
-                sortField: 'date',
-                sortDirection: prev.sortDirection === 'asc' ? 'desc' : 'asc',
+                fieldName: sortingDateield,
+                direction: prev.direction === 'asc' ? 'desc' : 'asc',
               }))
             }
-            className='cursor-pointer'
+            className={`cursor-pointer ${userTransactionsSorting.fieldName === sortingDateield && 'text-blue-600'}`}
           >
-            date
+            {sortingDateield}
           </span>
           <span
             onClick={() =>
-              setTransactionsFilter(prev => ({
+              userTransactionsSetSorting(prev => ({
                 ...prev,
-                sortField: 'amount',
-                sortDirection: prev.sortDirection === 'asc' ? 'desc' : 'asc',
+                fieldName: sortingAmountField,
+                direction: prev.direction === 'asc' ? 'desc' : 'asc',
               }))
             }
-            className='cursor-pointer'
+            className={`cursor-pointer ${userTransactionsSorting.fieldName === sortingAmountField && 'text-blue-600'}`}
           >
-            amount
+            {sortingAmountField}
           </span>
           <span
             onClick={() =>
-              setTransactionsFilter(prev => ({
+              userTransactionsSetSorting(prev => ({
                 ...prev,
-                sortField: 'type',
-                sortDirection: prev.sortDirection === 'asc' ? 'desc' : 'asc',
+                fieldName: sortingTypeField,
+                direction: prev.direction === 'asc' ? 'desc' : 'asc',
               }))
             }
-            className='cursor-pointer'
+            className={`cursor-pointer ${userTransactionsSorting.fieldName === sortingTypeField && 'text-blue-600'}`}
           >
-            type
+            {sortingTypeField}
           </span>
           <span
             onClick={() =>
-              setTransactionsFilter(prev => ({
+              userTransactionsSetSorting(prev => ({
                 ...prev,
-                sortField: 'user',
-                sortDirection: prev.sortDirection === 'asc' ? 'desc' : 'asc',
+                fieldName: sortingUserField,
+                direction: prev.direction === 'asc' ? 'desc' : 'asc',
               }))
             }
-            className='cursor-pointer'
+            className={`cursor-pointer ${userTransactionsSorting.fieldName === sortingUserField && 'text-blue-600'}`}
           >
-            user
+            {sortingUserField}
           </span>
           <span
             onClick={() =>
-              setTransactionsFilter(prev => ({
+              userTransactionsSetSorting(prev => ({
                 ...prev,
-                sortField: 'status',
-                sortDirection: prev.sortDirection === 'asc' ? 'desc' : 'asc',
+                fieldName: sortingStatusField,
+                direction: prev.direction === 'asc' ? 'desc' : 'asc',
               }))
             }
-            className='cursor-pointer'
+            className={`cursor-pointer ${userTransactionsSorting.fieldName === sortingStatusField && 'text-blue-600'}`}
           >
-            status
+            {sortingStatusField}
           </span>
         </div>
         {userTransactionsLoading && <CircleLoader />}
-        {useUserTransactionsError && <SimpleError message={useUserTransactionsError} />}
-        {userTransactions.map(x => (
+        {userTransactionsError && <SimpleError message={userTransactionsError} />}
+        {userTransactions.items.map(x => (
           <UserTransaction user={user} key={x.id} transaction={x} />
         ))}
         <Paginator
-          itemsTotalCount={userTransactionsTotalCount}
-          pageNumber={userTransactionsFilter.pageNumber}
-          pageItemsCount={userTransactionsFilter.totalItemsCount}
-          setItemsPerPage={setTransactionsFilter}
+          totalItemsCount={userTransactions.totalCount}
+          configuration={userTransactionsPagination}
+          setPaginator={userTransactionsSetPagination}
         />
       </div>
     </div>

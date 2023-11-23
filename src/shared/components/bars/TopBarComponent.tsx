@@ -1,14 +1,14 @@
 /** @format */
 
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuthState } from '../../../domains/auth/AuthHooks';
+import { useAuthContext } from '../../../domains/auth/AuthHooks';
 import { UserBalance } from '../../../domains/user/balance/UserBalanceComponent';
 import { SvgIcon } from '../icons/SvgIconComponent';
 import { SvgIcons } from '../icons/SvgIcons';
 
 export const TopBar = () => {
   const navigate = useNavigate();
-  const { isAuthorized, authUser, setAuthState } = useAuthState();
+  const { isAuthorized, authUser, setAuthState } = useAuthContext();
 
   return (
     <nav className='h-14 bg-gray-800 flex justify-between items-center px-5'>

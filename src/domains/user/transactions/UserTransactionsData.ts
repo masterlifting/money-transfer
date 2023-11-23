@@ -10,38 +10,21 @@ import {
 } from './UserTransactionsTypes';
 import { IUserGet } from '../types/UserTypes';
 import {
-  backendGetFilteredUserTransactions,
-  backendGetTransactions,
+  backendGetUserTransactions,
   backendGetUsers,
-  backendPostTransaction,
+  backendPostUserTransaction,
   backendGetTransactionsStatuses,
 } from '../../../backendMockData';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 
-export const fetchUserTransactions = async (authUser: IAuthUserGet): Promise<WebApiResponse<IUserTransactionsGet>> => {
-  try {
-    return {
-      isSuccess: true,
-      data: await backendGetTransactions(authUser),
-    };
-  } catch (e: any) {
-    return {
-      isSuccess: false,
-      error: {
-        message: e.message,
-      },
-    };
-  }
-};
-
-export const fetchFilteredUserTransactions = async (
+export const fetchUserTransactions = async (
+  user: IAuthUserGet,
   filter: IUserTransactionsFilter,
-  authUser: IAuthUserGet,
 ): Promise<WebApiResponse<IUserTransactionsGet>> => {
   try {
     return {
       isSuccess: true,
-      data: await backendGetFilteredUserTransactions(authUser, filter),
+      data: await backendGetUserTransactions(user, filter),
     };
   } catch (e: any) {
     return {
@@ -60,7 +43,7 @@ export const commitUserTransaction = async (
   try {
     return {
       isSuccess: true,
-      data: await backendPostTransaction(user, transaction),
+      data: await backendPostUserTransaction(user, transaction),
     };
   } catch (e: any) {
     return {
@@ -90,13 +73,13 @@ export const fetchUserTransactionsStatuses = async (
   }
 };
 
-export const fetchUserTransactionRecipients = async (authUser: IAuthUserGet): Promise<WebApiResponse<IUserGet[]>> => {
+export const fetchUserTransactionRecipients = async (user: IAuthUserGet): Promise<WebApiResponse<IUserGet[]>> => {
   try {
     var users = await backendGetUsers();
 
     return {
       isSuccess: true,
-      data: users.filter(x => x.id !== authUser.id),
+      data: users.filter(x => x.id !== user.id),
     };
   } catch (e: any) {
     return {

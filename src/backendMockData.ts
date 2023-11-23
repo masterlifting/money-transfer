@@ -69,34 +69,49 @@ const getUserBalance = (user: IUserGet): IUserBalanceGet => ({
 });
 
 const getUserTransactions = (user: IUserGet, filter: IUserTransactionsFilter): IUserTransactionsGet => {
-  const userTransactions = transactions.filter(x => x.user.id !== user.id);
+  let userTransactions = transactions.filter(x => x.user.id !== user.id);
 
-  const sortedTransactions = userTransactions.sort((a, b) => {
-    const valueA = a[filter.sortField as keyof IUserTransactionGet];
-    const valueB = b[filter.sortField as keyof IUserTransactionGet];
+  if (filter.sorting) {
+    userTransactions = userTransactions.sort((a, b) => {
+      const valueA = a[filter.sorting!.fieldName as keyof IUserTransactionGet];
+      const valueB = b[filter.sorting!.fieldName as keyof IUserTransactionGet];
 
-    if (typeof valueA === 'string' && typeof valueB === 'string') {
-      return filter.sortDirection === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-    } else if (typeof valueA === 'number' && typeof valueB === 'number') {
-      return filter.sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
-    } else if (typeof valueA === 'boolean' && typeof valueB === 'boolean') {
-      return filter.sortDirection === 'asc' ? (valueA ? 1 : -1) : valueB ? 1 : -1;
-    } else if (valueA instanceof Date && valueB instanceof Date) {
-      return filter.sortDirection === 'asc' ? valueA.getTime() - valueB.getTime() : valueB.getTime() - valueA.getTime();
-    } else if ((valueA as IUserGet) && (valueB as IUserGet)) {
-      const userA = valueA as IUserGet;
-      const userB = valueB as IUserGet;
-      return filter.sortDirection === 'asc' ? userA.email.localeCompare(userB.email) : userB.email.localeCompare(userA.email);
-    }
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        return filter.sorting!.direction === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      }
 
-    return 0;
-  });
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return filter.sorting!.direction === 'asc' ? valueA - valueB : valueB - valueA;
+      }
 
-  const totalCount = sortedTransactions.length;
-  const items = sortedTransactions.slice(
-    filter.totalItemsCount * (filter.pageNumber - 1),
-    filter.totalItemsCount * filter.pageNumber,
-  );
+      if (typeof valueA === 'boolean' && typeof valueB === 'boolean') {
+        return filter.sorting!.direction === 'asc' ? (valueA ? 1 : -1) : valueB ? 1 : -1;
+      }
+
+      if (valueA instanceof Date && valueB instanceof Date) {
+        return filter.sorting!.direction === 'asc' ? valueA.getTime() - valueB.getTime() : valueB.getTime() - valueA.getTime();
+      }
+
+      if ((valueA as IUserGet) && (valueB as IUserGet)) {
+        const userA = valueA as IUserGet;
+        const userB = valueB as IUserGet;
+        return filter.sorting!.direction === 'asc'
+          ? userA.email.localeCompare(userB.email)
+          : userB.email.localeCompare(userA.email);
+      }
+
+      return 0;
+    });
+  }
+
+  const totalCount = userTransactions.length;
+  let items = userTransactions;
+  if (filter.pagination) {
+    items = userTransactions.slice(
+      filter.pagination.pageItemsCount * (filter.pagination.pageNumber - 1),
+      filter.pagination.pageItemsCount * filter.pagination.pageNumber,
+    );
+  }
 
   return {
     totalCount,
@@ -135,21 +150,12 @@ export const backendRegisterUser = async (user: IAuthUserPost): Promise<IAuthUse
   }
 };
 
-export const backendGetTransactions = async (authUser: IAuthUserGet): Promise<IUserTransactionsGet> => {
-  const userTransactions = transactions.filter(x => x.user.id !== authUser.id);
-
-  return {
-    totalCount: userTransactions.length,
-    items: userTransactions,
-  };
-};
-
-export const backendGetFilteredUserTransactions = async (
+export const backendGetUserTransactions = async (
   authUser: IAuthUserGet,
   filter: IUserTransactionsFilter,
 ): Promise<IUserTransactionsGet> => getUserTransactions(authUser, filter);
 
-export const backendPostTransaction = async (
+export const backendPostUserTransaction = async (
   user: IAuthUserGet,
   transaction: IUserTransactionPost,
 ): Promise<IUserTransactionGet> => {

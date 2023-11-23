@@ -3,6 +3,6 @@
 import { ModalContext } from './ModalContext';
 import { useContext } from 'react';
 
-export const useModalState = () => {
+export const useModalContext = () => {
   return useContext(ModalContext);
 };

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { IUserTransactionGet } from '../UserTransactionsTypes';
-import { useModalState } from '../../../../shared/components/modals/ModalHooks';
+import { useModalContext } from '../../../../shared/components/modals/ModalHooks';
 import { Modal } from '../../../../shared/components/modals/ModalComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';
 import { UserTransactionDetails } from './UserTransactionDetailsComponent';
@@ -17,7 +17,7 @@ interface ITransactionProps {
 
 export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
   const [showDetails, setShowDetails] = useState(false);
-  const { openModal, closeModal } = useModalState();
+  const { openModal, closeModal } = useModalContext();
 
   return (
     <div className='border-b-2 border-gray transition-all duration-500'>

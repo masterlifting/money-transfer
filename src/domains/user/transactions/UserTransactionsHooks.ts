@@ -1,23 +1,29 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { ISortedData, IUserTransactionGet, IUserTransactionPost, IUserTransactionsFilter } from './UserTransactionsTypes';
-import { commitUserTransaction, fetchFilteredUserTransactions, fetchUserTransactionRecipients } from './UserTransactionsData';
+import {
+  ISortedData,
+  IUserTransactionGet,
+  IUserTransactionPost,
+  IUserTransactionsFilter,
+  IUserTransactionsGet,
+} from './UserTransactionsTypes';
+import { commitUserTransaction, fetchUserTransactions, fetchUserTransactionRecipients } from './UserTransactionsData';
 import { IUserGet } from '../types/UserTypes';
 import { IValidation } from '../../../shared/types/ValidationTypes';
-import { useModalState } from '../../../shared/components/modals/ModalHooks';
-import { useUserBalanceState } from '../balance/UserBalanceHooks';
+import { useModalContext } from '../../../shared/components/modals/ModalHooks';
+import { useUserBalanceContext } from '../balance/UserBalanceHooks';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 import { IPagination } from '../../../shared/components/paginators/PaginationTypes';
 
 export const useUserTransactions = (user: IAuthUserGet) => {
-  const { isModalOpen } = useModalState();
-  const { updateUserBalance } = useUserBalanceState();
+  const { isModalOpen } = useModalContext();
+  const { updateUserBalance } = useUserBalanceContext();
 
-  const [transactions, setTransactions] = useState<IUserTransactionGet[]>([]);
+  const [transactions, setTransactions] = useState<IUserTransactionsGet>({ items: [], totalCount: 0 });
   const [sorting, setSorting] = useState<ISortedData>({ fieldName: 'date', direction: 'desc' });
   const [pagination, setPagination] = useState<IPagination>({ pageNumber: 1, pageItemsCount: 10 });
-  const [transactionsTotalCount, setTransactionsTotalCount] = useState(0);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -29,10 +35,9 @@ export const useUserTransactions = (user: IAuthUserGet) => {
       sorting: sorting,
     };
 
-    fetchFilteredUserTransactions(filter, user).then(response => {
+    fetchUserTransactions(user, filter).then(response => {
       if (response.isSuccess) {
-        setTransactions(response.data.items);
-        setTransactionsTotalCount(response.data.totalCount);
+        setTransactions(response.data);
         updateUserBalance(user);
       } else {
         setError(response.error.message);
@@ -40,24 +45,25 @@ export const useUserTransactions = (user: IAuthUserGet) => {
     });
 
     setLoading(false);
-  }, [transactionsFilter, isModalOpen]);
+  }, [sorting, pagination, isModalOpen, user]);
 
   return {
-    userTransactionsTotalCount: transactionsTotalCount,
     userTransactions: transactions,
-    userTransactionsFilter: transactionsFilter,
-    setTransactionsFilter,
+    userTransactionsSorting: sorting,
+    userTransactionsPagination: pagination,
     userTransactionsLoading: loading,
-    useUserTransactionsError: error,
+    userTransactionsError: error,
+    userTransactionsSetSorting: setSorting,
+    userTransactionsSetPagination: setPagination,
   };
 };
 
 export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserTransactionGet | undefined) => {
-  const { closeModal, openModal } = useModalState();
+  const { closeModal, openModal } = useModalContext();
 
   const [recipients, setRecipients] = useState<IUserGet[]>([]);
   const [validation, setValidation] = useState<IValidation>({ message: '', isValid: true });
-  const [transactionPostModel, setTransactionPostModel] = useState<IUserTransactionPost>(
+  const [postModel, setPostModel] = useState<IUserTransactionPost>(
     transaction && transaction.type === 'outcome'
       ? transaction
       : {
@@ -88,14 +94,14 @@ export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserT
   useEffect(() => {
     setValidation({ message: '', isValid: true });
 
-    if (transactionPostModel.amount <= 0) {
+    if (postModel.amount <= 0) {
       setValidation({ message: 'Amount must be greater than 0', isValid: false });
     }
 
-    if (!transactionPostModel.user.id || transactionPostModel.user.id.length === 0) {
+    if (!postModel.user.id || postModel.user.id.length === 0) {
       setValidation({ message: '', isValid: false });
     }
-  }, [transactionPostModel]);
+  }, [postModel]);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -104,13 +110,13 @@ export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserT
       return;
     }
 
-    const recipient = recipients.find(x => x.id === transactionPostModel.user.id);
+    const recipient = recipients.find(x => x.id === postModel.user.id);
 
     if (recipient) {
-      transactionPostModel.user.email = recipient.email;
+      postModel.user.email = recipient.email;
     }
 
-    const commitTransactionResponse = await commitUserTransaction(user, transactionPostModel);
+    const commitTransactionResponse = await commitUserTransaction(user, postModel);
 
     if (commitTransactionResponse.isSuccess) {
       closeModal();
@@ -120,12 +126,19 @@ export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserT
   };
 
   const onChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTransactionPostModel({ ...transactionPostModel, amount: Number(event.target.value) });
+    setPostModel({ ...postModel, amount: Number(event.target.value) });
   };
 
   const onChangeRecipient = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setTransactionPostModel({ ...transactionPostModel, user: { ...transactionPostModel.user, id: event.target.value } });
+    setPostModel({ ...postModel, user: { ...postModel.user, id: event.target.value } });
   };
 
-  return { transactionPost: transactionPostModel, recipients, validation, onChangeAmount, onChangeRecipient, onSubmit };
+  return {
+    userTransactionPostModel: postModel,
+    userTransactionRecipients: recipients,
+    userTransactionCreateValidation: validation,
+    onSubmitUserTransactionCreate: onSubmit,
+    onChangeAmountUserTransactionCreate: onChangeAmount,
+    onChangeRecipientUserTransactionCreate: onChangeRecipient,
+  };
 };

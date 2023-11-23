@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const useAuthRedirection = () => {
   const navigate = useNavigate();
-  const { isAuthorized, authUser } = useAuthState();
+  const { isAuthorized, authUser } = useAuthContext();
 
   useEffect(() => {
     if (!isAuthorized) {
@@ -24,13 +24,13 @@ export const useAuthRedirection = () => {
   return { authUser: user };
 };
 
-export const useAuthState = () => {
+export const useAuthContext = () => {
   return useContext(AuthContext);
 };
 
 export const useAuthorizeUser = () => {
   const navigate = useNavigate();
-  const { setAuthState } = useAuthState();
+  const { setAuthState } = useAuthContext();
 
   const [validation, setValidation] = useState<IValidation>({ message: '', isValid: true });
   const [authUserPostModel, setAuthUserPostModel] = useState<IAuthUserPost>({ email: '', password: '' });

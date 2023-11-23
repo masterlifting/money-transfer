@@ -1,7 +1,7 @@
 /** @format */
 
 import { ValidationError } from '../../../../shared/components/errors/ErrorValidationComponent';
-import { useModalState } from '../../../../shared/components/modals/ModalHooks';
+import { useModalContext } from '../../../../shared/components/modals/ModalHooks';
 import { ButtonStyle } from '../../../../shared/styles/Button';
 import { InputSelectStyle, InputTextStyle } from '../../../../shared/styles/Input';
 import { IAuthUserGet } from '../../../auth/AuthTypes';
@@ -14,35 +14,39 @@ interface ITransactionProps {
 }
 
 export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) => {
-  const { closeModal } = useModalState();
-  const { transactionPost, recipients, validation, onChangeAmount, onChangeRecipient, onSubmit } = useUserTransactionCreate(
-    user,
-    transaction,
-  );
+  const { closeModal } = useModalContext();
+  const {
+    userTransactionPostModel,
+    userTransactionRecipients,
+    userTransactionCreateValidation,
+    onChangeAmountUserTransactionCreate,
+    onChangeRecipientUserTransactionCreate,
+    onSubmitUserTransactionCreate,
+  } = useUserTransactionCreate(user, transaction);
 
   return (
-    <form onSubmit={onSubmit}>
-      {!validation.isValid && <ValidationError message={validation.message} />}
+    <form onSubmit={onSubmitUserTransactionCreate}>
+      {!userTransactionCreateValidation.isValid && <ValidationError message={userTransactionCreateValidation.message} />}
       <div className='grid grid-cols-[30%_70%] gap-2'>
         <input
           className={InputTextStyle.Text}
           type='number'
           placeholder='Amount'
-          value={transactionPost.amount}
-          onChange={onChangeAmount}
+          value={userTransactionPostModel.amount}
+          onChange={onChangeAmountUserTransactionCreate}
         />
         <select
           title='Choose a recipient'
           className={InputSelectStyle.Base}
-          value={transactionPost.user.id}
-          onChange={onChangeRecipient}
+          value={userTransactionPostModel.user.id}
+          onChange={onChangeRecipientUserTransactionCreate}
           placeholder='Choose a recipient'
         >
           <option className={InputSelectStyle.Option} style={{ color: 'red' }} value=''>
             Choose a recipient
           </option>
 
-          {recipients.map(x => (
+          {userTransactionRecipients.map(x => (
             <option className={InputSelectStyle.Option} key={x.id} value={x.id}>
               {x.email}
             </option>
@@ -53,7 +57,10 @@ export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) 
         <button className={ButtonStyle.Secondary} onClick={closeModal}>
           Close
         </button>
-        <button disabled={!validation.isValid} className={validation.isValid ? ButtonStyle.Success : ButtonStyle.Disable}>
+        <button
+          disabled={!userTransactionCreateValidation.isValid}
+          className={userTransactionCreateValidation.isValid ? ButtonStyle.Success : ButtonStyle.Disable}
+        >
           Commit
         </button>
       </div>
