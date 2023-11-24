@@ -2,7 +2,7 @@
 
 import { IUser, IUserGet } from '../user/types/UserTypes';
 
-export type IAuthType = 'login' | 'register';
+export type IAuthType = 'Login' | 'Register';
 
 export interface IAuthUserGet extends IUserGet {
   token: string;

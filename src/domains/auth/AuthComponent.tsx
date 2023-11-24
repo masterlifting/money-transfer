@@ -45,7 +45,7 @@ export const Auth = ({ type }: IAuthUserProps) => {
           onChange={onChangeAuthUserPassword}
           autoComplete='new-password'
         />
-        {type === 'register' && (
+        {type === 'Register' && (
           <input
             className={InputTextStyle.Text}
             type='password'

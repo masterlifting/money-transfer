@@ -48,7 +48,7 @@ export const useAuth = (authType: IAuthType) => {
       errors.push('Password is required');
     }
 
-    if (authType === 'register' && authUser.password !== confirmedPassword) {
+    if (authType === 'Register' && authUser.password !== confirmedPassword) {
       errors.push('Passwords do not match');
     }
 
@@ -64,7 +64,7 @@ export const useAuth = (authType: IAuthType) => {
       return;
     }
 
-    const authUserResponse = authType === 'register' ? await registerUser(authUser) : await authorizeUser(authUser);
+    const authUserResponse = authType === 'Register' ? await registerUser(authUser) : await authorizeUser(authUser);
 
     if (authUserResponse.isSuccess) {
       setAuthState(authUserResponse.data);
