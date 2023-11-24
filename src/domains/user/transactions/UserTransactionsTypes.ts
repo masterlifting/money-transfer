@@ -1,6 +1,6 @@
 /** @format */
 
-import { IPagination } from '../../../shared/components/paginators/PaginationTypes';
+import { IPagination } from '../../../shared/components/paginations/PaginationTypes';
 import { ISorting } from '../../../shared/components/sortings/SortingFieldTypes';
 import { IUserGet } from '../types/UserTypes';
 

@@ -13,7 +13,7 @@ import { IValidation } from '../../../shared/types/ValidationTypes';
 import { useModalContext } from '../../../shared/components/modals/ModalHooks';
 import { useUserBalanceContext } from '../balance/UserBalanceHooks';
 import { IAuthUserGet } from '../../auth/AuthTypes';
-import { IPagination } from '../../../shared/components/paginators/PaginationTypes';
+import { IPagination } from '../../../shared/components/paginations/PaginationTypes';
 import { ISorting } from '../../../shared/components/sortings/SortingFieldTypes';
 
 export const useUserTransactions = (user: IAuthUserGet) => {

@@ -15,7 +15,7 @@ import { v4 as guid } from 'uuid';
 const generateRandomTransactions = (users: IUserGet[]): IUserTransactionGet[] => {
   const transactions: IUserTransactionGet[] = [];
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 1000; i++) {
     const transaction: IUserTransactionGet = {
       id: guid(),
       type: Math.random() < 0.5 ? 'income' : 'outcome',

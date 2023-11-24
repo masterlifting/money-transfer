@@ -4,7 +4,7 @@ import { SimpleError } from '../../../../shared/components/errors/ErrorSimpleCom
 import { CircleLoader } from '../../../../shared/components/loaders/CircleLoaderComponents';
 import { Modal } from '../../../../shared/components/modals/ModalComponent';
 import { useModalContext } from '../../../../shared/components/modals/ModalHooks';
-import { Paginator } from '../../../../shared/components/paginators/PaginationComponent';
+import { Paginator } from '../../../../shared/components/paginations/PaginationComponent';
 import { SortingField } from '../../../../shared/components/sortings/SortingFieldComponent';
 import { ButtonStyle } from '../../../../shared/styles/Button';
 import { IAuthUserGet } from '../../../auth/AuthTypes';
