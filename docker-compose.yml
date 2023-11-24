@@ -10,4 +10,5 @@ services:
       context: .
     ports:
       - '3000:3000'
+    command: sh -c "npm start"
 # docker-compose -p sharp-dev-react-app up -d --build

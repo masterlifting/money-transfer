@@ -9,6 +9,7 @@ export const UserTransactionDetails = ({ transactionId }: ITransactionDetailsPro
     <div
       className={`
         p-2
+        text-gray-500
         text-sm`}
     >
       <p>Details for transactionId: {transactionId}</p>

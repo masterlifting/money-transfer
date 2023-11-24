@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import {
-  ISortedData,
   IUserTransactionGet,
   IUserTransactionPost,
   IUserTransactionsFilter,
@@ -15,13 +14,14 @@ import { useModalContext } from '../../../shared/components/modals/ModalHooks';
 import { useUserBalanceContext } from '../balance/UserBalanceHooks';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 import { IPagination } from '../../../shared/components/paginators/PaginationTypes';
+import { ISorting } from '../../../shared/components/sortings/SortingFieldTypes';
 
 export const useUserTransactions = (user: IAuthUserGet) => {
   const { isModalOpen } = useModalContext();
   const { updateUserBalance } = useUserBalanceContext();
 
   const [transactions, setTransactions] = useState<IUserTransactionsGet>({ items: [], totalCount: 0 });
-  const [sorting, setSorting] = useState<ISortedData>({ fieldName: 'date', direction: 'desc' });
+  const [sorting, setSorting] = useState<ISorting>({ fieldName: 'date', direction: 'desc' });
   const [pagination, setPagination] = useState<IPagination>({ pageNumber: 1, pageItemsCount: 10 });
 
   const [loading, setLoading] = useState(false);
