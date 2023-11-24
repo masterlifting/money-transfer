@@ -61,7 +61,7 @@ export const useUserTransactions = (user: IAuthUserGet) => {
 export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserTransactionGet | undefined) => {
   const { closeModal, openModal } = useModalContext();
 
-  const [validationResult, setValidationResult] = useState<ValidationResult>({ isValid: true });
+  const [validationResult, setValidationResult] = useState<ValidationResult>({ isValid: false, errors: [] });
   const [recipients, setRecipients] = useState<IUserGet[]>([]);
   const [transactionPost, settransactionPost] = useState<IUserTransactionPost>(
     transaction && transaction.type === 'Outcome'

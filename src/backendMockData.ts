@@ -12,64 +12,42 @@ import {
 import { IUserGet } from './domains/user/types/UserTypes';
 import { v4 as guid } from 'uuid';
 
-const generateRandomTransactions = (users: IUserGet[]): IUserTransactionGet[] => {
-  const transactions: IUserTransactionGet[] = [];
+interface IBackendTransaction {
+  user: IUserGet;
+  transactions: IUserTransactionGet[];
+}
 
-  for (let i = 0; i < 1000; i++) {
-    const transaction: IUserTransactionGet = {
-      id: guid(),
-      type: Math.random() < 0.5 ? 'Income' : 'Outcome',
-      status: Math.random() < 0.5 ? 'Completed' : 'Pending',
-      date: new Date(),
-      amount: Math.floor(Math.random() * 1000),
-      user: users[Math.floor(Math.random() * users.length)],
-    };
+const users: IUserGet[] = [];
+const transactions: IBackendTransaction[] = [];
+const balances: IUserBalanceGet[] = [];
 
-    transactions.push(transaction);
+const setUserBalance = (user: IUserGet, value: number) => {
+  const userBalance = balances.find(x => x.userId === user.id);
+
+  if (userBalance) {
+    userBalance.value += value;
+  } else {
+    balances.push({
+      userId: user.id,
+      value: value,
+      currency: 'USD',
+      symbol: '$',
+    });
   }
-
-  return transactions;
 };
 
-const users: IUserGet[] = [
-  {
-    id: guid(),
-    email: 'jack@gmail.com',
-  },
-  {
-    id: guid(),
-    email: 'bob@gmail.com',
-  },
-  {
-    id: guid(),
-    email: 'alice@gmail.com',
-  },
-  {
-    id: guid(),
-    email: 'serhio@gmail.com',
-  },
-  {
-    id: guid(),
-    email: 'milica@gmail.com',
-  },
-];
-
-const transactions = generateRandomTransactions(users);
-
-const getUserBalanceValue = (user: IUserGet) =>
-  transactions
-    .filter(transaction => transaction.user.id !== user.id)
-    .reduce((acc, transaction) => (transaction.type === 'Income' ? acc + transaction.amount : acc - transaction.amount), 0);
-
-const getUserBalance = (user: IUserGet): IUserBalanceGet => ({
-  userId: user.id,
-  value: getUserBalanceValue(user),
-  currency: 'USD',
-  symbol: '$',
-});
+const getUserBalance = (user: IUserGet): IUserBalanceGet =>
+  balances.find(x => x.userId === user.id) ?? {
+    userId: user.id,
+    value: 0,
+    currency: 'USD',
+    symbol: '$',
+  };
 
 const getUserTransactions = (user: IUserGet, filter: IUserTransactionsFilter): IUserTransactionsGet => {
-  let userTransactions = transactions.filter(x => x.user.id !== user.id);
+  let userTransactions = transactions
+    .filter(x => x.user.id === user.id)
+    .reduce((acc, x) => [...acc, ...x.transactions], [] as IUserTransactionGet[]);
 
   if (filter.sorting) {
     userTransactions = userTransactions.sort((a, b) => {
@@ -146,6 +124,23 @@ export const backendRegisterUser = async (user: IAuthUserPost): Promise<IAuthUse
 
     users.push(newUser);
 
+    transactions.push({
+      user: newUser,
+      transactions: [
+        {
+          id: guid(),
+          date: new Date(),
+          type: 'Income',
+          status: 'Completed',
+          amount: 500,
+          user: {
+            id: guid(),
+            email: 'internalmoney@gmail.com',
+          },
+        },
+      ],
+    });
+
     return { ...newUser, token: guid(), refreshToken: guid() };
   }
 };
@@ -159,13 +154,13 @@ export const backendPostUserTransaction = async (
   user: IAuthUserGet,
   transaction: IUserTransactionPost,
 ): Promise<IUserTransactionGet> => {
-  const userBalance = getUserBalanceValue(user);
+  const userBalance = getUserBalance(user);
 
-  if (userBalance <= 0 || userBalance < transaction.amount) {
+  if (userBalance.value <= 0 || userBalance.value < transaction.amount) {
     throw new Error('Not enough money');
   }
 
-  var transactionGet: IUserTransactionGet = {
+  var newTransaction: IUserTransactionGet = {
     id: guid(),
     date: new Date(),
     type: 'Outcome',
@@ -174,9 +169,20 @@ export const backendPostUserTransaction = async (
     user: transaction.user,
   };
 
-  transactions.push(transactionGet);
+  const userTransactions = transactions.find(x => x.user.id === user.id);
 
-  return transactionGet;
+  if (userTransactions) {
+    userTransactions.transactions.push(newTransaction);
+  } else {
+    transactions.push({
+      user: user,
+      transactions: [newTransaction],
+    });
+  }
+
+  setUserBalance(user, -transaction.amount);
+
+  return newTransaction;
 };
 
 export const backendGetTransactionsStatuses = async (transactions: IUserTransactionGet[]): Promise<IUserTransactionStatusGet[]> =>

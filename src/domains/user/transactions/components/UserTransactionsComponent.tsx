@@ -17,7 +17,7 @@ interface IUserTransactionsProps {
 }
 
 export const UserTransactions = ({ user }: IUserTransactionsProps) => {
-  const newTransactionLabel = 'New money transfer.';
+  const newTransactionLabel = 'New money transfer';
 
   const { openModal } = useModalContext();
 

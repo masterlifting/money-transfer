@@ -10,7 +10,3 @@ services:
       context: .
     ports:
       - '3000:3000'
-# docker-compose -p sharp-dev-react-app up -d --build
-# docker-compose -p sharp-dev-react-app down -v
-
-# AFTER THAT OPEN YOUR BROWSER AT http://localhost:3000

@@ -32,7 +32,7 @@ export const useAuth = (authType: IAuthType) => {
   const navigate = useNavigate();
   const { setAuthState } = useAuthContext();
 
-  const [validationResult, setValidationResult] = useState<ValidationResult>({ isValid: true });
+  const [validationResult, setValidationResult] = useState<ValidationResult>({ isValid: false, errors: [] });
   const [authUser, setAuthUser] = useState<IAuthUserPost>({ email: '', password: '' });
   const [confirmedPassword, setConfirmedPassword] = useState('');
 

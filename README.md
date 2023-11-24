@@ -1,46 +1,61 @@
-# Getting Started with Create React App
+<!-- @format -->
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# This is a WEB application for the task 'LEARN-8126' of the 'SharpDevelopers' company
 
-## Available Scripts
+### The application is written in React and TypeScript
 
-In the project directory, you can run:
+### The link of the technical task for the application is https://docs.google.com/document/d/1NMfvzJq173mqQwrMq5-s5PqQ-c6kZE1ZqhTbruGsv80/edit
 
-### `npm start`
+### I was focusing on the following points:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- The application does not have a backend
+- The application should be written in React and TypeScript
+- The application should be written in a functional style
+- The application should be written using React Hooks and Hooks Patterns
+- Tha application should have a responsive design
+- The application should have a minimum of rendering
+- The application should have a sorting and pagination
+- The application should have a simple authorization and authentication
+- The application DOES NOT HAVE EMAIL AND PASSWORD VALIDATION
+- The application should have a simple validation
+- The application should not use the external component libraries
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Run the application
 
-### `npm test`
+### If you have the Docker installed on your machine, use the following commands:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Clone the repository
 
-### `npm run build`
+  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Run the application from the root directory of the repository
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  `docker-compose -p sharp-dev-react-app up -d --build`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Stop the application
 
-### `npm run eject`
+  `docker-compose -p sharp-dev-react-app down -v`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### If you do not want to use the Docker, use the following commands:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Ensure that you have the Node.js installed on your machine
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  `node -v`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  `npm -v`
 
-## Learn More
+- If you do not have the Node.js installed, please install it from the https://nodejs.org/en/download/
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Clone the repository
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react`
+
+- Install the dependencies
+
+  `npm install`
+
+- Run the application
+
+  `npm start`
+
+## The application will be available on the http://localhost:3000
