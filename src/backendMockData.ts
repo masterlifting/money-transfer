@@ -18,8 +18,8 @@ const generateRandomTransactions = (users: IUserGet[]): IUserTransactionGet[] =>
   for (let i = 0; i < 1000; i++) {
     const transaction: IUserTransactionGet = {
       id: guid(),
-      type: Math.random() < 0.5 ? 'income' : 'outcome',
-      status: Math.random() < 0.5 ? 'completed' : 'pending',
+      type: Math.random() < 0.5 ? 'Income' : 'Outcome',
+      status: Math.random() < 0.5 ? 'Completed' : 'Pending',
       date: new Date(),
       amount: Math.floor(Math.random() * 1000),
       user: users[Math.floor(Math.random() * users.length)],
@@ -59,7 +59,7 @@ const transactions = generateRandomTransactions(users);
 const getUserBalanceValue = (user: IUserGet) =>
   transactions
     .filter(transaction => transaction.user.id !== user.id)
-    .reduce((acc, transaction) => (transaction.type === 'income' ? acc + transaction.amount : acc - transaction.amount), 0);
+    .reduce((acc, transaction) => (transaction.type === 'Income' ? acc + transaction.amount : acc - transaction.amount), 0);
 
 const getUserBalance = (user: IUserGet): IUserBalanceGet => ({
   userId: user.id,
@@ -168,8 +168,8 @@ export const backendPostUserTransaction = async (
   var transactionGet: IUserTransactionGet = {
     id: guid(),
     date: new Date(),
-    type: 'outcome',
-    status: 'pending',
+    type: 'Outcome',
+    status: 'Pending',
     amount: transaction.amount,
     user: transaction.user,
   };

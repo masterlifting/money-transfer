@@ -4,8 +4,8 @@ import { IPagination } from '../../../shared/components/paginations/PaginationTy
 import { ISorting } from '../../../shared/components/sortings/SortingFieldTypes';
 import { IUserGet } from '../types/UserTypes';
 
-type TransactionType = 'income' | 'outcome';
-type TransactionStatus = 'created' | 'pending' | 'completed' | 'failed';
+type TransactionType = 'Income' | 'Outcome';
+type TransactionStatus = 'Created' | 'Pending' | 'Completed' | 'Failed';
 
 interface IUserTransaction {
   user: IUserGet;

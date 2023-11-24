@@ -64,7 +64,7 @@ export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserT
   const [validationResult, setValidationResult] = useState<ValidationResult>({ isValid: true });
   const [recipients, setRecipients] = useState<IUserGet[]>([]);
   const [transactionPost, settransactionPost] = useState<IUserTransactionPost>(
-    transaction && transaction.type === 'outcome'
+    transaction && transaction.type === 'Outcome'
       ? transaction
       : {
           amount: 100,
@@ -77,7 +77,7 @@ export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserT
 
   // Fetch recipients
   useEffect(() => {
-    if (transaction && transaction.type === 'outcome') {
+    if (transaction && transaction.type === 'Outcome') {
       setRecipients([transaction.user]);
     } else {
       fetchUserTransactionRecipients(user).then(response => {
