@@ -9,12 +9,12 @@ import {
 } from './UserTransactionsTypes';
 import { commitUserTransaction, fetchUserTransactions, fetchUserTransactionRecipients } from './UserTransactionsData';
 import { IUserGet } from '../types/UserTypes';
-import { IValidation } from '../../../shared/types/ValidationTypes';
 import { useModalContext } from '../../../shared/components/modals/ModalHooks';
 import { useUserBalanceContext } from '../balance/UserBalanceHooks';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 import { IPagination } from '../../../shared/components/paginations/PaginationTypes';
 import { ISorting } from '../../../shared/components/sortings/SortingFieldTypes';
+import { IError, ValidationResult } from '../../../shared/components/errors/ErrorTypes';
 
 export const useUserTransactions = (user: IAuthUserGet) => {
   const { isModalOpen } = useModalContext();
@@ -25,7 +25,7 @@ export const useUserTransactions = (user: IAuthUserGet) => {
   const [pagination, setPagination] = useState<IPagination>({ pageNumber: 1, pageItemsCount: 10 });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<IError>({ message: '' });
 
   useEffect(() => {
     setLoading(true);
@@ -40,7 +40,7 @@ export const useUserTransactions = (user: IAuthUserGet) => {
         setTransactions(response.data);
         updateUserBalance(user);
       } else {
-        setError(response.error.message);
+        setError({ message: response.error.message });
       }
     });
 
@@ -61,9 +61,9 @@ export const useUserTransactions = (user: IAuthUserGet) => {
 export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserTransactionGet | undefined) => {
   const { closeModal, openModal } = useModalContext();
 
+  const [validationResult, setValidationResult] = useState<ValidationResult>({ isValid: true });
   const [recipients, setRecipients] = useState<IUserGet[]>([]);
-  const [validation, setValidation] = useState<IValidation>({ message: '', isValid: true });
-  const [postModel, setPostModel] = useState<IUserTransactionPost>(
+  const [transactionPost, settransactionPost] = useState<IUserTransactionPost>(
     transaction && transaction.type === 'outcome'
       ? transaction
       : {
@@ -84,7 +84,7 @@ export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserT
         if (response.isSuccess) {
           setRecipients(response.data);
         } else {
-          setValidation({ message: response.error.message, isValid: false });
+          setValidationResult({ isValid: false, errors: [{ message: response.error.message }] });
         }
       });
     }
@@ -92,51 +92,50 @@ export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserT
 
   // Validate transaction post model
   useEffect(() => {
-    setValidation({ message: '', isValid: true });
+    setValidationResult({ isValid: true });
 
-    if (postModel.amount <= 0) {
-      setValidation({ message: 'Amount must be greater than 0', isValid: false });
+    if (transactionPost.amount <= 0) {
+      setValidationResult({ isValid: false, errors: [{ message: 'Amount must be greater than 0' }] });
     }
-
-    if (!postModel.user.id || postModel.user.id.length === 0) {
-      setValidation({ message: '', isValid: false });
+    if (!transactionPost?.user.id) {
+      setValidationResult({ isValid: false, errors: [{ message: '' }] });
     }
-  }, [postModel]);
+  }, [transactionPost.amount, transactionPost.user.id]);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!validation.isValid) {
+    if (!validationResult.isValid) {
       return;
     }
 
-    const recipient = recipients.find(x => x.id === postModel.user.id);
+    const recipient = recipients.find(x => x.id === transactionPost.user.id);
 
     if (recipient) {
-      postModel.user.email = recipient.email;
+      transactionPost.user.email = recipient.email;
     }
 
-    const commitTransactionResponse = await commitUserTransaction(user, postModel);
+    const commitTransactionResponse = await commitUserTransaction(user, transactionPost);
 
     if (commitTransactionResponse.isSuccess) {
       closeModal();
     } else {
-      setValidation({ message: commitTransactionResponse.error.message, isValid: false });
+      setValidationResult({ isValid: false, errors: [{ message: commitTransactionResponse.error.message }] });
     }
   };
 
   const onChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPostModel({ ...postModel, amount: Number(event.target.value) });
+    settransactionPost({ ...transactionPost, amount: Number(event.target.value) });
   };
 
   const onChangeRecipient = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setPostModel({ ...postModel, user: { ...postModel.user, id: event.target.value } });
+    settransactionPost({ ...transactionPost, user: { ...transactionPost.user, id: event.target.value } });
   };
 
   return {
-    userTransactionPostModel: postModel,
+    userTransactionPostModel: transactionPost,
     userTransactionRecipients: recipients,
-    userTransactionCreateValidation: validation,
+    userTransactionCreateValidationResult: validationResult,
     onSubmitUserTransactionCreate: onSubmit,
     onChangeAmountUserTransactionCreate: onChangeAmount,
     onChangeRecipientUserTransactionCreate: onChangeRecipient,

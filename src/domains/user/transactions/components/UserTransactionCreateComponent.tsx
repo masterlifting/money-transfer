@@ -1,6 +1,6 @@
 /** @format */
 
-import { ValidationError } from '../../../../shared/components/errors/ErrorValidationComponent';
+import { Error } from '../../../../shared/components/errors/ErrorComponent';
 import { useModalContext } from '../../../../shared/components/modals/ModalHooks';
 import { ButtonStyle } from '../../../../shared/styles/Button';
 import { InputSelectStyle, InputTextStyle } from '../../../../shared/styles/Input';
@@ -18,7 +18,7 @@ export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) 
   const {
     userTransactionPostModel,
     userTransactionRecipients,
-    userTransactionCreateValidation,
+    userTransactionCreateValidationResult,
     onChangeAmountUserTransactionCreate,
     onChangeRecipientUserTransactionCreate,
     onSubmitUserTransactionCreate,
@@ -26,7 +26,7 @@ export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) 
 
   return (
     <form onSubmit={onSubmitUserTransactionCreate}>
-      {!userTransactionCreateValidation.isValid && <ValidationError message={userTransactionCreateValidation.message} />}
+      {!userTransactionCreateValidationResult.isValid && <Error error={userTransactionCreateValidationResult} />}
       <div className='grid grid-cols-[30%_70%] gap-2'>
         <div className='grid grid-row-2'>
           <label className='text-gray-400'>amount</label>
@@ -64,8 +64,8 @@ export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) 
           Close
         </button>
         <button
-          disabled={!userTransactionCreateValidation.isValid}
-          className={userTransactionCreateValidation.isValid ? ButtonStyle.Success : ButtonStyle.Disable}
+          disabled={!userTransactionCreateValidationResult.isValid}
+          className={userTransactionCreateValidationResult.isValid ? ButtonStyle.Success : ButtonStyle.Disable}
         >
           Commit
         </button>

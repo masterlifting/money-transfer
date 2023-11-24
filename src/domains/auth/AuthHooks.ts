@@ -1,11 +1,11 @@
 /** @format */
 
-import { IValidation } from '../../shared/types/ValidationTypes';
 import { AuthContext } from './AuthContext';
 import { useContext, useEffect, useState } from 'react';
 import { IAuthType, IAuthUserPost } from './AuthTypes';
 import { authorizeUser, registerUser } from './AuthData';
 import { useNavigate } from 'react-router-dom';
+import { ValidationResult } from '../../shared/components/errors/ErrorTypes';
 
 /** @format */
 
@@ -28,58 +28,73 @@ export const useAuthContext = () => {
   return useContext(AuthContext);
 };
 
-export const useAuthorizeUser = () => {
+export const useAuth = (authType: IAuthType) => {
   const navigate = useNavigate();
   const { setAuthState } = useAuthContext();
 
-  const [validation, setValidation] = useState<IValidation>({ message: '', isValid: true });
-  const [authUserPostModel, setAuthUserPostModel] = useState<IAuthUserPost>({ email: '', password: '' });
+  const [validationResult, setValidationResult] = useState<ValidationResult>({ isValid: true });
+  const [authUser, setAuthUser] = useState<IAuthUserPost>({ email: '', password: '' });
+  const [confirmedPassword, setConfirmedPassword] = useState('');
 
   useEffect(() => {
-    setValidation({ message: '', isValid: true });
+    setValidationResult({ isValid: true });
 
-    if (!authUserPostModel.email || authUserPostModel.email.length === 0) {
-      setValidation({ message: 'Email is required', isValid: false });
+    const errors: string[] = [];
+    if (!authUser.email || authUser.email.length === 0) {
+      errors.push('Email is required');
     }
 
-    if (!authUserPostModel.password || authUserPostModel.password.length === 0) {
-      setValidation({ message: 'Password is required', isValid: false });
+    if (!authUser.password || authUser.password.length === 0) {
+      errors.push('Password is required');
     }
-  }, [authUserPostModel.email, authUserPostModel.password]);
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>, type: IAuthType) => {
+    if (authType === 'register' && authUser.password !== confirmedPassword) {
+      errors.push('Passwords do not match');
+    }
+
+    if (errors.length > 0) {
+      setValidationResult({ isValid: false, errors: errors.map(error => ({ message: error })) });
+    }
+  }, [authType, authUser.email, authUser.password, confirmedPassword]);
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!validation.isValid) {
+    if (!validationResult.isValid) {
       return;
     }
 
-    const authUserResponse = type === 'register' ? await registerUser(authUserPostModel) : await authorizeUser(authUserPostModel);
+    const authUserResponse = authType === 'register' ? await registerUser(authUser) : await authorizeUser(authUser);
 
     if (authUserResponse.isSuccess) {
       setAuthState(authUserResponse.data);
       navigate('/');
     } else {
-      setValidation({ message: authUserResponse.error.message, isValid: false });
+      setValidationResult({ isValid: false, errors: [{ message: authUserResponse.error.message }] });
     }
   };
 
   const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setAuthUserPostModel({ ...authUserPostModel, email: value });
+    setAuthUser({ ...authUser, email: value });
   };
 
   const onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setAuthUserPostModel({ ...authUserPostModel, password: value });
+    setAuthUser({ ...authUser, password: value });
+  };
+
+  const onChangeConfirmedPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmedPassword(event.target.value);
   };
 
   return {
-    validation,
-    authUserPostModel,
-    onSubmit,
-    onChangeEmail,
-    onChangePassword,
-    setValidation,
+    authUser,
+    authUserConfirmedPassword: confirmedPassword,
+    authUserValidationResult: validationResult,
+    onSubmitAuthUser: onSubmit,
+    onChangeAuthUserEmail: onChangeEmail,
+    onChangeAuthUserPassword: onChangePassword,
+    onChangeAuthUserConfirmedPassword: onChangeConfirmedPassword,
   };
 };

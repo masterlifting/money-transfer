@@ -1,6 +1,5 @@
 /** @format */
 
-import { useEffect } from 'react';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 import { useUserBalanceContext } from './UserBalanceHooks';
 
@@ -9,12 +8,7 @@ interface IUserBalanceProps {
 }
 
 export const UserBalance = ({ user }: IUserBalanceProps) => {
-  const { userBalance, updateUserBalance } = useUserBalanceContext();
-
-  useEffect(() => {
-    updateUserBalance(user);
-  }, [user]);
-
+  const { userBalance } = useUserBalanceContext();
   return (
     <span className='text-yellow-400 font-bold'>
       {userBalance.symbol}

@@ -1,6 +1,6 @@
 /** @format */
 
-import { SimpleError } from '../../../../shared/components/errors/ErrorSimpleComponent';
+import { Error } from '../../../../shared/components/errors/ErrorComponent';
 import { CircleLoader } from '../../../../shared/components/loaders/CircleLoaderComponents';
 import { Modal } from '../../../../shared/components/modals/ModalComponent';
 import { useModalContext } from '../../../../shared/components/modals/ModalHooks';
@@ -54,7 +54,7 @@ export const UserTransactions = ({ user }: IUserTransactionsProps) => {
           <SortingField name={'status'} configuration={userTransactionsSorting} setSorting={userTransactionsSetSorting} />
         </div>
         {userTransactionsLoading && <CircleLoader />}
-        {userTransactionsError && <SimpleError message={userTransactionsError} />}
+        {userTransactionsError && <Error error={userTransactionsError} />}
         {userTransactions.items.map(x => (
           <UserTransaction user={user} key={x.id} transaction={x} />
         ))}

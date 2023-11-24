@@ -1,8 +1,10 @@
 /** @format */
 
-type WebApiError = {
-  message: string;
-};
+import { IError } from '../components/errors/ErrorTypes';
+
+interface IWebApiError extends IError {
+  code?: number;
+}
 
 export interface IWebApiSuccessResponse<T> {
   isSuccess: true;
@@ -11,7 +13,7 @@ export interface IWebApiSuccessResponse<T> {
 
 export interface IWebApiErrorResponse {
   isSuccess: false;
-  error: WebApiError;
+  error: IWebApiError;
 }
 
 export type WebApiResponse<T> = IWebApiSuccessResponse<T> | IWebApiErrorResponse;
