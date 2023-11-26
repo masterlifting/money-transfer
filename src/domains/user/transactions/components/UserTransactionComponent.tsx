@@ -9,6 +9,7 @@ import { UserTransactionDetails } from './UserTransactionDetailsComponent';
 import { SvgIcon } from '../../../../shared/components/icons/SvgIconComponent';
 import { SvgIcons } from '../../../../shared/components/icons/SvgIcons';
 import { IAuthUserGet } from '../../../auth/AuthTypes';
+import { TextColors } from '../../../../shared/styles/Colors';
 
 interface ITransactionProps {
   user: IAuthUserGet;
@@ -38,15 +39,32 @@ export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
             hour12: false,
           })}
         </span>
-        <span>${transaction.amount}</span>
+        <span className={transaction.type === 'Income' ? TextColors.Success : TextColors.Danger}>{`${
+          transaction.type === 'Income' ? '' : '-'
+        }${transaction.amount.symbol}${transaction.amount.value}`}</span>
         <span>{transaction.type === 'Outcome' ? 'to' : 'from'}</span>
         <span>{transaction.user.email}</span>
-        <span>{transaction.status}</span>
+        <span
+          className={(() => {
+            switch (transaction.status) {
+              case 'Pending':
+                return TextColors.Warning;
+              case 'Completed':
+                return TextColors.Success;
+              case 'Failed':
+                return TextColors.Danger;
+              default:
+                return '';
+            }
+          })()}
+        >
+          {transaction.status}
+        </span>
         <div className='flex justify-end items-center'>
           {transaction.type === 'Outcome' && <SvgIcon icon={SvgIcons.Repeat} handleClick={() => openModal(transaction.id)} />}
         </div>
       </div>
-      {showDetails && <UserTransactionDetails transactionId={transaction.id} />}
+      {showDetails && <UserTransactionDetails transactionId={transaction.id} description={transaction.description} />}
     </div>
   );
 };

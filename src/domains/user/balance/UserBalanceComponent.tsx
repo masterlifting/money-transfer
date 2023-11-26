@@ -11,8 +11,8 @@ export const UserBalance = ({ user }: IUserBalanceProps) => {
   const { userBalance } = useUserBalanceContext();
   return (
     <span className='text-yellow-400 font-bold'>
-      {userBalance.symbol}
-      {userBalance.value}
+      {userBalance?.amount.symbol}
+      {userBalance?.amount.value}
     </span>
   );
 };

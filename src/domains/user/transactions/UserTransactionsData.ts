@@ -4,17 +4,11 @@ import { WebApiResponse } from '../../../shared/types/WebApiTypes';
 import {
   IUserTransactionGet,
   IUserTransactionPost,
-  IUserTransactionStatusGet,
   IUserTransactionsFilter,
   IUserTransactionsGet,
 } from './UserTransactionsTypes';
 import { IUserGet } from '../types/UserTypes';
-import {
-  backendGetUserTransactions,
-  backendGetUsers,
-  backendPostUserTransaction,
-  backendGetTransactionsStatuses,
-} from '../../../backendMockData';
+import { backendGetUserTransactions, backendGetUsers, backendPostUserTransaction } from '../../../backendMockData';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 
 export const fetchUserTransactions = async (
@@ -44,24 +38,6 @@ export const commitUserTransaction = async (
     return {
       isSuccess: true,
       data: await backendPostUserTransaction(user, transaction),
-    };
-  } catch (e: any) {
-    return {
-      isSuccess: false,
-      error: {
-        message: e.message,
-      },
-    };
-  }
-};
-
-export const fetchUserTransactionsStatuses = async (
-  transactions: IUserTransactionGet[],
-): Promise<WebApiResponse<IUserTransactionStatusGet[]>> => {
-  try {
-    return {
-      isSuccess: true,
-      data: await backendGetTransactionsStatuses(transactions),
     };
   } catch (e: any) {
     return {

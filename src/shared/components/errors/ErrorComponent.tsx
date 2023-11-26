@@ -1,5 +1,6 @@
 /** @format */
 
+import { TextColors } from '../../styles/Colors';
 import { IError, IValidationFailure } from './ErrorTypes';
 
 export interface IErrorProps {
@@ -10,13 +11,13 @@ export const Error = ({ error }: IErrorProps) => {
   if (error.hasOwnProperty('errors')) {
     var errors = (error as IValidationFailure).errors;
     return (
-      <ul className='text-red-500 text-sm'>
+      <ul className={`${TextColors.Danger} text-xs`}>
         {errors.map((x, index) => (
           <li key={index}>{x.message}</li>
         ))}
       </ul>
     );
   } else {
-    return <span className='text-red-500 text-sm'>{(error as IError).message}</span>;
+    return <span className={`${TextColors.Danger} text-xs`}>{(error as IError).message}</span>;
   }
 };

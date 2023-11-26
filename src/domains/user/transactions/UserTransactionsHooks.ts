@@ -67,7 +67,7 @@ export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserT
     transaction && transaction.type === 'Outcome'
       ? transaction
       : {
-          amount: 100,
+          amount: { value: 100, currency: 'USD', symbol: '$' },
           user: {
             id: '',
             email: '',
@@ -94,7 +94,7 @@ export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserT
   useEffect(() => {
     setValidationResult({ isValid: true });
 
-    if (transactionPost.amount <= 0) {
+    if (transactionPost.amount.value <= 0) {
       setValidationResult({ isValid: false, errors: [{ message: 'Amount must be greater than 0' }] });
     }
     if (!transactionPost?.user.id) {
@@ -125,7 +125,7 @@ export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserT
   };
 
   const onChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
-    settransactionPost({ ...transactionPost, amount: Number(event.target.value) });
+    settransactionPost({ ...transactionPost, amount: { ...transactionPost.amount, value: +event.target.value } });
   };
 
   const onChangeRecipient = (event: React.ChangeEvent<HTMLSelectElement>) => {

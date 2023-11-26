@@ -2,6 +2,7 @@
 
 import { IPagination } from '../../../shared/components/paginations/PaginationTypes';
 import { ISorting } from '../../../shared/components/sortings/SortingFieldTypes';
+import { IMoney } from '../types/MoneyTypes';
 import { IUserGet } from '../types/UserTypes';
 
 type TransactionType = 'Income' | 'Outcome';
@@ -9,7 +10,7 @@ type TransactionStatus = 'Created' | 'Pending' | 'Completed' | 'Failed';
 
 interface IUserTransaction {
   user: IUserGet;
-  amount: number;
+  amount: IMoney;
 }
 
 export interface IUserTransactionGet extends IUserTransaction {
@@ -17,6 +18,7 @@ export interface IUserTransactionGet extends IUserTransaction {
   date: Date;
   type: TransactionType;
   status: TransactionStatus;
+  description?: string;
 }
 
 export interface IUserTransactionsFilter {
@@ -27,11 +29,6 @@ export interface IUserTransactionsFilter {
 export interface IUserTransactionsGet {
   totalCount: number;
   items: IUserTransactionGet[];
-}
-
-export interface IUserTransactionStatusGet {
-  id: string;
-  status: TransactionStatus;
 }
 
 export interface IUserTransactionPost extends IUserTransaction {}

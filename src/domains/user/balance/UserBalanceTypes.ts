@@ -1,8 +1,9 @@
 /** @format */
 
+import { IMoney } from '../types/MoneyTypes';
+import { IUserGet } from '../types/UserTypes';
+
 export interface IUserBalanceGet {
-  userId: string;
-  value: number;
-  currency: string;
-  symbol: string;
+  user: IUserGet;
+  amount: IMoney;
 }

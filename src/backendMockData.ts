@@ -5,49 +5,118 @@ import { IUserBalanceGet } from './domains/user/balance/UserBalanceTypes';
 import {
   IUserTransactionGet,
   IUserTransactionPost,
-  IUserTransactionStatusGet,
   IUserTransactionsFilter,
   IUserTransactionsGet,
 } from './domains/user/transactions/UserTransactionsTypes';
 import { IUserGet } from './domains/user/types/UserTypes';
 import { v4 as guid } from 'uuid';
 
-interface IBackendTransaction {
-  user: IUserGet;
-  transactions: IUserTransactionGet[];
-}
+//Users controller
+const _users: IUserGet[] = [];
 
-const users: IUserGet[] = [];
-const transactions: IBackendTransaction[] = [];
-const balances: IUserBalanceGet[] = [];
+export const backendGetUsers = (): Promise<IUserGet[]> => Promise.resolve(_users);
 
-const setUserBalance = (user: IUserGet, value: number) => {
-  const userBalance = balances.find(x => x.userId === user.id);
+export const backendAuthorizeUser = (user: IAuthUserPost): Promise<IAuthUserGet> => {
+  const userGet = _users.find(x => x.email === user.email);
 
-  if (userBalance) {
-    userBalance.value += value;
+  if (userGet) {
+    return Promise.resolve({ ...userGet, token: guid(), refreshToken: guid() });
   } else {
-    balances.push({
-      userId: user.id,
-      value: value,
-      currency: 'USD',
-      symbol: '$',
-    });
+    throw new Error('User not found');
   }
 };
 
-const getUserBalance = (user: IUserGet): IUserBalanceGet =>
-  balances.find(x => x.userId === user.id) ?? {
-    userId: user.id,
-    value: 0,
-    currency: 'USD',
-    symbol: '$',
-  };
+export const backendRegisterUser = (user: IAuthUserPost): Promise<IAuthUserGet> => {
+  let newUser = _users.find(x => x.email === user.email);
 
-const getUserTransactions = (user: IUserGet, filter: IUserTransactionsFilter): IUserTransactionsGet => {
-  let userTransactions = transactions
-    .filter(x => x.user.id === user.id)
-    .reduce((acc, x) => [...acc, ...x.transactions], [] as IUserTransactionGet[]);
+  if (newUser) {
+    throw new Error('User already exists');
+  } else {
+    newUser = {
+      id: guid(),
+      email: user.email,
+    };
+
+    _users.push(newUser);
+
+    const presentTransaction: IUserTransactionGet = {
+      id: guid(),
+      date: new Date(),
+      type: 'Income',
+      status: 'Completed',
+      amount: {
+        value: 500,
+        currency: 'USD',
+        symbol: '$',
+      },
+      user: {
+        id: guid(),
+        email: 'internalmoney@gmail.com',
+      },
+      description: 'Welcome bonus from Internal Money',
+    };
+
+    addTransaction(newUser, presentTransaction);
+
+    return Promise.resolve({ ...newUser, token: guid(), refreshToken: guid() });
+  }
+};
+
+//Transactions controller
+const _balances = new Map<string, IUserBalanceGet>();
+const _transactions = new Map<string, IUserTransactionGet[]>();
+
+const getBalance = (user: IUserGet): IUserBalanceGet => {
+  let balance = _balances.get(user.id);
+
+  if (!balance) {
+    balance = {
+      user: user,
+      amount: {
+        value: 0,
+        currency: 'USD',
+        symbol: '$',
+      },
+    };
+
+    _balances.set(user.id, balance);
+  }
+
+  return balance;
+};
+
+const setBalance = (user: IUserGet, value: number) => {
+  const balance = getBalance(user);
+  const newValue = balance.amount.value + value;
+
+  if (newValue < 0) {
+    throw new Error('Not enough money');
+  }
+
+  _balances.set(user.id, { ...balance, amount: { ...balance.amount, value: newValue } });
+};
+
+const addTransaction = (user: IUserGet, transaction: IUserTransactionGet) => {
+  if (transaction.type === 'Income') {
+    setBalance(user, transaction.amount.value);
+  } else {
+    setBalance(user, -transaction.amount.value);
+  }
+
+  const userTransactions = _transactions.get(user.id);
+
+  if (userTransactions) {
+    userTransactions.push(transaction);
+  } else {
+    _transactions.set(user.id, [transaction]);
+  }
+};
+
+export const backendGetUserTransactions = (
+  user: IAuthUserGet,
+  filter: IUserTransactionsFilter,
+): Promise<IUserTransactionsGet> => {
+  let userTransactions = _transactions.get(user.id) ?? [];
 
   if (filter.sorting) {
     userTransactions = userTransactions.sort((a, b) => {
@@ -91,76 +160,29 @@ const getUserTransactions = (user: IUserGet, filter: IUserTransactionsFilter): I
     );
   }
 
-  return {
+  return Promise.resolve({
     totalCount,
     items,
-  };
+  });
 };
 
-//Mock controllers
-
-export const backendGetUsers = async (): Promise<IUserGet[]> => users;
-
-export const backendAuthorizeUser = async (user: IAuthUserPost): Promise<IAuthUserGet> => {
-  const userGet = users.find(x => x.email === user.email);
-
-  if (userGet) {
-    return { ...userGet, token: guid(), refreshToken: guid() };
-  } else {
-    throw new Error('User not found');
-  }
-};
-
-export const backendRegisterUser = async (user: IAuthUserPost): Promise<IAuthUserGet> => {
-  const userGet = users.find(x => x.email === user.email);
-
-  if (userGet) {
-    throw new Error('User already exists');
-  } else {
-    const newUser: IUserGet = {
-      id: guid(),
-      email: user.email,
-    };
-
-    users.push(newUser);
-
-    transactions.push({
-      user: newUser,
-      transactions: [
-        {
-          id: guid(),
-          date: new Date(),
-          type: 'Income',
-          status: 'Completed',
-          amount: 500,
-          user: {
-            id: guid(),
-            email: 'internalmoney@gmail.com',
-          },
-        },
-      ],
-    });
-
-    return { ...newUser, token: guid(), refreshToken: guid() };
-  }
-};
-
-export const backendGetUserTransactions = async (
-  authUser: IAuthUserGet,
-  filter: IUserTransactionsFilter,
-): Promise<IUserTransactionsGet> => getUserTransactions(authUser, filter);
-
-export const backendPostUserTransaction = async (
+export const backendPostUserTransaction = (
   user: IAuthUserGet,
   transaction: IUserTransactionPost,
 ): Promise<IUserTransactionGet> => {
-  const userBalance = getUserBalance(user);
+  const receiver = _users.find(x => x.id === transaction.user.id);
 
-  if (userBalance.value <= 0 || userBalance.value < transaction.amount) {
-    throw new Error('Not enough money');
+  if (!receiver) {
+    throw new Error('Receiver not found');
   }
 
-  var newTransaction: IUserTransactionGet = {
+  // this status behavior is only for demo purposes
+
+  _transactions.get(user.id)?.forEach(x => {
+    x.status = 'Completed';
+  });
+
+  var senderTransaction: IUserTransactionGet = {
     id: guid(),
     date: new Date(),
     type: 'Outcome',
@@ -169,28 +191,18 @@ export const backendPostUserTransaction = async (
     user: transaction.user,
   };
 
-  const userTransactions = transactions.find(x => x.user.id === user.id);
+  addTransaction(user, senderTransaction);
 
-  if (userTransactions) {
-    userTransactions.transactions.push(newTransaction);
-  } else {
-    transactions.push({
-      user: user,
-      transactions: [newTransaction],
-    });
-  }
+  addTransaction(receiver, {
+    id: guid(),
+    date: new Date(),
+    type: 'Income',
+    status: 'Completed',
+    amount: transaction.amount,
+    user: user,
+  });
 
-  setUserBalance(user, -transaction.amount);
-
-  return newTransaction;
+  return Promise.resolve(senderTransaction);
 };
 
-export const backendGetTransactionsStatuses = async (transactions: IUserTransactionGet[]): Promise<IUserTransactionStatusGet[]> =>
-  transactions
-    .filter(transaction => transactions.some(t => t.id === transaction.id))
-    .map(transaction => ({
-      id: transaction.id,
-      status: transaction.status,
-    }));
-
-export const backendGetUserBalance = async (user: IAuthUserGet): Promise<IUserBalanceGet> => getUserBalance(user);
+export const backendGetUserBalance = (user: IAuthUserGet): Promise<IUserBalanceGet> => Promise.resolve(getBalance(user));

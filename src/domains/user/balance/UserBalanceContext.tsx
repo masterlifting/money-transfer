@@ -6,17 +6,17 @@ import { fetchUserBalance } from './UserBalanceData';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 
 interface IUserBalanceContext {
-  userBalance: IUserBalanceGet;
+  userBalance?: IUserBalanceGet;
   updateUserBalance: (user: IAuthUserGet) => void;
 }
 
 export const UserBalanceContext = createContext<IUserBalanceContext>({
-  userBalance: { symbol: '$', value: 0 } as IUserBalanceGet,
+  userBalance: undefined,
   updateUserBalance: (user?: IAuthUserGet) => {},
 });
 
 export const UserBalanceState = ({ children }: { children: React.ReactNode }) => {
-  const [userBalance, setBalance] = useState<IUserBalanceGet>({ symbol: '$', value: 0 } as IUserBalanceGet);
+  const [userBalance, setBalance] = useState<IUserBalanceGet>();
 
   const updateUserBalance = (user: IAuthUserGet) => {
     fetchUserBalance(user).then(x => {

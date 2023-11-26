@@ -34,7 +34,7 @@ export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) 
             className={InputTextStyle.Text}
             type='number'
             placeholder='Amount'
-            value={userTransactionPostModel.amount}
+            value={userTransactionPostModel.amount.value}
             onChange={onChangeAmountUserTransactionCreate}
           />
         </div>
