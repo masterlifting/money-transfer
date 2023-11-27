@@ -65,7 +65,7 @@ export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserT
   const [recipients, setRecipients] = useState<IUserGet[]>([]);
   const [transactionPost, settransactionPost] = useState<IUserTransactionPost>(
     transaction && transaction.type === 'Outcome'
-      ? transaction
+      ? { ...transaction, amount: { ...transaction.amount, value: -transaction.amount.value } }
       : {
           amount: { value: 100, currency: 'USD', symbol: '$' },
           user: {
