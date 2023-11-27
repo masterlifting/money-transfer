@@ -39,9 +39,9 @@ export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
             hour12: false,
           })}
         </span>
-        <span className={transaction.type === 'Income' ? TextColors.Success : TextColors.Danger}>{`${
-          transaction.type === 'Income' ? '' : '-'
-        }${transaction.amount.symbol}${transaction.amount.value}`}</span>
+        <span
+          className={transaction.type === 'Income' ? TextColors.Success : TextColors.Danger}
+        >{`${transaction.amount.value}${transaction.amount.symbol}`}</span>
         <span>{transaction.type === 'Outcome' ? 'to' : 'from'}</span>
         <span>{transaction.user.email}</span>
         <span

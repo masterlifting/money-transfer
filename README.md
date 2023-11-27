@@ -16,7 +16,6 @@
 - The application should have a minimum of rendering
 - The application should have a sorting and pagination
 - The application should have a simple authorization and authentication
-- The application DOES NOT HAVE EMAIL AND PASSWORD VALIDATION
 - The application should have a simple validation
 - The application should not use the external component libraries
 

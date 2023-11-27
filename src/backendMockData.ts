@@ -97,11 +97,11 @@ const setBalance = (user: IUserGet, value: number) => {
 };
 
 const addTransaction = (user: IUserGet, transaction: IUserTransactionGet) => {
-  if (transaction.type === 'Income') {
-    setBalance(user, transaction.amount.value);
-  } else {
-    setBalance(user, -transaction.amount.value);
-  }
+  const transactionAmount = transaction.type === 'Income' ? transaction.amount.value : -transaction.amount.value;
+
+  transaction = { ...transaction, amount: { ...transaction.amount, value: transactionAmount } };
+
+  setBalance(user, transaction.amount.value);
 
   const userTransactions = _transactions.get(user.id);
 
@@ -119,35 +119,27 @@ export const backendGetUserTransactions = (
   let userTransactions = _transactions.get(user.id) ?? [];
 
   if (filter.sorting) {
+    const compareNumbers = (a: number, b: number, direction: 'asc' | 'desc') => (direction === 'asc' ? a - b : b - a);
+    const compareStrings = (a: string, b: string, direction: 'asc' | 'desc') =>
+      direction === 'asc' ? a.localeCompare(b) : b.localeCompare(a);
+    const compareDates = (a: Date, b: Date, direction: 'asc' | 'desc') =>
+      direction === 'asc' ? a.getTime() - b.getTime() : b.getTime() - a.getTime();
+
     userTransactions = userTransactions.sort((a, b) => {
-      const valueA = a[filter.sorting!.fieldName as keyof IUserTransactionGet];
-      const valueB = b[filter.sorting!.fieldName as keyof IUserTransactionGet];
-
-      if (typeof valueA === 'string' && typeof valueB === 'string') {
-        return filter.sorting!.direction === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      switch (filter.sorting?.fieldName) {
+        case 'date':
+          return compareDates(a.date, b.date, filter.sorting.direction);
+        case 'type':
+          return compareStrings(a.type, b.type, filter.sorting.direction);
+        case 'status':
+          return compareStrings(a.status, b.status, filter.sorting.direction);
+        case 'user':
+          return compareStrings(a.user.email, b.user.email, filter.sorting.direction);
+        case 'amount':
+          return compareNumbers(a.amount.value, b.amount.value, filter.sorting.direction);
+        default:
+          return 0;
       }
-
-      if (typeof valueA === 'number' && typeof valueB === 'number') {
-        return filter.sorting!.direction === 'asc' ? valueA - valueB : valueB - valueA;
-      }
-
-      if (typeof valueA === 'boolean' && typeof valueB === 'boolean') {
-        return filter.sorting!.direction === 'asc' ? (valueA ? 1 : -1) : valueB ? 1 : -1;
-      }
-
-      if (valueA instanceof Date && valueB instanceof Date) {
-        return filter.sorting!.direction === 'asc' ? valueA.getTime() - valueB.getTime() : valueB.getTime() - valueA.getTime();
-      }
-
-      if ((valueA as IUserGet) && (valueB as IUserGet)) {
-        const userA = valueA as IUserGet;
-        const userB = valueB as IUserGet;
-        return filter.sorting!.direction === 'asc'
-          ? userA.email.localeCompare(userB.email)
-          : userB.email.localeCompare(userA.email);
-      }
-
-      return 0;
     });
   }
 
@@ -170,6 +162,7 @@ export const backendPostUserTransaction = (
   user: IAuthUserGet,
   transaction: IUserTransactionPost,
 ): Promise<IUserTransactionGet> => {
+  const sender = user;
   const receiver = _users.find(x => x.id === transaction.user.id);
 
   if (!receiver) {
@@ -188,19 +181,20 @@ export const backendPostUserTransaction = (
     type: 'Outcome',
     status: 'Pending',
     amount: transaction.amount,
-    user: transaction.user,
+    user: receiver,
   };
 
-  addTransaction(user, senderTransaction);
-
-  addTransaction(receiver, {
+  var receiverTransaction: IUserTransactionGet = {
     id: guid(),
     date: new Date(),
     type: 'Income',
     status: 'Completed',
     amount: transaction.amount,
-    user: user,
-  });
+    user: sender,
+  };
+
+  addTransaction(sender, senderTransaction);
+  addTransaction(receiver, receiverTransaction);
 
   return Promise.resolve(senderTransaction);
 };

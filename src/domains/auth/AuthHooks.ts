@@ -36,6 +36,7 @@ export const useAuth = (authType: IAuthType) => {
   const [authUser, setAuthUser] = useState<IAuthUserPost>({ email: '', password: '' });
   const [confirmedPassword, setConfirmedPassword] = useState('');
 
+  //user's input validation
   useEffect(() => {
     setValidationResult({ isValid: true });
 
@@ -44,8 +45,16 @@ export const useAuth = (authType: IAuthType) => {
       errors.push('Email is required');
     }
 
+    if (authUser.email && !authUser.email.includes('@') && !authUser.email.includes('.') && authUser.email.length < 8) {
+      errors.push('Email is not valid');
+    }
+
     if (!authUser.password || authUser.password.length === 0) {
       errors.push('Password is required');
+    }
+
+    if (authUser.password && authUser.password.length < 6) {
+      errors.push('Password must be at least 6 characters long');
     }
 
     if (authType === 'Register' && authUser.password !== confirmedPassword) {

@@ -19,7 +19,7 @@ export const TopBar = () => {
         {isAuthorized ? (
           <div className='flex gap-4'>
             <p className='text-white'>{authUser!.email}</p>
-            <UserBalance user={authUser!} />
+            <UserBalance />
             <SvgIcon
               icon={SvgIcons.Logout}
               handleClick={() => {
