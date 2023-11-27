@@ -16,4 +16,4 @@ export interface IWebApiErrorResponse {
   error: IWebApiError;
 }
 
-export type WebApiResponse<T> = IWebApiSuccessResponse<T> | IWebApiErrorResponse;
+export type WebApiResponseType<T> = IWebApiSuccessResponse<T> | IWebApiErrorResponse;

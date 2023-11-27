@@ -1,10 +1,10 @@
 /** @format */
 
 import { backendAuthorizeUser, backendRegisterUser } from '../../backendMockData';
-import { WebApiResponse } from '../../shared/types/WebApiTypes';
+import { WebApiResponseType } from '../../shared/types/WebApiTypes';
 import { IAuthUserGet, IAuthUserPost } from './AuthTypes';
 
-export const authorizeUser = async (user: IAuthUserPost): Promise<WebApiResponse<IAuthUserGet>> => {
+export const authorizeUser = async (user: IAuthUserPost): Promise<WebApiResponseType<IAuthUserGet>> => {
   try {
     return {
       isSuccess: true,
@@ -20,7 +20,7 @@ export const authorizeUser = async (user: IAuthUserPost): Promise<WebApiResponse
   }
 };
 
-export const registerUser = async (user: IAuthUserPost): Promise<WebApiResponse<IAuthUserGet>> => {
+export const registerUser = async (user: IAuthUserPost): Promise<WebApiResponseType<IAuthUserGet>> => {
   try {
     return {
       isSuccess: true,

@@ -1,6 +1,6 @@
 /** @format */
 
-import { IUser, IUserGet } from '../user/types/UserTypes';
+import { IUser, IUserGet } from '../../shared/types/UserTypes';
 
 export type IAuthType = 'Login' | 'Register';
 

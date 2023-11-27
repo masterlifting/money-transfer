@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from 'react';
 import { IAuthType, IAuthUserPost } from './AuthTypes';
 import { authorizeUser, registerUser } from './AuthData';
 import { useNavigate } from 'react-router-dom';
-import { ValidationResult } from '../../shared/components/errors/ErrorTypes';
+import { ValidationResultType } from '../../shared/components/errors/ErrorTypes';
 
 /** @format */
 
@@ -32,7 +32,7 @@ export const useAuth = (authType: IAuthType) => {
   const navigate = useNavigate();
   const { setAuthState } = useAuthContext();
 
-  const [validationResult, setValidationResult] = useState<ValidationResult>({ isValid: false, errors: [] });
+  const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: false, errors: [] });
   const [authUser, setAuthUser] = useState<IAuthUserPost>({ email: '', password: '' });
   const [confirmedPassword, setConfirmedPassword] = useState('');
 

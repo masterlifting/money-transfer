@@ -1,20 +1,20 @@
 /** @format */
 
-import { WebApiResponse } from '../../../shared/types/WebApiTypes';
+import { WebApiResponseType } from '../../../shared/types/WebApiTypes';
 import {
   IUserTransactionGet,
   IUserTransactionPost,
   IUserTransactionsFilter,
   IUserTransactionsGet,
 } from './UserTransactionsTypes';
-import { IUserGet } from '../types/UserTypes';
+import { IUserGet } from '../../../shared/types/UserTypes';
 import { backendGetUserTransactions, backendGetUsers, backendPostUserTransaction } from '../../../backendMockData';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 
 export const fetchUserTransactions = async (
   user: IAuthUserGet,
   filter: IUserTransactionsFilter,
-): Promise<WebApiResponse<IUserTransactionsGet>> => {
+): Promise<WebApiResponseType<IUserTransactionsGet>> => {
   try {
     return {
       isSuccess: true,
@@ -33,7 +33,7 @@ export const fetchUserTransactions = async (
 export const commitUserTransaction = async (
   user: IAuthUserGet,
   transaction: IUserTransactionPost,
-): Promise<WebApiResponse<IUserTransactionGet>> => {
+): Promise<WebApiResponseType<IUserTransactionGet>> => {
   try {
     return {
       isSuccess: true,
@@ -49,7 +49,7 @@ export const commitUserTransaction = async (
   }
 };
 
-export const fetchUserTransactionRecipients = async (user: IAuthUserGet): Promise<WebApiResponse<IUserGet[]>> => {
+export const fetchUserTransactionRecipients = async (user: IAuthUserGet): Promise<WebApiResponseType<IUserGet[]>> => {
   try {
     var users = await backendGetUsers();
 

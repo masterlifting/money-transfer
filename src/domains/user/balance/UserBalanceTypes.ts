@@ -1,7 +1,7 @@
 /** @format */
 
-import { IMoney } from '../types/MoneyTypes';
-import { IUserGet } from '../types/UserTypes';
+import { IMoney } from '../../../shared/types/MoneyTypes';
+import { IUserGet } from '../../../shared/types/UserTypes';
 
 export interface IUserBalanceGet {
   user: IUserGet;

@@ -8,7 +8,7 @@ import {
   IUserTransactionsFilter,
   IUserTransactionsGet,
 } from './domains/user/transactions/UserTransactionsTypes';
-import { IUserGet } from './domains/user/types/UserTypes';
+import { IUserGet } from './shared/types/UserTypes';
 import { v4 as guid } from 'uuid';
 
 //Users controller

@@ -8,13 +8,13 @@ import {
   IUserTransactionsGet,
 } from './UserTransactionsTypes';
 import { commitUserTransaction, fetchUserTransactions, fetchUserTransactionRecipients } from './UserTransactionsData';
-import { IUserGet } from '../types/UserTypes';
+import { IUserGet } from '../../../shared/types/UserTypes';
 import { useModalContext } from '../../../shared/components/modals/ModalHooks';
 import { useUserBalanceContext } from '../balance/UserBalanceHooks';
 import { IAuthUserGet } from '../../auth/AuthTypes';
 import { IPagination } from '../../../shared/components/paginations/PaginationTypes';
 import { ISorting } from '../../../shared/components/sortings/SortingFieldTypes';
-import { IError, ValidationResult } from '../../../shared/components/errors/ErrorTypes';
+import { IError, ValidationResultType } from '../../../shared/components/errors/ErrorTypes';
 
 export const useUserTransactions = (user: IAuthUserGet) => {
   const { isModalOpen } = useModalContext();
@@ -61,7 +61,7 @@ export const useUserTransactions = (user: IAuthUserGet) => {
 export const useUserTransactionCreate = (user: IAuthUserGet, transaction: IUserTransactionGet | undefined) => {
   const { closeModal, openModal } = useModalContext();
 
-  const [validationResult, setValidationResult] = useState<ValidationResult>({ isValid: false, errors: [] });
+  const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: false, errors: [] });
   const [recipients, setRecipients] = useState<IUserGet[]>([]);
   const [transactionPost, settransactionPost] = useState<IUserTransactionPost>(
     transaction && transaction.type === 'Outcome'

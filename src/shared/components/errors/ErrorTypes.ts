@@ -13,4 +13,4 @@ export interface IValidationFailure {
   errors: IError[];
 }
 
-export type ValidationResult = IValidationSuccess | IValidationFailure;
+export type ValidationResultType = IValidationSuccess | IValidationFailure;
