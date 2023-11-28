@@ -1,13 +1,7 @@
 /** @format */
 
 import { createContext, useState } from 'react';
-
-interface IModalContext {
-  modalId: string;
-  isModalOpen: boolean;
-  openModal: (key: string) => void;
-  closeModal: () => void;
-}
+import { IModalContext } from './ModalTypes';
 
 export const ModalContext = createContext<IModalContext>({
   modalId: '',

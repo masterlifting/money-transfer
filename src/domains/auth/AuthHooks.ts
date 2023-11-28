@@ -3,7 +3,6 @@
 import { AuthContext } from './AuthContext';
 import { useContext, useEffect, useState } from 'react';
 import { AuthType, IAuthUserPost } from './AuthTypes';
-import { authorizeUser, registerUser } from './AuthData';
 import { useNavigate } from 'react-router-dom';
 import { ValidationResultType } from '../../shared/components/errors/ErrorTypes';
 
@@ -11,17 +10,16 @@ import { ValidationResultType } from '../../shared/components/errors/ErrorTypes'
 
 export const useAuth = (authType: AuthType) => {
   const navigate = useNavigate();
-  const { setAuthState } = useAuthContext();
+  const { authUser, authErrors, setAuthState } = useAuthContext();
 
-  const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: false, errors: [] });
-  const [authUser, setAuthUser] = useState<IAuthUserPost>({ email: '', password: '' });
+  const [userPost, setUserPost] = useState<IAuthUserPost>({ email: '', password: '' });
   const [confirmedPassword, setConfirmedPassword] = useState('');
+  const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: false, errors: [] });
 
-  //user's input validation
-  useEffect(() => {
-    setValidationResult({ isValid: true });
-
+  //Validate auth user
+  const getAuthUserValidationErrors = (authUser: IAuthUserPost, confirmedPassword: string, authType: AuthType) => {
     const errors: string[] = [];
+
     if (!authUser.email || authUser.email.length === 0) {
       errors.push('Email is required');
     }
@@ -42,11 +40,26 @@ export const useAuth = (authType: AuthType) => {
       errors.push('Passwords do not match');
     }
 
-    if (errors.length > 0) {
-      setValidationResult({ isValid: false, errors: errors.map(error => ({ message: error })) });
-    }
-  }, [authType, authUser.email, authUser.password, confirmedPassword]);
+    return errors;
+  };
+  useEffect(() => {
+    const validationErrors = getAuthUserValidationErrors(userPost, confirmedPassword, authType);
 
+    if (validationErrors.length === 0) {
+      setValidationResult({ isValid: true });
+    } else {
+      setValidationResult({ isValid: false, errors: validationErrors.map(error => ({ message: error })) });
+    }
+  }, [authType, userPost, confirmedPassword]);
+
+  //Submit auth user
+  useEffect(() => {
+    if (authUser) {
+      navigate('/');
+    } else {
+      setValidationResult({ isValid: false, errors: authErrors });
+    }
+  }, [authErrors, authUser, navigate]);
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -54,56 +67,33 @@ export const useAuth = (authType: AuthType) => {
       return;
     }
 
-    const authUserResponse = authType === 'Register' ? await registerUser(authUser) : await authorizeUser(authUser);
-
-    if (authUserResponse.isSuccess) {
-      setAuthState(authUserResponse.data);
-      navigate('/');
-    } else {
-      setValidationResult({ isValid: false, errors: [{ message: authUserResponse.error.message }] });
-    }
-  };
-
-  const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setAuthUser({ ...authUser, email: value });
-  };
-
-  const onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setAuthUser({ ...authUser, password: value });
-  };
-
-  const onChangeConfirmedPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setConfirmedPassword(event.target.value);
+    setAuthState(authType, userPost);
   };
 
   return {
-    authUser,
+    authUser: userPost,
     authUserConfirmedPassword: confirmedPassword,
     authUserValidationResult: validationResult,
     onSubmitAuthUser: onSubmit,
-    onChangeAuthUserEmail: onChangeEmail,
-    onChangeAuthUserPassword: onChangePassword,
-    onChangeAuthUserConfirmedPassword: onChangeConfirmedPassword,
+    onChangeAuthUserEmail: (event: React.ChangeEvent<HTMLInputElement>) =>
+      setUserPost({ ...userPost, email: event.target.value }),
+    onChangeAuthUserPassword: (event: React.ChangeEvent<HTMLInputElement>) =>
+      setUserPost({ ...userPost, password: event.target.value }),
+    onChangeAuthUserConfirmedPassword: (event: React.ChangeEvent<HTMLInputElement>) => setConfirmedPassword(event.target.value),
   };
 };
 
 export const useAuthRedirection = () => {
   const navigate = useNavigate();
-  const { isAuthorized, authUser } = useAuthContext();
+  const { authUser } = useAuthContext();
 
   useEffect(() => {
-    if (!isAuthorized) {
+    if (!authUser) {
       navigate('/login');
     }
-  }, [isAuthorized, navigate]);
+  }, [authUser, navigate]);
 
-  const user = authUser!;
-
-  return { authUser: user };
+  return { authUser: authUser! };
 };
 
-export const useAuthContext = () => {
-  return useContext(AuthContext);
-};
+export const useAuthContext = () => useContext(AuthContext);

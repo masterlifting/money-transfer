@@ -8,7 +8,7 @@ import { SvgIcons } from '../icons/SvgIcons';
 
 export const TopBar = () => {
   const navigate = useNavigate();
-  const { isAuthorized, authUser, setAuthState } = useAuthContext();
+  const { authUser, clearAuthState } = useAuthContext();
 
   return (
     <nav className='h-14 bg-gray-800 flex justify-between items-center px-5'>
@@ -16,14 +16,15 @@ export const TopBar = () => {
         internal money
       </Link>
       <div className='flex gap-2'>
-        {isAuthorized ? (
+        {authUser ? (
           <div className='flex gap-4'>
-            <p className='text-white'>{authUser!.email}</p>
+            <p className='text-white'>{authUser.email}</p>
             <UserBalance />
             <SvgIcon
               icon={SvgIcons.Logout}
+              title='Logout'
               handleClick={() => {
-                setAuthState();
+                clearAuthState();
                 navigate('/login');
               }}
             />
@@ -35,6 +36,7 @@ export const TopBar = () => {
             </Link>
             <SvgIcon
               icon={SvgIcons.Login}
+              title='Login'
               handleClick={() => {
                 navigate('/login');
               }}

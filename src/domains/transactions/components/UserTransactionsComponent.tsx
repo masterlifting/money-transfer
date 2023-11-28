@@ -41,7 +41,7 @@ export const UserTransactions = ({ user }: IUserTransactionsProps) => {
         <h1 className='align-middle text-xl font-bold'>
           {userTransactions.totalCount} {userTransactions.totalCount === 1 ? 'Transaction' : 'Transactions'}
         </h1>
-        <button className={ButtonClass.Primary} onClick={() => openModal(newTransactionLabel)}>
+        <button title='Make a new money transfer' className={ButtonClass.Primary} onClick={() => openModal(newTransactionLabel)}>
           New
         </button>
       </div>

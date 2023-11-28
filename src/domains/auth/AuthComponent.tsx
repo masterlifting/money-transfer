@@ -60,6 +60,7 @@ export const Auth = ({ type }: IAuthUserProps) => {
       <div className='flex justify-end'>
         <button
           type='submit'
+          title={!authUserValidationResult.isValid ? 'Fill in all fields' : undefined}
           disabled={!authUserValidationResult.isValid}
           className={authUserValidationResult.isValid ? ButtonClass.Success : ButtonClass.Disable}
         >

@@ -30,9 +30,9 @@ export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) 
       {!userTransactionCreateValidationResult.isValid && <Error error={userTransactionCreateValidationResult} />}
       <div className='grid grid-cols-[30%_70%] gap-2'>
         <div className='grid grid-row-2'>
-          <label className={TextColor.Secondary}>amount</label>
+          <label className={TextColor.Secondary + 'text-sm'}>{transaction?.amount.symbol} amount</label>
           <input
-            className={InputClass.Text + 'text-sm'}
+            className={InputClass.Text}
             type='number'
             placeholder='Amount'
             value={userTransactionPostModel.amount.value}
@@ -65,6 +65,7 @@ export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) 
           Close
         </button>
         <button
+          title={!userTransactionCreateValidationResult.isValid ? 'Fill in all fields' : undefined}
           disabled={!userTransactionCreateValidationResult.isValid}
           className={userTransactionCreateValidationResult.isValid ? ButtonClass.Success : ButtonClass.Disable}
         >

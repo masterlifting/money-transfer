@@ -5,5 +5,5 @@ import { UserTransactions } from '../domains/transactions/components/UserTransac
 
 export const Home = () => {
   const { authUser } = useAuthRedirection();
-  return <UserTransactions user={authUser} />;
+  return authUser && <UserTransactions user={authUser} />;
 };

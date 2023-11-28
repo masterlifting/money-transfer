@@ -61,7 +61,9 @@ export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
           {transaction.status}
         </span>
         <div className='flex justify-end items-center'>
-          {transaction.type === 'Outcome' && <SvgIcon icon={SvgIcons.Repeat} handleClick={() => openModal(transaction.id)} />}
+          {transaction.type === 'Outcome' && (
+            <SvgIcon icon={SvgIcons.Repeat} title='Repeat transfer' handleClick={() => openModal(transaction.id)} />
+          )}
         </div>
       </div>
       {showDetails && <UserTransactionDetails transactionId={transaction.id} description={transaction.description} />}

@@ -1,32 +1,34 @@
 /** @format */
 
 import { createContext, useState } from 'react';
-import { IAuthUserGet } from './AuthTypes';
-
-interface IAuthContext {
-  isAuthorized: boolean;
-  authUser?: IAuthUserGet;
-  setAuthState: (user?: IAuthUserGet) => void;
-}
+import { AuthType, IAuthContext, IAuthUserGet, IAuthUserPost } from './AuthTypes';
+import { authorizeUser, registerUser } from './AuthData';
+import { IError } from '../../shared/components/errors/ErrorTypes';
 
 export const AuthContext = createContext<IAuthContext>({
-  isAuthorized: false,
-  setAuthState: (user?: IAuthUserGet) => {},
+  authErrors: [],
+  setAuthState: (authType: AuthType, user: IAuthUserPost) => {},
+  clearAuthState: () => {},
 });
 
 export const AuthState = ({ children }: { children: React.ReactNode }) => {
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const [authUser, setUser] = useState<IAuthUserGet>();
+  const [authUser, setAuthUser] = useState<IAuthUserGet>();
+  const [authErrors, setAuthErrors] = useState<IError[]>([]);
 
-  const setAuthState = (user?: IAuthUserGet) => {
-    if (user) {
-      setIsAuthorized(true);
-      setUser(user);
+  const setAuthState = async (authType: AuthType, user: IAuthUserPost) => {
+    const response = authType === 'Login' ? await authorizeUser(user) : await registerUser(user);
+
+    if (response.isSuccess) {
+      setAuthUser(response.data);
     } else {
-      setIsAuthorized(false);
-      setUser(undefined);
+      setAuthErrors([response.error]);
     }
   };
 
-  return <AuthContext.Provider value={{ isAuthorized, authUser, setAuthState }}>{children}</AuthContext.Provider>;
+  const clearAuthState = () => {
+    setAuthUser(undefined);
+    setAuthErrors([]);
+  };
+
+  return <AuthContext.Provider value={{ authUser, authErrors, setAuthState, clearAuthState }}>{children}</AuthContext.Provider>;
 };

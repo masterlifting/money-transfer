@@ -8,7 +8,7 @@ import {
   IUserTransactionsGet,
 } from './UserTransactionsTypes';
 import { IUserGet } from '../../shared/types/UserTypes';
-import { backendGetUserTransactions, backendGetUsers, backendPostUserTransaction } from '../../backendMockData';
+import { backendGetUserTransactions, backendGetUsers, backendPostUserTransaction } from '../../_backendMockApi';
 import { IAuthUserGet } from '../auth/AuthTypes';
 
 export const fetchUserTransactions = async (
