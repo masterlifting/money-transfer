@@ -9,25 +9,6 @@ import { ValidationResultType } from '../../shared/components/errors/ErrorTypes'
 
 /** @format */
 
-export const useAuthRedirection = () => {
-  const navigate = useNavigate();
-  const { isAuthorized, authUser } = useAuthContext();
-
-  useEffect(() => {
-    if (!isAuthorized) {
-      navigate('/login');
-    }
-  }, [isAuthorized, navigate]);
-
-  const user = authUser!;
-
-  return { authUser: user };
-};
-
-export const useAuthContext = () => {
-  return useContext(AuthContext);
-};
-
 export const useAuth = (authType: AuthType) => {
   const navigate = useNavigate();
   const { setAuthState } = useAuthContext();
@@ -106,4 +87,23 @@ export const useAuth = (authType: AuthType) => {
     onChangeAuthUserPassword: onChangePassword,
     onChangeAuthUserConfirmedPassword: onChangeConfirmedPassword,
   };
+};
+
+export const useAuthRedirection = () => {
+  const navigate = useNavigate();
+  const { isAuthorized, authUser } = useAuthContext();
+
+  useEffect(() => {
+    if (!isAuthorized) {
+      navigate('/login');
+    }
+  }, [isAuthorized, navigate]);
+
+  const user = authUser!;
+
+  return { authUser: user };
+};
+
+export const useAuthContext = () => {
+  return useContext(AuthContext);
 };
