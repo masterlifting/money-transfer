@@ -1,6 +1,6 @@
 /** @format */
 
-import { HoveredTextColors } from '../../styles/Colors';
+import { HoveredTextColor } from '../../styles/Colors';
 
 interface ISvgIconProps {
   icon: JSX.Element;
@@ -9,7 +9,7 @@ interface ISvgIconProps {
 
 export const SvgIcon = ({ icon, handleClick }: ISvgIconProps) => (
   <span
-    className={HoveredTextColors.Primary}
+    className={HoveredTextColor.Primary}
     onClick={event => {
       event.stopPropagation();
       handleClick && handleClick();

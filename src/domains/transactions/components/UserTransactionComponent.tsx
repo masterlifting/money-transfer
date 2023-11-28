@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import { IUserTransactionGet } from '../UserTransactionsTypes';
-import { useModalContext } from '../../../../shared/components/modals/ModalHooks';
-import { Modal } from '../../../../shared/components/modals/ModalComponent';
+import { useModalContext } from '../../../shared/components/modals/ModalHooks';
+import { Modal } from '../../../shared/components/modals/ModalComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';
 import { UserTransactionDetails } from './UserTransactionDetailsComponent';
-import { SvgIcon } from '../../../../shared/components/icons/SvgIconComponent';
-import { SvgIcons } from '../../../../shared/components/icons/SvgIcons';
-import { IAuthUserGet } from '../../../auth/AuthTypes';
-import { TextColors } from '../../../../shared/styles/Colors';
+import { SvgIcon } from '../../../shared/components/icons/SvgIconComponent';
+import { SvgIcons } from '../../../shared/components/icons/SvgIcons';
+import { IAuthUserGet } from '../../auth/AuthTypes';
+import { TextColor } from '../../../shared/styles/Colors';
 
 interface ITransactionProps {
   user: IAuthUserGet;
@@ -21,7 +21,7 @@ export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
   const { openModal, closeModal } = useModalContext();
 
   return (
-    <div className='border-b-2 border-gray transition-all duration-500'>
+    <div className='border-b-2 border-gray'>
       <Modal id={transaction.id} title={`Repeat transfer for ${transaction.user.email}`} onClose={closeModal}>
         <UserTransactionCreate user={user} transaction={transaction} />
       </Modal>
@@ -40,7 +40,7 @@ export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
           })}
         </span>
         <span
-          className={transaction.type === 'Income' ? TextColors.Success : TextColors.Danger}
+          className={transaction.type === 'Income' ? TextColor.Success : TextColor.Danger}
         >{`${transaction.amount.value}${transaction.amount.symbol}`}</span>
         <span>{transaction.type === 'Outcome' ? 'to' : 'from'}</span>
         <span>{transaction.user.email}</span>
@@ -48,11 +48,11 @@ export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
           className={(() => {
             switch (transaction.status) {
               case 'Pending':
-                return TextColors.Warning;
+                return TextColor.Warning;
               case 'Completed':
-                return TextColors.Success;
+                return TextColor.Success;
               case 'Failed':
-                return TextColors.Danger;
+                return TextColor.Danger;
               default:
                 return '';
             }

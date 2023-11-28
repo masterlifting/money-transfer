@@ -1,13 +1,13 @@
 /** @format */
 
-import { Error } from '../../../../shared/components/errors/ErrorComponent';
-import { CircleLoader } from '../../../../shared/components/loaders/CircleLoaderComponents';
-import { Modal } from '../../../../shared/components/modals/ModalComponent';
-import { useModalContext } from '../../../../shared/components/modals/ModalHooks';
-import { Paginator } from '../../../../shared/components/paginations/PaginationComponent';
-import { SortingField } from '../../../../shared/components/sortings/SortingFieldComponent';
-import { ButtonStyle } from '../../../../shared/styles/Button';
-import { IAuthUserGet } from '../../../auth/AuthTypes';
+import { Error } from '../../../shared/components/errors/ErrorComponent';
+import { CircleLoader } from '../../../shared/components/loaders/CircleLoaderComponents';
+import { Modal } from '../../../shared/components/modals/ModalComponent';
+import { useModalContext } from '../../../shared/components/modals/ModalHooks';
+import { Paginator } from '../../../shared/components/paginations/PaginationComponent';
+import { SortingField } from '../../../shared/components/sortings/SortingFieldComponent';
+import { ButtonClass } from '../../../shared/styles/Button';
+import { IAuthUserGet } from '../../auth/AuthTypes';
 import { useUserTransactions } from '../UserTransactionsHooks';
 import { UserTransaction } from './UserTransactionComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';
@@ -41,7 +41,7 @@ export const UserTransactions = ({ user }: IUserTransactionsProps) => {
         <h1 className='align-middle text-xl font-bold'>
           {userTransactions.totalCount} {userTransactions.totalCount === 1 ? 'Transaction' : 'Transactions'}
         </h1>
-        <button className={ButtonStyle.Primary} onClick={() => openModal(newTransactionLabel)}>
+        <button className={ButtonClass.Primary} onClick={() => openModal(newTransactionLabel)}>
           New
         </button>
       </div>

@@ -1,15 +1,15 @@
 /** @format */
 
-import { WebApiResponseType } from '../../../shared/types/WebApiTypes';
+import { WebApiResponseType } from '../../shared/types/WebApiTypes';
 import {
   IUserTransactionGet,
   IUserTransactionPost,
   IUserTransactionsFilter,
   IUserTransactionsGet,
 } from './UserTransactionsTypes';
-import { IUserGet } from '../../../shared/types/UserTypes';
-import { backendGetUserTransactions, backendGetUsers, backendPostUserTransaction } from '../../../backendMockData';
-import { IAuthUserGet } from '../../auth/AuthTypes';
+import { IUserGet } from '../../shared/types/UserTypes';
+import { backendGetUserTransactions, backendGetUsers, backendPostUserTransaction } from '../../backendMockData';
+import { IAuthUserGet } from '../auth/AuthTypes';
 
 export const fetchUserTransactions = async (
   user: IAuthUserGet,

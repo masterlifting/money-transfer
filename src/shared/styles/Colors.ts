@@ -1,6 +1,6 @@
 /** @format */
 
-export enum TextColors {
+export enum TextColor {
   Primary = 'text-blue-400 ',
   Secondary = 'text-gray-400 ',
   Success = 'text-green-400 ',
@@ -9,7 +9,7 @@ export enum TextColors {
   Disable = 'text-gray-400 ',
 }
 
-export enum HoveredTextColors {
+export enum HoveredTextColor {
   Primary = 'hover:text-blue-400 cursor-pointer ',
   Secondary = 'hover:text-gray-400 cursor-pointer ',
   Success = 'hover:text-green-400 cursor-pointer ',
@@ -18,7 +18,7 @@ export enum HoveredTextColors {
   Disable = 'hover:text-gray-400 cursor-pointer ',
 }
 
-export enum BackgroundColors {
+export enum BackgroundColor {
   Primary = 'bg-blue-400 ',
   Secondary = 'bg-gray-400 ',
   Success = 'bg-green-400 ',

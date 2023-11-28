@@ -1,13 +1,13 @@
 /** @format */
 
 import { IAuthUserGet, IAuthUserPost } from './domains/auth/AuthTypes';
-import { IUserBalanceGet } from './domains/user/balance/UserBalanceTypes';
+import { IUserBalanceGet } from './domains/balance/UserBalanceTypes';
 import {
   IUserTransactionGet,
   IUserTransactionPost,
   IUserTransactionsFilter,
   IUserTransactionsGet,
-} from './domains/user/transactions/UserTransactionsTypes';
+} from './domains/transactions/UserTransactionsTypes';
 import { IUserGet } from './shared/types/UserTypes';
 import { v4 as guid } from 'uuid';
 

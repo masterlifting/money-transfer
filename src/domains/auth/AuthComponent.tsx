@@ -1,9 +1,9 @@
 /** @format */
 
 import { Error } from '../../shared/components/errors/ErrorComponent';
-import { InputTextStyle } from '../../shared/styles/Input';
+import { InputClass } from '../../shared/styles/Input';
 import { useAuth } from './AuthHooks';
-import { ButtonStyle } from '../../shared/styles/Button';
+import { ButtonClass } from '../../shared/styles/Button';
 import { IAuthType } from './AuthTypes';
 
 interface IAuthUserProps {
@@ -30,7 +30,7 @@ export const Auth = ({ type }: IAuthUserProps) => {
       {!authUserValidationResult.isValid && <Error error={authUserValidationResult} />}
       <div className='flex flex-col items-center'>
         <input
-          className={InputTextStyle.Text}
+          className={InputClass.Text}
           type='email'
           placeholder='email'
           value={authUser.email}
@@ -38,7 +38,7 @@ export const Auth = ({ type }: IAuthUserProps) => {
           autoComplete='email'
         />
         <input
-          className={InputTextStyle.Text}
+          className={InputClass.Text}
           type='password'
           placeholder='password'
           value={authUser.password}
@@ -47,7 +47,7 @@ export const Auth = ({ type }: IAuthUserProps) => {
         />
         {type === 'Register' && (
           <input
-            className={InputTextStyle.Text}
+            className={InputClass.Text}
             type='password'
             placeholder='repeat password'
             required={true}
@@ -61,7 +61,7 @@ export const Auth = ({ type }: IAuthUserProps) => {
         <button
           type='submit'
           disabled={!authUserValidationResult.isValid}
-          className={authUserValidationResult.isValid ? ButtonStyle.Success : ButtonStyle.Disable}
+          className={authUserValidationResult.isValid ? ButtonClass.Success : ButtonClass.Disable}
         >
           {type}
         </button>

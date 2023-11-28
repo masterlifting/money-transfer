@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { IPagination, PaginationPageItemsCountType } from './PaginationTypes';
-import { HoveredTextColors, TextColors } from '../../styles/Colors';
+import { HoveredTextColor, TextColor } from '../../styles/Colors';
 
 const pageItemsCounts: PaginationPageItemsCountType[] = [10, 20, 30, 40, 50];
 
@@ -20,11 +20,11 @@ export const Paginator = ({ totalItemsCount, pageItemsCount, configuration, setP
     <div className='flex justify-end items-center mt-2'>
       {configuration.pageNumber !== 1 && (
         <div className='flex gap-2 items-center'>
-          <span className={HoveredTextColors.Primary} onClick={_ => setPaginator({ ...configuration, pageNumber: 1 })}>
+          <span className={HoveredTextColor.Primary} onClick={_ => setPaginator({ ...configuration, pageNumber: 1 })}>
             {'<<'}
           </span>
           <span
-            className={HoveredTextColors.Primary}
+            className={HoveredTextColor.Primary}
             onClick={_ => setPaginator({ ...configuration, pageNumber: configuration.pageNumber - 1 })}
           >
             {'<'}
@@ -49,7 +49,7 @@ export const Paginator = ({ totalItemsCount, pageItemsCount, configuration, setP
                   _pageItemsCount <= totalItemsCount && (
                     <option
                       key={_pageItemsCount}
-                      className={_pageItemsCount === configuration.pageItemsCount ? TextColors.Primary + 'font-bold' : ''}
+                      className={_pageItemsCount === configuration.pageItemsCount ? TextColor.Primary + 'font-bold' : ''}
                     >
                       {_pageItemsCount}
                     </option>
@@ -72,8 +72,8 @@ export const Paginator = ({ totalItemsCount, pageItemsCount, configuration, setP
                 {shouldShowEllipsis && index === 1 && <span className='text-sm'>. . .</span>}
                 {isNearCurrentPage && (
                   <span
-                    className={`${HoveredTextColors.Primary}${
-                      pageNumber === configuration.pageNumber && TextColors.Primary + 'font-bold'
+                    className={`${HoveredTextColor.Primary}${
+                      pageNumber === configuration.pageNumber && TextColor.Primary + 'font-bold'
                     }`}
                     onClick={() => setPaginator({ ...configuration, pageNumber })}
                   >
@@ -90,13 +90,13 @@ export const Paginator = ({ totalItemsCount, pageItemsCount, configuration, setP
       {totalItemsCount > configuration.pageNumber * configuration.pageItemsCount && (
         <div className='flex gap-2 items-center'>
           <span
-            className={HoveredTextColors.Primary}
+            className={HoveredTextColor.Primary}
             onClick={_ => setPaginator({ ...configuration, pageNumber: configuration.pageNumber + 1 })}
           >
             {'>'}
           </span>
           <span
-            className={HoveredTextColors.Primary}
+            className={HoveredTextColor.Primary}
             onClick={_ =>
               setPaginator({ ...configuration, pageNumber: Math.ceil(totalItemsCount / configuration.pageItemsCount) })
             }

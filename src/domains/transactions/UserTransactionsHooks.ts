@@ -8,13 +8,13 @@ import {
   IUserTransactionsGet,
 } from './UserTransactionsTypes';
 import { commitUserTransaction, fetchUserTransactions, fetchUserTransactionRecipients } from './UserTransactionsData';
-import { IUserGet } from '../../../shared/types/UserTypes';
-import { useModalContext } from '../../../shared/components/modals/ModalHooks';
+import { IUserGet } from '../../shared/types/UserTypes';
+import { useModalContext } from '../../shared/components/modals/ModalHooks';
 import { useUserBalanceContext } from '../balance/UserBalanceHooks';
-import { IAuthUserGet } from '../../auth/AuthTypes';
-import { IPagination } from '../../../shared/components/paginations/PaginationTypes';
-import { ISorting } from '../../../shared/components/sortings/SortingFieldTypes';
-import { IError, ValidationResultType } from '../../../shared/components/errors/ErrorTypes';
+import { IAuthUserGet } from '../auth/AuthTypes';
+import { IPagination } from '../../shared/components/paginations/PaginationTypes';
+import { ISorting } from '../../shared/components/sortings/SortingFieldTypes';
+import { IError, ValidationResultType } from '../../shared/components/errors/ErrorTypes';
 
 export const useUserTransactions = (user: IAuthUserGet) => {
   const { isModalOpen } = useModalContext();

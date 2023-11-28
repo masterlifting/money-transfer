@@ -2,7 +2,7 @@
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../../domains/auth/AuthHooks';
-import { UserBalance } from '../../../domains/user/balance/UserBalanceComponent';
+import { UserBalance } from '../../../domains/balance/UserBalanceComponent';
 import { SvgIcon } from '../icons/SvgIconComponent';
 import { SvgIcons } from '../icons/SvgIcons';
 

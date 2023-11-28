@@ -1,8 +1,8 @@
 /** @format */
 
-import { backendGetUserBalance } from '../../../backendMockData';
-import { WebApiResponseType } from '../../../shared/types/WebApiTypes';
-import { IAuthUserGet } from '../../auth/AuthTypes';
+import { backendGetUserBalance } from '../../backendMockData';
+import { WebApiResponseType } from '../../shared/types/WebApiTypes';
+import { IAuthUserGet } from '../auth/AuthTypes';
 import { IUserBalanceGet } from './UserBalanceTypes';
 
 export const fetchUserBalance = async (user: IAuthUserGet): Promise<WebApiResponseType<IUserBalanceGet>> => {

@@ -1,9 +1,9 @@
 /** @format */
 
-import { IPagination } from '../../../shared/components/paginations/PaginationTypes';
-import { ISorting } from '../../../shared/components/sortings/SortingFieldTypes';
-import { IMoney } from '../../../shared/types/MoneyTypes';
-import { IUserGet } from '../../../shared/types/UserTypes';
+import { IPagination } from '../../shared/components/paginations/PaginationTypes';
+import { ISorting } from '../../shared/components/sortings/SortingFieldTypes';
+import { IMoney } from '../../shared/types/MoneyTypes';
+import { IUserGet } from '../../shared/types/UserTypes';
 
 type TransactionType = 'Income' | 'Outcome';
 type TransactionStatus = 'Created' | 'Pending' | 'Completed' | 'Failed';

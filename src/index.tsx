@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { AuthState } from './domains/auth/AuthContext';
 import { ModalState } from './shared/components/modals/ModalContext';
-import { UserBalanceState } from './domains/user/balance/UserBalanceContext';
+import { UserBalanceState } from './domains/balance/UserBalanceContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 

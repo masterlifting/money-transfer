@@ -1,6 +1,6 @@
 /** @format */
 
-import { TextColors } from '../../styles/Colors';
+import { TextColor } from '../../styles/Colors';
 import { ISorting } from './SortingFieldTypes';
 
 interface ISortingFieldProps {
@@ -19,7 +19,7 @@ export const SortingField = ({ name, configuration, setSorting }: ISortingFieldP
           direction: configuration.direction === 'asc' ? 'desc' : 'asc',
         })
       }
-      className={`cursor-pointer ${configuration.fieldName === name && TextColors.Primary}`}
+      className={`cursor-pointer ${configuration.fieldName === name && TextColor.Primary}`}
     >
       {configuration.fieldName === name ? (configuration.direction === 'asc' ? '▲' : '▼') : ''}
       {name}

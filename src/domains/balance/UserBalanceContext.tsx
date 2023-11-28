@@ -3,7 +3,7 @@
 import { createContext, useState } from 'react';
 import { IUserBalanceGet } from './UserBalanceTypes';
 import { fetchUserBalance } from './UserBalanceData';
-import { IAuthUserGet } from '../../auth/AuthTypes';
+import { IAuthUserGet } from '../auth/AuthTypes';
 
 interface IUserBalanceContext {
   userBalance?: IUserBalanceGet;

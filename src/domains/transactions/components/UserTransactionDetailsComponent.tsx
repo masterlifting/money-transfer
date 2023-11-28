@@ -1,6 +1,6 @@
 /** @format */
 
-import { TextColors } from '../../../../shared/styles/Colors';
+import { TextColor } from '../../../shared/styles/Colors';
 
 interface ITransactionDetailsProps {
   transactionId: string;
@@ -9,7 +9,7 @@ interface ITransactionDetailsProps {
 
 export const UserTransactionDetails = ({ transactionId, description }: ITransactionDetailsProps) => {
   return (
-    <div className={`${TextColors.Secondary} p-2 text-sm`}>
+    <div className={`${TextColor.Secondary} p-2 text-sm`}>
       {description ? <p>{description}</p> : <p>Additional details for the transaction: {transactionId}</p>}
     </div>
   );
