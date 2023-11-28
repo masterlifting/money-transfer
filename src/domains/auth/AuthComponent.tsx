@@ -4,10 +4,10 @@ import { Error } from '../../shared/components/errors/ErrorComponent';
 import { InputClass } from '../../shared/styles/Input';
 import { useAuth } from './AuthHooks';
 import { ButtonClass } from '../../shared/styles/Button';
-import { IAuthType } from './AuthTypes';
+import { AuthType } from './AuthTypes';
 
 interface IAuthUserProps {
-  type: IAuthType;
+  type: AuthType;
 }
 
 export const Auth = ({ type }: IAuthUserProps) => {

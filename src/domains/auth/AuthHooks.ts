@@ -2,7 +2,7 @@
 
 import { AuthContext } from './AuthContext';
 import { useContext, useEffect, useState } from 'react';
-import { IAuthType, IAuthUserPost } from './AuthTypes';
+import { AuthType, IAuthUserPost } from './AuthTypes';
 import { authorizeUser, registerUser } from './AuthData';
 import { useNavigate } from 'react-router-dom';
 import { ValidationResultType } from '../../shared/components/errors/ErrorTypes';
@@ -28,7 +28,7 @@ export const useAuthContext = () => {
   return useContext(AuthContext);
 };
 
-export const useAuth = (authType: IAuthType) => {
+export const useAuth = (authType: AuthType) => {
   const navigate = useNavigate();
   const { setAuthState } = useAuthContext();
 
