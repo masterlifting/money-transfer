@@ -11,7 +11,7 @@ export const AuthContext = createContext<IAuthContext>({
   clearAuthState: () => {},
 });
 
-export const AuthState = ({ children }: { children: React.ReactNode }) => {
+export const AuthStateProvider = ({ children }: { children: React.ReactNode }) => {
   const [authUser, setAuthUser] = useState<IAuthUserGet>();
   const [authErrors, setAuthErrors] = useState<IError[]>([]);
 

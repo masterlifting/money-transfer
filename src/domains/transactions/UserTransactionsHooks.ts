@@ -1,12 +1,7 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import {
-  IUserTransactionGet,
-  IUserTransactionPost,
-  IUserTransactionsFilter,
-  IUserTransactionsGet,
-} from './UserTransactionsTypes';
+import { IUserTransactionGet, IUserTransactionPost, IUserTransactionsGet } from './UserTransactionsTypes';
 import { commitUserTransaction, fetchUserTransactions, fetchUserTransactionRecipients } from './UserTransactionsData';
 import { IUserGet } from '../../shared/types/UserTypes';
 import { useModalContext } from '../../shared/components/modals/ModalHooks';

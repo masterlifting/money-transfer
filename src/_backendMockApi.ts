@@ -11,7 +11,7 @@ import {
 import { IUserGet } from './shared/types/UserTypes';
 import { v4 as guid } from 'uuid';
 
-//Users controller
+// Users controller
 const _users: IUserGet[] = [];
 
 export const backendGetUsers = (): Promise<IUserGet[]> => Promise.resolve(_users);
@@ -62,9 +62,8 @@ export const backendRegisterUser = (user: IAuthUserPost): Promise<IAuthUserGet> 
   }
 };
 
-//Transactions controller
+// User balance controller
 const _balances = new Map<string, IUserBalanceGet>();
-const _transactions = new Map<string, IUserTransactionGet[]>();
 
 const getBalance = (user: IUserGet): IUserBalanceGet => {
   let balance = _balances.get(user.id);
@@ -95,6 +94,11 @@ const setBalance = (user: IUserGet, value: number) => {
 
   _balances.set(user.id, { ...balance, amount: { ...balance.amount, value: newValue } });
 };
+
+export const backendGetUserBalance = (user: IAuthUserGet): Promise<IUserBalanceGet> => Promise.resolve(getBalance(user));
+
+// User transactions controller
+const _transactions = new Map<string, IUserTransactionGet[]>();
 
 const addTransaction = (user: IUserGet, transaction: IUserTransactionGet) => {
   const transactionAmount = transaction.type === 'Income' ? transaction.amount.value : -transaction.amount.value;
@@ -198,5 +202,3 @@ export const backendPostUserTransaction = (
 
   return Promise.resolve(senderTransaction);
 };
-
-export const backendGetUserBalance = (user: IAuthUserGet): Promise<IUserBalanceGet> => Promise.resolve(getBalance(user));

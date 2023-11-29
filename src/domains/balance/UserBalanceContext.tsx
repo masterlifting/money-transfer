@@ -10,7 +10,7 @@ export const UserBalanceContext = createContext<IUserBalanceContext>({
   updateUserBalance: (user?: IAuthUserGet) => {},
 });
 
-export const UserBalanceState = ({ children }: { children: React.ReactNode }) => {
+export const UserBalanceStateProvider = ({ children }: { children: React.ReactNode }) => {
   const [userBalance, setBalance] = useState<IUserBalanceGet>();
 
   const updateUserBalance = (user: IAuthUserGet) => {

@@ -10,7 +10,7 @@ export const ModalContext = createContext<IModalContext>({
   closeModal: () => {},
 });
 
-export const ModalState = ({ children }: { children: React.ReactNode }) => {
+export const ModalStateProvider = ({ children }: { children: React.ReactNode }) => {
   const [modal, setModal] = useState({ id: '', isOpen: false });
 
   const openModal = (id: string) => {

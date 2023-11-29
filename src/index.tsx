@@ -1,23 +1,23 @@
 /** @format */
 
 import './index.css';
-import App from './App';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthState } from './domains/auth/AuthContext';
-import { ModalState } from './shared/components/modals/ModalContext';
-import { UserBalanceState } from './domains/balance/UserBalanceContext';
+import { AuthStateProvider } from './domains/auth/AuthContext';
+import { ModalStateProvider } from './shared/components/modals/ModalContext';
+import { UserBalanceStateProvider } from './domains/balance/UserBalanceContext';
+import { App } from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <BrowserRouter>
-    <ModalState>
-      <AuthState>
-        <UserBalanceState>
+    <ModalStateProvider>
+      <AuthStateProvider>
+        <UserBalanceStateProvider>
           <App />
-        </UserBalanceState>
-      </AuthState>
-    </ModalState>
+        </UserBalanceStateProvider>
+      </AuthStateProvider>
+    </ModalStateProvider>
   </BrowserRouter>,
 );
