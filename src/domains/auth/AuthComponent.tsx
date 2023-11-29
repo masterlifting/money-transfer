@@ -5,6 +5,7 @@ import { InputClass } from '../../shared/styles/Input';
 import { useAuth } from './AuthHooks';
 import { ButtonClass } from '../../shared/styles/Button';
 import { AuthType } from './AuthTypes';
+import { CircleLoader } from '../../shared/components/loaders/CircleLoaderComponents';
 
 interface IAuthUserProps {
   type: AuthType;
@@ -12,6 +13,7 @@ interface IAuthUserProps {
 
 export const Auth = ({ type }: IAuthUserProps) => {
   const {
+    authLoading,
     authUser,
     authUserConfirmedPassword,
     authUserValidationResult,
@@ -27,6 +29,7 @@ export const Auth = ({ type }: IAuthUserProps) => {
       className='w-80 absolute rounded-md left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/3'
     >
       <h1 className='text-2xl font-bold mb-2'>{type}</h1>
+      {authLoading && <CircleLoader />}
       {!authUserValidationResult.isValid && <Error error={authUserValidationResult} />}
       <div className='flex flex-col items-center'>
         <input

@@ -15,6 +15,7 @@ export interface IAuthUserPost extends IUser {
 }
 
 export interface IAuthContext {
+  authLoading: boolean;
   authUser?: IAuthUserGet;
   authErrors: IError[];
   setAuthState: (authType: AuthType, user: IAuthUserPost) => void;
