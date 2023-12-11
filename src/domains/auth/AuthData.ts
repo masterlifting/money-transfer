@@ -1,14 +1,14 @@
 /** @format */
 
-import { backendAuthorizeUser, backendRegisterUser } from '../../_backendMockApi';
+import { backendAuthorizeUser as backendLoginUser, backendRegisterUser } from '../../_backendMockApi';
 import { WebApiResponseType } from '../../shared/types/WebApiTypes';
 import { IAuthUserGet, IAuthUserPost } from './AuthTypes';
 
-export const authorizeUser = async (user: IAuthUserPost): Promise<WebApiResponseType<IAuthUserGet>> => {
+export const loginUser = async (user: IAuthUserPost): Promise<WebApiResponseType<IAuthUserGet>> => {
   try {
     return {
       isSuccess: true,
-      data: await backendAuthorizeUser(user),
+      data: await backendLoginUser(user),
     };
   } catch (e: any) {
     return {

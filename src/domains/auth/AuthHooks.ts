@@ -5,12 +5,21 @@ import { useContext, useEffect, useState } from 'react';
 import { AuthType, IAuthUserPost } from './AuthTypes';
 import { useNavigate } from 'react-router-dom';
 import { ValidationResultType } from '../../shared/components/errors/ErrorTypes';
+import { useAppSelector } from '../../shared/hooks/ReduxAppSelector';
+import { useAppActions } from '../../shared/hooks/ReduxAppActions';
+import { useLoginMutation, useRegisterMutation } from './AuthApi';
 
 /** @format */
 
 export const useAuth = (authType: AuthType) => {
   const navigate = useNavigate();
-  const { authLoading, authUser, authErrors, setAuthState } = useAuthContext();
+  //const { authLoading, authUser, authErrors, setAuthState } = useAuthContext();
+
+  const [login, { isError: isLoginError, isLoading, isSuccess, data, error }] = useLoginMutation();
+  const [register] = useRegisterMutation();
+
+  const { setAuthState } = useAppActions();
+  const { authUser } = useAppSelector(x => x.authState);
 
   const [user, setUser] = useState<IAuthUserPost>({ email: '', password: '' });
   const [confirmedPassword, setConfirmedPassword] = useState('');
@@ -60,6 +69,7 @@ export const useAuth = (authType: AuthType) => {
       setValidationResult({ isValid: false, errors: authErrors });
     }
   }, [authErrors, authUser, navigate]);
+
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -67,7 +77,13 @@ export const useAuth = (authType: AuthType) => {
       return;
     }
 
-    setAuthState(authType, user);
+    if (authType === 'Login') {
+      login(user);
+    } else if (authType === 'Register') {
+      register(user);
+    }
+
+    setAuthState({ authUser });
   };
 
   return {
@@ -84,7 +100,7 @@ export const useAuth = (authType: AuthType) => {
 
 export const useAuthRedirection = () => {
   const navigate = useNavigate();
-  const { authUser } = useAuthContext();
+  const { authUser } = useAppSelector(state => state.authState);
 
   useEffect(() => {
     if (!authUser) {

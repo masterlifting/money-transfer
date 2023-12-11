@@ -14,6 +14,10 @@ export interface IAuthUserPost extends IUser {
   password: string;
 }
 
+export interface IAuthState {
+  authUser?: IAuthUserGet;
+}
+
 export interface IAuthContext {
   authLoading: boolean;
   authUser?: IAuthUserGet;
