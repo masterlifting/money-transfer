@@ -25,7 +25,7 @@
 
 - Clone the repository
 
-  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react`
+  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react-redux`
 
 - Run the application from the root directory of the repository
 
@@ -47,7 +47,7 @@
 
 - Clone the repository
 
-  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react`
+  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react-redux`
 
 - Install the dependencies
 
