@@ -3,67 +3,37 @@
 import { useEffect, useState } from 'react';
 import { AuthType, IAuthUserPost } from './AuthTypes';
 import { useNavigate } from 'react-router-dom';
-import { IError, ValidationResultType } from '../../shared/components/errors/ErrorTypes';
+import { ValidationResultType } from '../../shared/components/errors/ErrorTypes';
 import { useAppSelector } from '../../shared/hooks/ReduxAppSelector';
 import { useAppActions } from '../../shared/hooks/ReduxAppActions';
 import { useLoginUserMutation, useRegisterUserMutation } from './AuthApi';
 
 export const useAuth = (authType: AuthType) => {
   const navigate = useNavigate();
-
   const { authUser } = useAppSelector(x => x.authState);
+
+  useEffect(() => authUser && navigate('/'), [authUser, navigate]);
 
   const [user, setUser] = useState<IAuthUserPost>({ email: '', password: '' });
   const [confirmedPassword, setConfirmedPassword] = useState('');
 
-  const { loginUser, errors: loginErrors, isLoading: isLoginLoading } = useLoginUser(authType, user);
-  const {
-    registerUser,
-    errors: registerErrors,
-    isLoading: isRegisterLoading,
-  } = useRegisterUser(authType, user, confirmedPassword);
+  const { submitUser, validationResult, isLoading } = useSubmitUser(authType, user, confirmedPassword);
 
-  const validationResult: ValidationResultType =
-    authType === 'Login'
-      ? loginErrors.length === 0
-        ? { isValid: true }
-        : { isValid: false, errors: loginErrors }
-      : registerErrors.length === 0
-      ? { isValid: true }
-      : { isValid: false, errors: registerErrors };
-
-  const isLoading = isLoginLoading || isRegisterLoading;
-
-  console.log('useAuth');
-
-  useEffect(() => {
-    if (authUser) {
-      navigate('/');
-    }
-  }, [authUser, navigate]);
-
-  //Submit auth user
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (validationResult.isValid) {
-      if (authType === 'Login') {
-        loginUser(user);
-      } else if (authType === 'Register') {
-        registerUser(user);
-      }
-    }
+    return validationResult.isValid && submitUser(user);
   };
 
   return {
     user,
     isLoading,
-    confirmedPassword,
     validationResult,
-    onSubmit: onSubmit,
-    onChangeEmail: (event: React.ChangeEvent<HTMLInputElement>) => setUser({ ...user, email: event.target.value }),
-    onChangePassword: (event: React.ChangeEvent<HTMLInputElement>) => setUser({ ...user, password: event.target.value }),
-    onChangeConfirmedPassword: (event: React.ChangeEvent<HTMLInputElement>) => setConfirmedPassword(event.target.value),
+    confirmedPassword,
+    onSubmit,
+    onChangeEmail: (e: React.ChangeEvent<HTMLInputElement>) => setUser({ ...user, email: e.target.value }),
+    onChangePassword: (e: React.ChangeEvent<HTMLInputElement>) => setUser({ ...user, password: e.target.value }),
+    onChangeConfirmedPassword: (e: React.ChangeEvent<HTMLInputElement>) => setConfirmedPassword(e.target.value),
   };
 };
 
@@ -80,100 +50,63 @@ export const useAuthorize = () => {
   return { authUser: authUser! };
 };
 
-const useLoginUser = (authType: AuthType, user: IAuthUserPost) => {
-  const [loginUser, { isError, isLoading, data: apiResult, error }] = useLoginUserMutation();
+const validateUser = (authType: AuthType, user: IAuthUserPost, confirmedPassword?: string): string | undefined => {
+  const { email, password } = user;
+
+  if (email.length === 0) {
+    return 'Email is required';
+  }
+
+  if (!email.includes('@') || !email.includes('.') || email.length < 8) {
+    return 'Email is not valid';
+  }
+
+  if (password.length === 0) {
+    return 'Password is required';
+  }
+
+  if (password.length < 6) {
+    return 'Password must be at least 6 characters long';
+  }
+
+  if (authType === 'Register' && confirmedPassword && password !== confirmedPassword) {
+    return 'Passwords do not match';
+  }
+
+  return undefined;
+};
+
+const useSubmitUser = (authType: AuthType, user: IAuthUserPost, confirmedPassword?: string) => {
+  const useUserMutation = authType === 'Login' ? useLoginUserMutation : useRegisterUserMutation;
+  const [submitUser, { isError, isLoading, data: apiResult, error }] = useUserMutation();
   const { setAuthState } = useAppActions();
-  const [errors, setErrors] = useState<IError[]>([]);
+  const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: true });
 
   useEffect(() => {
-    if (authType !== 'Login') {
-      console.log(authType);
-      return;
-    }
+    const validationError = validateUser(authType, user, confirmedPassword);
 
-    const validationErrors = validateUser(authType, user);
-
-    if (validationErrors.length > 0) {
-      setErrors(validationErrors.map(error => ({ message: error })));
-      return;
+    if (validationError) {
+      return setValidationResult({
+        isValid: false,
+        errors: [{ message: validationError }],
+      });
     }
 
     if (apiResult) {
       if (apiResult.isSuccess) {
+        setValidationResult({ isValid: true });
         setAuthState({ authUser: apiResult.data });
       } else {
+        setValidationResult({ isValid: false, errors: [{ message: apiResult.error.message }] });
         setAuthState({ authUser: undefined });
-        setErrors([{ message: apiResult.error.message }]);
       }
+    } else if (isError) {
+      alert(error?.toString() || '');
+      setAuthState({ authUser: undefined });
     } else {
-      if (isError) {
-        setAuthState({ authUser: undefined });
-        setErrors([{ message: error?.toString() || '' }]);
-      }
+      setValidationResult({ isValid: true });
     }
-  }, [apiResult, isError, error, user, setAuthState, authType]);
+  }, [apiResult, authType, confirmedPassword, error, isError, setAuthState, user]);
 
-  return { errors, isLoading, loginUser };
-};
-
-const useRegisterUser = (authType: AuthType, user: IAuthUserPost, confirmedPassword: string) => {
-  const [registerUser, { isError, isLoading, data: apiResult, error }] = useRegisterUserMutation();
-  const { setAuthState } = useAppActions();
-  const [errors, setErrors] = useState<IError[]>([]);
-
-  useEffect(() => {
-    if (authType !== 'Register') {
-      console.log(authType);
-      return;
-    }
-
-    const validationErrors = validateUser(authType, user, confirmedPassword);
-
-    if (validationErrors.length > 0) {
-      setErrors(validationErrors.map(error => ({ message: error })));
-      return;
-    }
-
-    if (apiResult) {
-      if (apiResult.isSuccess) {
-        setAuthState({ authUser: apiResult.data });
-      } else {
-        setAuthState({ authUser: undefined });
-        setErrors([{ message: apiResult.error.message }]);
-      }
-    } else {
-      if (isError) {
-        setAuthState({ authUser: undefined });
-        setErrors([{ message: error?.toString() || '' }]);
-      }
-    }
-  }, [apiResult, isError, error, user, confirmedPassword, setAuthState, authType]);
-
-  return { errors, isLoading, registerUser };
-};
-
-const validateUser = (authType: AuthType, user: IAuthUserPost, confirmedPassword?: string) => {
-  const errors: string[] = [];
-
-  if (!user.email || user.email.length === 0) {
-    errors.push('Email is required');
-  }
-
-  if (user.email && !user.email.includes('@') && !user.email.includes('.') && user.email.length < 8) {
-    errors.push('Email is not valid');
-  }
-
-  if (!user.password || user.password.length === 0) {
-    errors.push('Password is required');
-  }
-
-  if (user.password && user.password.length < 6) {
-    errors.push('Password must be at least 6 characters long');
-  }
-
-  if (authType === 'Register' && confirmedPassword && user.password !== confirmedPassword) {
-    errors.push('Passwords do not match');
-  }
-
-  return errors;
+  return { submitUser, validationResult, isLoading };
 };

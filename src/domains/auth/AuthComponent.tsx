@@ -23,12 +23,11 @@ export const Auth = ({ authType }: IAuthUserProps) => {
     onSubmit,
   } = useAuth(authType);
 
-  console.log('AuthComponent');
-
-  return (
+  return isLoading ? (
+    <CircleLoader />
+  ) : (
     <form onSubmit={onSubmit} className='w-80 absolute rounded-md left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/3'>
       <h1 className='text-2xl font-bold mb-2'>{authType}</h1>
-      {isLoading && <CircleLoader />}
       {!validationResult.isValid && <Error error={validationResult} />}
       <div className='flex flex-col items-center'>
         <input
