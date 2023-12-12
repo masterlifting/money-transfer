@@ -2,4 +2,4 @@
 
 import { Auth } from '../domains/auth/AuthComponent';
 
-export const UserRegister = () => <Auth type='Register' />;
+export const UserRegister = () => <Auth authType='Register' />;

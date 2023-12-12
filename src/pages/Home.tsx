@@ -1,9 +1,9 @@
 /** @format */
 
-import { useAuthRedirection } from '../domains/auth/AuthHooks';
+import { useAuthorize } from '../domains/auth/AuthHooks';
 import { UserTransactions } from '../domains/transactions/components/UserTransactionsComponent';
 
 export const Home = () => {
-  const { authUser } = useAuthRedirection();
+  const { authUser } = useAuthorize();
   return authUser && <UserTransactions user={authUser} />;
 };

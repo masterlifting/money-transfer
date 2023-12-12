@@ -15,11 +15,12 @@ export const authSlice = createSlice({
   reducers: {
     setAuthState: (state, action: PayloadAction<IAuthState>) => {
       state.authUser = action.payload.authUser;
-      localStorage.setItem(authUserKey, JSON.stringify(state.authUser));
-    },
-    clearAuthState: state => {
-      state.authUser = undefined;
-      localStorage.removeItem(authUserKey);
+
+      if (state.authUser) {
+        localStorage.setItem(authUserKey, JSON.stringify(state.authUser));
+      } else {
+        localStorage.removeItem(authUserKey);
+      }
     },
   },
 });
