@@ -1,11 +1,8 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
     "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true
+    "rootDirs": ["./src", "../shared"]
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
