@@ -1,12 +1,12 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { IUserTransactionGet, IUserTransactionPost, IUserTransactionsGet } from './UserTransactionsTypes';
+import { IUserTransactionGet, IUserTransactionPost, IUserTransactionsGet } from '../../../../shared/types/UserTransactionsTypes';
 import { commitUserTransaction, fetchUserTransactions, fetchUserTransactionRecipients } from './UserTransactionsData';
-import { IUserGet } from '../../shared/types/UserTypes';
+import { IUserGet } from '../../../../shared/types/UserTypes';
 import { useModalContext } from '../../shared/components/modals/ModalHooks';
 import { useUserBalanceContext } from '../balance/UserBalanceHooks';
-import { IAuthUserGet } from '../auth/AuthTypes';
+import { IAuthUserGet } from '../../../../shared/types/AuthTypes';
 import { IPagination } from '../../shared/components/paginations/PaginationTypes';
 import { ISorting } from '../../shared/components/sortings/SortingFieldTypes';
 import { IError, ValidationResultType } from '../../shared/components/errors/ErrorTypes';

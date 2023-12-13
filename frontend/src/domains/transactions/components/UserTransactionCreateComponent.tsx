@@ -5,9 +5,9 @@ import { useModalContext } from '../../../shared/components/modals/ModalHooks';
 import { ButtonClass } from '../../../shared/styles/Button';
 import { TextColor } from '../../../shared/styles/Colors';
 import { InputClass } from '../../../shared/styles/Input';
-import { IAuthUserGet } from '../../auth/AuthTypes';
+import { IAuthUserGet } from '../../../../../shared/types/AuthTypes';
 import { useUserTransactionCreate } from '../UserTransactionsHooks';
-import { IUserTransactionGet } from '../UserTransactionsTypes';
+import { IUserTransactionGet } from '../../../../../shared/types/UserTransactionsTypes';
 
 interface ITransactionProps {
   user: IAuthUserGet;

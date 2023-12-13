@@ -1,14 +1,14 @@
 /** @format */
 
 import { useState } from 'react';
-import { IUserTransactionGet } from '../UserTransactionsTypes';
+import { IUserTransactionGet } from '../../../../../shared/types/UserTransactionsTypes';
 import { useModalContext } from '../../../shared/components/modals/ModalHooks';
 import { Modal } from '../../../shared/components/modals/ModalComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';
 import { UserTransactionDetails } from './UserTransactionDetailsComponent';
 import { SvgIcon } from '../../../shared/components/icons/SvgIconComponent';
 import { SvgIcons } from '../../../shared/components/icons/SvgIcons';
-import { IAuthUserGet } from '../../auth/AuthTypes';
+import { IAuthUserGet } from '../../../../../shared/types/AuthTypes';
 import { TextColor } from '../../../shared/styles/Colors';
 
 interface ITransactionProps {

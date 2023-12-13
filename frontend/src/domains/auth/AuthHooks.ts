@@ -1,7 +1,7 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { AuthType, IAuthUserPost } from './AuthTypes';
+import { AuthType, IAuthUserPost } from '../../../../shared/types/AuthTypes';
 import { useNavigate } from 'react-router-dom';
 import { ValidationResultType } from '../../shared/components/errors/ErrorTypes';
 import { useAppSelector } from '../../shared/hooks/ReduxAppSelector';
@@ -22,7 +22,7 @@ export const useAuth = (authType: AuthType) => {
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    return validationResult.isValid && submitUser(user);
+    validationResult.isValid && submitUser(user);
   };
 
   return {

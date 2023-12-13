@@ -1,14 +1,14 @@
 /** @format */
 
-import { IAuthUserGet, IAuthUserPost } from './domains/auth/AuthTypes';
-import { IUserBalanceGet } from './domains/balance/UserBalanceTypes';
+import { IAuthUserGet, IAuthUserPost } from '../../shared/types/AuthTypes';
+import { IUserBalanceGet } from '../../shared/types/UserBalanceTypes';
 import {
   IUserTransactionGet,
   IUserTransactionPost,
   IUserTransactionsFilter,
   IUserTransactionsGet,
-} from './domains/transactions/UserTransactionsTypes';
-import { IUserGet } from './shared/types/UserTypes';
+} from '../../shared/types/UserTransactionsTypes';
+import { IUserGet } from '../../shared/types/UserTypes';
 import { v4 as guid } from 'uuid';
 
 // Users controller

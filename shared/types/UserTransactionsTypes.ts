@@ -1,7 +1,7 @@
 /** @format */
 
-import { IPagination } from '../../shared/components/paginations/PaginationTypes';
-import { ISorting } from '../../shared/components/sortings/SortingFieldTypes';
+import { IPagination } from '../../frontend/src/shared/components/paginations/PaginationTypes';
+import { ISorting } from '../../frontend/src/shared/components/sortings/SortingFieldTypes';
 import { IMoney } from '../../shared/types/MoneyTypes';
 import { IUserGet } from '../../shared/types/UserTypes';
 

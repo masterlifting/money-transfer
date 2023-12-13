@@ -7,7 +7,7 @@ import { useModalContext } from '../../../shared/components/modals/ModalHooks';
 import { Paginator } from '../../../shared/components/paginations/PaginationComponent';
 import { SortingField } from '../../../shared/components/sortings/SortingFieldComponent';
 import { ButtonClass } from '../../../shared/styles/Button';
-import { IAuthUserGet } from '../../auth/AuthTypes';
+import { IAuthUserGet } from '../../../../../shared/types/AuthTypes';
 import { useUserTransactions } from '../UserTransactionsHooks';
 import { UserTransaction } from './UserTransactionComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';

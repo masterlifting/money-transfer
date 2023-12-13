@@ -1,7 +1,7 @@
 /** @format */
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IAuthState } from './AuthTypes';
+import { IAuthState } from '../../../../shared/types/AuthTypes';
 
 const authUserKey = 'authUser';
 

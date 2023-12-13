@@ -2,7 +2,7 @@
 
 import { IMoney } from '../../shared/types/MoneyTypes';
 import { IUserGet } from '../../shared/types/UserTypes';
-import { IAuthUserGet } from '../auth/AuthTypes';
+import { IAuthUserGet } from './AuthTypes';
 
 export interface IUserBalanceGet {
   user: IUserGet;

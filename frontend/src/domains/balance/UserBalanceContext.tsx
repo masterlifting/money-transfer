@@ -1,9 +1,9 @@
 /** @format */
 
 import { createContext, useState } from 'react';
-import { IUserBalanceContext, IUserBalanceGet } from './UserBalanceTypes';
+import { IUserBalanceContext, IUserBalanceGet } from '../../../../shared/types/UserBalanceTypes';
 import { fetchUserBalance } from './UserBalanceData';
-import { IAuthUserGet } from '../auth/AuthTypes';
+import { IAuthUserGet } from '../../../../shared/types/AuthTypes';
 
 export const UserBalanceContext = createContext<IUserBalanceContext>({
   userBalance: undefined,

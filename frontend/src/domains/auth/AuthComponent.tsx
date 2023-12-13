@@ -4,7 +4,7 @@ import { Error } from '../../shared/components/errors/ErrorComponent';
 import { InputClass } from '../../shared/styles/Input';
 import { useAuth } from './AuthHooks';
 import { ButtonClass } from '../../shared/styles/Button';
-import { AuthType } from './AuthTypes';
+import { AuthType } from '../../../../shared/types/AuthTypes';
 import { CircleLoader } from '../../shared/components/loaders/CircleLoaderComponents';
 
 interface IAuthUserProps {

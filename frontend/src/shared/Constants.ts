@@ -8,7 +8,7 @@ export const constants = {
       PUT: 'PUT',
       DELETE: 'DELETE',
     },
-    baseFetchUrl: 'https://localhost:5001/api/v.1/',
+    baseFetchUrl: 'http://localhost:5000/api/',
     defaultErrorMessage: 'Something went wrong',
   },
 };
