@@ -9,6 +9,7 @@ import {
   IUserTransactionsGet,
 } from '../types/UserTransactionsTypes';
 import { WebApiResponseType } from '../types/WebApiTypes';
+import { v4 as guid } from 'uuid';
 
 export const getTransactions = (req: Request, res: Response) => {
   const userId = req.params.userId;
@@ -26,11 +27,36 @@ export const postTransaction = (req: Request, res: Response) => {
   const userId = req.params.userId;
   const transaction: IUserTransactionPost = req.body;
 
-  const sender = user;
-  const receiver = _users.find(x => x.id === transaction.user.id);
+  let response: WebApiResponseType<IUserTransactionGet>;
+
+  const sender = repository.users.getById(userId);
+
+  if (!sender) {
+    response = {
+      isSuccess: false,
+      error: {
+        code: 404,
+        message: 'User not found',
+      },
+    };
+
+    res.send(response);
+    return;
+  }
+
+  const receiver = repository.users.getById(transaction.user.id);
 
   if (!receiver) {
-    throw new Error('Receiver not found');
+    response = {
+      isSuccess: false,
+      error: {
+        code: 404,
+        message: 'Receiver not found',
+      },
+    };
+
+    res.send(response);
+    return;
   }
 
   var senderTransaction: IUserTransactionGet = {
@@ -51,8 +77,23 @@ export const postTransaction = (req: Request, res: Response) => {
     user: sender,
   };
 
-  repository.transactions.add(sender, senderTransaction);
-  repository.transactions.add(receiver, receiverTransaction);
+  try {
+    repository.transactions.add(sender.id, senderTransaction);
+    repository.transactions.add(receiver.id, receiverTransaction);
 
-  return Promise.resolve(senderTransaction);
+    response = {
+      isSuccess: true,
+      data: senderTransaction,
+    };
+  } catch (error: any) {
+    response = {
+      isSuccess: false,
+      error: {
+        code: 400,
+        message: error.message,
+      },
+    };
+  }
+
+  res.send(response);
 };

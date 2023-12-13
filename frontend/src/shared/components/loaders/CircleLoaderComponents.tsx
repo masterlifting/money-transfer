@@ -1,5 +1,7 @@
 /** @format */
 
+import React from 'react';
+
 export const CircleLoader = () => {
   return (
     <div className='fixed inset-0 flex items-center justify-center'>

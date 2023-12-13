@@ -5,6 +5,7 @@ import { Home } from './pages/Home';
 import { UserLogin } from './pages/UserLogin';
 import { TopBar } from './shared/components/bars/TopBarComponent';
 import { UserRegister } from './pages/UserRegister';
+import React from 'react';
 
 export const App = () => (
   <>

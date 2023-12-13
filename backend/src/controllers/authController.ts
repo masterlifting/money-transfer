@@ -74,16 +74,26 @@ export const register = (req: Request, res: Response) => {
       description: 'Welcome bonus from Internal Money',
     };
 
-    repository.transactions.add(user, presentTransaction);
+    try {
+      repository.transactions.add(user.id, presentTransaction);
 
-    response = {
-      isSuccess: true,
-      data: {
-        ...user,
-        token: guid(),
-        refreshToken: guid(),
-      },
-    };
+      response = {
+        isSuccess: true,
+        data: {
+          ...user,
+          token: guid(),
+          refreshToken: guid(),
+        },
+      };
+    } catch (error: any) {
+      response = {
+        isSuccess: false,
+        error: {
+          code: 400,
+          message: error.message,
+        },
+      };
+    }
 
     res.send(response);
   }

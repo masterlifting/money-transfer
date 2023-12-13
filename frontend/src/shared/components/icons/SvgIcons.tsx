@@ -1,5 +1,7 @@
 /** @format */
 
+import React from 'react';
+
 export const SvgIcons = {
   Repeat: (
     <svg

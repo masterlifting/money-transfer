@@ -6,6 +6,7 @@ import { SvgIcon } from '../icons/SvgIconComponent';
 import { SvgIcons } from '../icons/SvgIcons';
 import { useAppSelector } from '../../hooks/ReduxAppSelector';
 import { useAppActions } from '../../hooks/ReduxAppActions';
+import React from 'react';
 
 export const TopBar = () => {
   const navigate = useNavigate();

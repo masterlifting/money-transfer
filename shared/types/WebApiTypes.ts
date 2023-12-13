@@ -1,6 +1,6 @@
 /** @format */
 
-import { IError } from '../../frontend/src/shared/components/errors/ErrorTypes';
+import { IError } from './ErrorTypes';
 
 interface IWebApiError extends IError {
   code?: number;

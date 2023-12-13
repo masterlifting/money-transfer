@@ -1,5 +1,6 @@
 /** @format */
 
+import React from 'react';
 import { TextColor } from '../../styles/Colors';
 import { ISorting } from './SortingFieldTypes';
 

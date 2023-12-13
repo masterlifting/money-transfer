@@ -10,6 +10,7 @@ import { SvgIcon } from '../../../shared/components/icons/SvgIconComponent';
 import { SvgIcons } from '../../../shared/components/icons/SvgIcons';
 import { IAuthUserGet } from '../../../../../shared/types/AuthTypes';
 import { TextColor } from '../../../shared/styles/Colors';
+import React from 'react';
 
 interface ITransactionProps {
   user: IAuthUserGet;

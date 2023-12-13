@@ -10,6 +10,7 @@ const transactions = new Map<string, IUserTransactionGet[]>();
 export const repository = {
   users: {
     getAll: () => users,
+    getById: (userId: string) => users.find(x => x.id === userId),
     getByEmail: (email: string) => users.find(x => x.email === email),
     add: (user: IUserGet) => {
       users.push(user);

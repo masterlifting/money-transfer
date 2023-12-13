@@ -9,7 +9,7 @@ import { useUserBalanceContext } from '../balance/UserBalanceHooks';
 import { IAuthUserGet } from '../../../../shared/types/AuthTypes';
 import { IPagination } from '../../shared/components/paginations/PaginationTypes';
 import { ISorting } from '../../shared/components/sortings/SortingFieldTypes';
-import { IError, ValidationResultType } from '../../shared/components/errors/ErrorTypes';
+import { IError, ValidationResultType } from '../../../../shared/types/ErrorTypes';
 
 export const useUserTransactions = (user: IAuthUserGet) => {
   const { closeModal } = useModalContext();

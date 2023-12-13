@@ -1,5 +1,6 @@
 /** @format */
 
+import React from 'react';
 import { useUserBalanceContext } from './UserBalanceHooks';
 
 export const UserBalance = () => {

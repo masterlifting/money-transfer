@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { AuthType, IAuthUserPost } from '../../../../shared/types/AuthTypes';
 import { useNavigate } from 'react-router-dom';
-import { ValidationResultType } from '../../shared/components/errors/ErrorTypes';
+import { ValidationResultType } from '../../../../shared/types/ErrorTypes';
 import { useAppSelector } from '../../shared/hooks/ReduxAppSelector';
 import { useAppActions } from '../../shared/hooks/ReduxAppActions';
 import { useLoginUserMutation, useRegisterUserMutation } from './AuthApi';

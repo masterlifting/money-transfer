@@ -6,6 +6,7 @@ import { useAuth } from './AuthHooks';
 import { ButtonClass } from '../../shared/styles/Button';
 import { AuthType } from '../../../../shared/types/AuthTypes';
 import { CircleLoader } from '../../shared/components/loaders/CircleLoaderComponents';
+import React from 'react';
 
 interface IAuthUserProps {
   authType: AuthType;

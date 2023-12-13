@@ -1,5 +1,6 @@
 /** @format */
 
+import React from 'react';
 import { useModalContext } from './ModalHooks';
 
 interface IModalProps {

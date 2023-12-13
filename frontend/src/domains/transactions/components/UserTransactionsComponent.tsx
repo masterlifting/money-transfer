@@ -11,6 +11,7 @@ import { IAuthUserGet } from '../../../../../shared/types/AuthTypes';
 import { useUserTransactions } from '../UserTransactionsHooks';
 import { UserTransaction } from './UserTransactionComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';
+import React from 'react';
 
 interface IUserTransactionsProps {
   user: IAuthUserGet;

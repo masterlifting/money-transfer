@@ -8,6 +8,7 @@ import { InputClass } from '../../../shared/styles/Input';
 import { IAuthUserGet } from '../../../../../shared/types/AuthTypes';
 import { useUserTransactionCreate } from '../UserTransactionsHooks';
 import { IUserTransactionGet } from '../../../../../shared/types/UserTransactionsTypes';
+import React from 'react';
 
 interface ITransactionProps {
   user: IAuthUserGet;
