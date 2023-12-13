@@ -1,12 +1,10 @@
 # Ignore Node.js related files and folders
 node_modules/
+package-lock.json
 npm-debug.log
 yarn-error.log
 
 # Ignore built TypeScript files
-**/*.js
-**/*.js.map
-**/*.d.ts
 dist/
 
 # Ignore environment variables file
@@ -14,9 +12,6 @@ dist/
 
 # Ignore Docker-related files
 .DS_Store
-docker-compose.override.yml
-docker-compose.yml
-Dockerfile
 
 # Ignore VSCode related files
 .vscode/
