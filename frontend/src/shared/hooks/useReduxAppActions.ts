@@ -3,7 +3,7 @@
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { authActions } from '../../domains/auth/AuthSlice';
+import { authActions } from '../../domains/auth/authSlice';
 
 const actions = {
   ...authActions,

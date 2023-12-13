@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { IUserTransactionGet, IUserTransactionPost, IUserTransactionsGet } from '../../../../shared/types/UserTransactionsTypes';
-import { commitUserTransaction, fetchUserTransactions, fetchUserTransactionRecipients } from './UserTransactionsData';
+import { commitUserTransaction, fetchUserTransactions, fetchUserTransactionRecipients } from './userTransactionsData';
 import { IUserGet } from '../../../../shared/types/UserTypes';
-import { useModalContext } from '../../shared/components/modals/ModalHooks';
-import { useUserBalanceContext } from '../balance/UserBalanceHooks';
+import { useModalContext } from '../../shared/components/modals/modalHooks';
+import { useUserBalanceContext } from '../balance/userBalanceHooks';
 import { IAuthUserGet } from '../../../../shared/types/AuthTypes';
-import { IPagination } from '../../shared/components/paginations/PaginationTypes';
-import { ISorting } from '../../shared/components/sortings/SortingFieldTypes';
+import { IPagination } from '../../shared/components/paginations/paginationTypes';
+import { ISorting } from '../../shared/components/sortings/sortingFieldTypes';
 import { IError, ValidationResultType } from '../../../../shared/types/ErrorTypes';
 
 export const useUserTransactions = (user: IAuthUserGet) => {

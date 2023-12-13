@@ -3,7 +3,7 @@
 import { FetchBaseQueryError, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IAuthUserGet, IAuthUserPost } from '../../../../shared/types/AuthTypes';
 import { WebApiResponseType } from '../../../../shared/types/WebApiTypes';
-import { constants } from '../../shared/Constants';
+import { constants } from '../../shared/constants';
 
 const controller = 'auth';
 

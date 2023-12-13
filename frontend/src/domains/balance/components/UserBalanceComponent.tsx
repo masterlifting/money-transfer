@@ -1,7 +1,7 @@
 /** @format */
 
 import React from 'react';
-import { useUserBalanceContext } from './UserBalanceHooks';
+import { useUserBalanceContext } from '../userBalanceHooks';
 
 export const UserBalance = () => {
   const { userBalance } = useUserBalanceContext();

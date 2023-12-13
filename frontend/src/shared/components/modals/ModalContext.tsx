@@ -1,7 +1,7 @@
 /** @format */
 
 import { createContext, useState } from 'react';
-import { IModalContext } from './ModalTypes';
+import { IModalContext } from './modalTypes';
 
 export const ModalContext = createContext<IModalContext>({
   modalId: '',
