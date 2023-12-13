@@ -1,11 +1,11 @@
 /** @format */
 
 import express, { Router } from 'express';
-import { postLogin, postRegister } from '../controllers/authController';
+import { login, register } from '../controllers/authController';
 
 const authRouter: Router = express.Router();
 
-authRouter.post('/login', postLogin);
-authRouter.post('/register', postRegister);
+authRouter.post('/login', login);
+authRouter.post('/register', register);
 
 export default authRouter;

@@ -1,19 +1,12 @@
 /** @format */
 
-import { IUserGet } from './../../../shared/types/UserTypes';
-
 import { Request, Response } from 'express';
-
-const _users: IUserGet[] = [];
+import { repository } from '../persistence/DbRepository';
 
 export const getUsers = (req: Request, res: Response) => {
-  _users.push({
-    id: '1',
-    email: 'test',
-  });
-  res.send(_users);
+  res.send(repository.users.getAll());
 };
 
 export const getUserBalance = (req: Request, res: Response) => {
-  res.send('Hello from the getUserBalance controller!');
+  res.send(repository.users.getBalance(req.params.userId));
 };

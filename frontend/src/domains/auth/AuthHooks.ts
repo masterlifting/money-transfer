@@ -8,16 +8,34 @@ import { useAppSelector } from '../../shared/hooks/ReduxAppSelector';
 import { useAppActions } from '../../shared/hooks/ReduxAppActions';
 import { useLoginUserMutation, useRegisterUserMutation } from './AuthApi';
 
-export const useAuth = (authType: AuthType) => {
+export const useAuthorize = () => {
   const navigate = useNavigate();
   const { authUser } = useAppSelector(x => x.authState);
 
-  useEffect(() => authUser && navigate('/'), [authUser, navigate]);
+  useEffect(() => {
+    if (!authUser) {
+      navigate('/login');
+    }
+  }, [authUser, navigate]);
+
+  return { authUser: authUser! };
+};
+
+export const useAuth = (authType: AuthType) => {
+  const navigate = useNavigate();
+  const { setAuthState } = useAppActions();
 
   const [user, setUser] = useState<IAuthUserPost>({ email: '', password: '' });
   const [confirmedPassword, setConfirmedPassword] = useState('');
 
-  const { submitUser, validationResult, isLoading } = useSubmitUser(authType, user, confirmedPassword);
+  const { submitUser, authUser, validationResult, isLoading } = useSubmitUser(authType, user, confirmedPassword);
+
+  useEffect(() => {
+    if (authUser) {
+      navigate('/');
+    }
+    setAuthState({ authUser });
+  }, [authUser, navigate, setAuthState]);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,20 +55,7 @@ export const useAuth = (authType: AuthType) => {
   };
 };
 
-export const useAuthorize = () => {
-  const navigate = useNavigate();
-  const { authUser } = useAppSelector(x => x.authState);
-
-  useEffect(() => {
-    if (!authUser) {
-      navigate('/login');
-    }
-  }, [authUser, navigate]);
-
-  return { authUser: authUser! };
-};
-
-const validateUser = (authType: AuthType, user: IAuthUserPost, confirmedPassword?: string): string | undefined => {
+const getUserValidationError = (authType: AuthType, user: IAuthUserPost, confirmedPassword?: string): string | undefined => {
   const { email, password } = user;
 
   if (email.length === 0) {
@@ -78,35 +83,29 @@ const validateUser = (authType: AuthType, user: IAuthUserPost, confirmedPassword
 
 const useSubmitUser = (authType: AuthType, user: IAuthUserPost, confirmedPassword?: string) => {
   const useUserMutation = authType === 'Login' ? useLoginUserMutation : useRegisterUserMutation;
-  const [submitUser, { isError, isLoading, data: apiResult, error }] = useUserMutation();
-  const { setAuthState } = useAppActions();
+  const [submitUser, { isError: apiHasError, isLoading, data: apiResult, error: apiError }] = useUserMutation();
   const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: true });
 
   useEffect(() => {
-    const validationError = validateUser(authType, user, confirmedPassword);
+    const userValidationError = getUserValidationError(authType, user, confirmedPassword);
 
-    if (validationError) {
-      return setValidationResult({
+    if (userValidationError) {
+      setValidationResult({
         isValid: false,
-        errors: [{ message: validationError }],
+        errors: [{ message: userValidationError }],
       });
-    }
-
-    if (apiResult) {
+    } else if (apiResult) {
       if (apiResult.isSuccess) {
         setValidationResult({ isValid: true });
-        setAuthState({ authUser: apiResult.data });
       } else {
         setValidationResult({ isValid: false, errors: [{ message: apiResult.error.message }] });
-        setAuthState({ authUser: undefined });
       }
-    } else if (isError) {
-      alert(error?.toString() || '');
-      setAuthState({ authUser: undefined });
+    } else if (apiHasError) {
+      setValidationResult({ isValid: false, errors: [{ message: apiError?.toString() || '' }] });
     } else {
       setValidationResult({ isValid: true });
     }
-  }, [apiResult, authType, confirmedPassword, error, isError, setAuthState, user]);
+  }, [apiResult, authType, confirmedPassword, apiError, apiHasError, user]);
 
-  return { submitUser, validationResult, isLoading };
+  return { submitUser, authUser: apiResult?.isSuccess ? apiResult.data : undefined, validationResult, isLoading };
 };
