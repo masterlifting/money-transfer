@@ -3,10 +3,25 @@
 version: '3'
 
 services:
-  sharp-dev-react-app:
-    image: sharp-dev-react-app-image
-    container_name: sharp-dev-react-web
+  frontend:
+    image: sharpdev-frontend-image
+    container_name: sharpdev-frontend
     build:
-      context: .
+      context: ./frontend
     ports:
       - '3000:3000'
+    depends_on:
+      - backend
+
+  backend:
+    image: sharpdev-backend-image
+    container_name: sharpdev-backend
+    build:
+      context: ./backend
+    ports:
+      - '5000:5000'
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ./backend:/app
+    command: ['npm', 'run', 'dev']
