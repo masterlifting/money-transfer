@@ -6,8 +6,10 @@ import { useDispatch } from 'react-redux';
 import { authActions } from '../../domains/auth/authSlice';
 import { usersActions } from '../../domains/users/usersSlice';
 import { transactionsActions } from '../../domains/transactions/transactionsSlice';
+import { modalActions } from '../components/modals/modalSlice';
 
 const actions = {
+  ...modalActions,
   ...authActions,
   ...usersActions,
   ...transactionsActions,

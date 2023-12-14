@@ -1,6 +1,6 @@
 /** @format */
 
-import { FetchBaseQueryError, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IUserBalanceGet } from '../../../../shared/types/userBalanceTypes';
 import { IUserGet } from '../../../../shared/types/userTypes';
 import { WebApiResponseType } from '../../../../shared/types/webApiTypes';
@@ -17,18 +17,14 @@ export const usersApi = createApi({
         url: `${controller}`,
         method: constants.http.methods.GET,
       }),
-      transformErrorResponse: (error: FetchBaseQueryError): string =>
-        typeof error.status !== 'number' ? error.error : constants.http.defaultErrorMessage,
     }),
     getUserBalance: builder.query<WebApiResponseType<IUserBalanceGet>, string>({
       query: userId => ({
         url: `${controller}/${userId}/balance`,
         method: constants.http.methods.GET,
       }),
-      transformErrorResponse: (error: FetchBaseQueryError): string =>
-        typeof error.status !== 'number' ? error.error : constants.http.defaultErrorMessage,
     }),
   }),
 });
 
-export const { useLazyGetUsersQuery, useGetUserBalanceQuery } = usersApi;
+export const { useLazyGetUsersQuery, useLazyGetUserBalanceQuery } = usersApi;

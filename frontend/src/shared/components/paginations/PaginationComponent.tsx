@@ -9,23 +9,23 @@ const pageItemsCounts: PaginationPageItemsCountType[] = [10, 20, 30, 40, 50];
 interface IPaginatorProps {
   totalItemsCount: number;
   pageItemsCount: number;
-  configuration: IPagination;
-  setPaginator: (configuration: IPagination) => void;
+  state: IPagination;
+  setPaginatonState: (configuration: IPagination) => void;
 }
 
-export const Paginator = ({ totalItemsCount, pageItemsCount, configuration, setPaginator }: IPaginatorProps) => {
-  const pageNumbersCount = Math.ceil(totalItemsCount / configuration.pageItemsCount);
+export const Paginator = ({ totalItemsCount, pageItemsCount, state, setPaginatonState }: IPaginatorProps) => {
+  const pageNumbersCount = Math.ceil(totalItemsCount / state.pageItemsCount);
 
   return (
     <div className='flex justify-end items-center mt-2'>
-      {configuration.pageNumber !== 1 && (
+      {state.pageNumber !== 1 && (
         <div className='flex gap-2 items-center'>
-          <span className={HoveredTextColor.Primary} onClick={_ => setPaginator({ ...configuration, pageNumber: 1 })}>
+          <span className={HoveredTextColor.Primary} onClick={_ => setPaginatonState({ ...state, pageNumber: 1 })}>
             {'<<'}
           </span>
           <span
             className={HoveredTextColor.Primary}
-            onClick={_ => setPaginator({ ...configuration, pageNumber: configuration.pageNumber - 1 })}
+            onClick={_ => setPaginatonState({ ...state, pageNumber: state.pageNumber - 1 })}
           >
             {'<'}
           </span>
@@ -33,23 +33,23 @@ export const Paginator = ({ totalItemsCount, pageItemsCount, configuration, setP
       )}
 
       <div className='flex flex-col-2 px-2 gap-1 items-center'>
-        {pageItemsCount === configuration.pageItemsCount && (
+        {pageItemsCount === state.pageItemsCount && (
           <select
             className='cursor-pointer'
-            value={configuration.pageItemsCount}
+            value={state.pageItemsCount}
             onChange={event => {
               const _pageItemsCount = parseInt(event.target.value) as PaginationPageItemsCountType;
-              setPaginator({ ...configuration, pageNumber: 1, pageItemsCount: _pageItemsCount });
+              setPaginatonState({ ...state, pageNumber: 1, pageItemsCount: _pageItemsCount });
             }}
           >
             {pageItemsCounts
-              .filter(_pageItemsCount => totalItemsCount >= configuration.pageNumber * _pageItemsCount)
+              .filter(_pageItemsCount => totalItemsCount >= state.pageNumber * _pageItemsCount)
               .map(
                 _pageItemsCount =>
                   _pageItemsCount <= totalItemsCount && (
                     <option
                       key={_pageItemsCount}
-                      className={_pageItemsCount === configuration.pageItemsCount ? TextColor.Primary + 'font-bold' : ''}
+                      className={_pageItemsCount === state.pageItemsCount ? TextColor.Primary + 'font-bold' : ''}
                     >
                       {_pageItemsCount}
                     </option>
@@ -62,7 +62,7 @@ export const Paginator = ({ totalItemsCount, pageItemsCount, configuration, setP
             const pageNumber = index + 1;
 
             const isNearCurrentPage =
-              Math.abs(pageNumber - configuration.pageNumber) <= 1 || pageNumber === 1 || pageNumber === pageNumbersCount;
+              Math.abs(pageNumber - state.pageNumber) <= 1 || pageNumber === 1 || pageNumber === pageNumbersCount;
 
             const shouldShowEllipsis =
               !isNearCurrentPage && index !== 0 && index !== pageNumbersCount - 1 && pageNumbersCount > 5;
@@ -72,10 +72,8 @@ export const Paginator = ({ totalItemsCount, pageItemsCount, configuration, setP
                 {shouldShowEllipsis && index === 1 && <span className='text-sm'>. . .</span>}
                 {isNearCurrentPage && (
                   <span
-                    className={`${HoveredTextColor.Primary}${
-                      pageNumber === configuration.pageNumber && TextColor.Primary + 'font-bold'
-                    }`}
-                    onClick={() => setPaginator({ ...configuration, pageNumber })}
+                    className={`${HoveredTextColor.Primary}${pageNumber === state.pageNumber && TextColor.Primary + 'font-bold'}`}
+                    onClick={() => setPaginatonState({ ...state, pageNumber })}
                   >
                     {pageNumber}
                   </span>
@@ -87,19 +85,17 @@ export const Paginator = ({ totalItemsCount, pageItemsCount, configuration, setP
         </div>
       </div>
 
-      {totalItemsCount > configuration.pageNumber * configuration.pageItemsCount && (
+      {totalItemsCount > state.pageNumber * state.pageItemsCount && (
         <div className='flex gap-2 items-center'>
           <span
             className={HoveredTextColor.Primary}
-            onClick={_ => setPaginator({ ...configuration, pageNumber: configuration.pageNumber + 1 })}
+            onClick={_ => setPaginatonState({ ...state, pageNumber: state.pageNumber + 1 })}
           >
             {'>'}
           </span>
           <span
             className={HoveredTextColor.Primary}
-            onClick={_ =>
-              setPaginator({ ...configuration, pageNumber: Math.ceil(totalItemsCount / configuration.pageItemsCount) })
-            }
+            onClick={_ => setPaginatonState({ ...state, pageNumber: Math.ceil(totalItemsCount / state.pageItemsCount) })}
           >
             {'>>'}
           </span>

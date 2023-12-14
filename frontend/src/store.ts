@@ -8,13 +8,18 @@ import { usersApi } from './domains/users/usersApi';
 import { transactionsApi } from './domains/transactions/transactionsApi';
 import { usersReducer } from './domains/users/usersSlice';
 import { transactionsReducer } from './domains/transactions/transactionsSlice';
+import { modalReducer } from './shared/components/modals/modalSlice';
 
 export const store = configureStore({
   reducer: {
+    modalState: modalReducer,
+
     [authApi.reducerPath]: authApi.reducer,
     authState: authReducer,
+
     [usersApi.reducerPath]: usersApi.reducer,
     usersState: usersReducer,
+
     [transactionsApi.reducerPath]: transactionsApi.reducer,
     transactionsState: transactionsReducer,
   },

@@ -1,6 +1,6 @@
 /** @format */
 
-import { FetchBaseQueryError, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { WebApiResponseType } from '../../../../shared/types/webApiTypes';
 import { constants } from '../../shared/constants';
 import {
@@ -20,10 +20,14 @@ export const transactionsApi = createApi({
       query: filter => ({
         url: `${controller}`,
         method: constants.http.methods.GET,
-        body: filter,
+        params: {
+          userId: filter.userId,
+          pageNumber: filter.pagination?.pageNumber,
+          pageItemsCount: filter.pagination?.pageItemsCount,
+          fieldName: filter.sorting?.fieldName,
+          direction: filter.sorting?.direction,
+        },
       }),
-      transformErrorResponse: (error: FetchBaseQueryError): string =>
-        typeof error.status !== 'number' ? error.error : constants.http.defaultErrorMessage,
     }),
     createTransaction: builder.mutation<WebApiResponseType<IUserTransactionGet>, IUserTransactionPost>({
       query: transaction => ({
@@ -31,8 +35,6 @@ export const transactionsApi = createApi({
         method: constants.http.methods.POST,
         body: transaction,
       }),
-      transformErrorResponse: (error: FetchBaseQueryError): string =>
-        typeof error.status !== 'number' ? error.error : constants.http.defaultErrorMessage,
     }),
   }),
 });

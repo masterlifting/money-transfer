@@ -7,6 +7,13 @@ const transactions = new Map<string, IUserTransactionGet[]>();
 
 export const transactionsRepository = {
   get: (filter: IUserTransactionsFilter): IUserTransactionsGet => {
+    if (!filter.userId) {
+      return {
+        totalCount: 0,
+        items: [],
+      };
+    }
+
     let userTransactions = transactions.get(filter.userId) ?? [];
 
     if (filter.sorting) {

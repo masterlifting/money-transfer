@@ -1,5 +1,6 @@
 /** @format */
 
+import { HandledError } from '../../shred/errorTypes';
 import {
   IUserTransactionGet,
   IUserTransactionPost,
@@ -23,25 +24,13 @@ export const transactionsService = {
     const sender = usersRepository.getById(transaction.senderId);
 
     if (!sender) {
-      return {
-        isSuccess: false,
-        error: {
-          code: 404,
-          message: 'User not found',
-        },
-      };
+      throw new HandledError('Sender not found');
     }
 
     const receiver = usersRepository.getById(transaction.user.id);
 
     if (!receiver) {
-      return {
-        isSuccess: false,
-        error: {
-          code: 404,
-          message: 'Receiver not found',
-        },
-      };
+      throw new HandledError('Receiver not found');
     }
 
     var senderTransaction: IUserTransactionGet = {
@@ -62,22 +51,12 @@ export const transactionsService = {
       user: sender,
     };
 
-    try {
-      transactionsRepository.add(sender.id, senderTransaction);
-      transactionsRepository.add(receiver.id, receiverTransaction);
+    transactionsRepository.add(sender.id, senderTransaction);
+    transactionsRepository.add(receiver.id, receiverTransaction);
 
-      return {
-        isSuccess: true,
-        data: senderTransaction,
-      };
-    } catch (error: any) {
-      return {
-        isSuccess: false,
-        error: {
-          code: 400,
-          message: error.message,
-        },
-      };
-    }
+    return {
+      isSuccess: true,
+      data: senderTransaction,
+    };
   },
 };

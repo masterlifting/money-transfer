@@ -9,7 +9,7 @@ export const get = (req: Request, res: Response) => {
 };
 
 export const getBalance = (req: Request, res: Response) => {
-  const userId = req.params.userId;
+  const userId = req.params.id;
   const response = usersService.getBalance(userId);
   res.send(response);
 };

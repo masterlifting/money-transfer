@@ -1,7 +1,6 @@
 /** @format */
 
 import { Error } from '../../../shared/components/errors/ErrorComponent';
-import { useModalContext } from '../../../shared/components/modals/modalHooks';
 import { ButtonClass } from '../../../shared/styles/button';
 import { TextColor } from '../../../shared/styles/colors';
 import { InputClass } from '../../../shared/styles/input';
@@ -16,8 +15,8 @@ interface ITransactionProps {
 }
 
 export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) => {
-  const { closeModal } = useModalContext();
   const {
+    closeModal,
     userTransactionPostModel,
     userTransactionRecipients,
     userTransactionCreateValidationResult,

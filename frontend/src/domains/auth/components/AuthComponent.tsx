@@ -63,8 +63,7 @@ export const Auth = ({ authType }: IAuthUserProps) => {
         <button
           type='submit'
           title={!validationResult.isValid ? 'Fill in all fields' : undefined}
-          disabled={!validationResult.isValid}
-          className={validationResult.isValid ? ButtonClass.Success : ButtonClass.Disable}
+          className={ButtonClass.Success}
         >
           {authType}
         </button>

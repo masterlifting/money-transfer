@@ -6,23 +6,23 @@ import { ISorting } from '../../../../../shared/types/sortingFieldTypes';
 
 interface ISortingFieldProps {
   name: string;
-  configuration: ISorting;
-  setSorting: (config: ISorting) => void;
+  state: ISorting;
+  setState: (config: ISorting) => void;
 }
 
-export const SortingField = ({ name, configuration, setSorting }: ISortingFieldProps) => {
+export const SortingField = ({ name, state, setState }: ISortingFieldProps) => {
   return (
     <span
       onClick={() =>
-        setSorting({
-          ...configuration,
+        setState({
+          ...state,
           fieldName: name,
-          direction: configuration.direction === 'asc' ? 'desc' : 'asc',
+          direction: state.direction === 'asc' ? 'desc' : 'asc',
         })
       }
-      className={`cursor-pointer ${configuration.fieldName === name && TextColor.Primary}`}
+      className={`cursor-pointer ${state.fieldName === name && TextColor.Primary}`}
     >
-      {configuration.fieldName === name ? (configuration.direction === 'asc' ? '▲' : '▼') : ''}
+      {state.fieldName === name ? (state.direction === 'asc' ? '▲' : '▼') : ''}
       {name}
     </span>
   );

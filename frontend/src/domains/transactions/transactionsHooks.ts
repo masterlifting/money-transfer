@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { IUserTransactionGet, IUserTransactionPost } from '../../../../shared/types/userTransactionsTypes';
-import { useModalContext } from '../../shared/components/modals/modalHooks';
 import { IAuthUserGet } from '../../../../shared/types/authTypes';
 import { ValidationResultType } from '../../../../shared/types/errorTypes';
 import { useCreateTransactionMutation, useGetTransactionsQuery } from './transactionsApi';
 import { useAppActions } from '../../shared/hooks/useAppActions';
 import { useAppSelector } from '../../shared/hooks/useAppSelector';
-import { useLazyGetUsersQuery } from '../users/usersApi';
+import { useLazyGetUserBalanceQuery, useLazyGetUsersQuery } from '../users/usersApi';
 import { ISorting } from '../../../../shared/types/sortingFieldTypes';
 import { IPagination } from '../../../../shared/types/paginationTypes';
 
@@ -37,18 +36,21 @@ export const useTransactions = (user: IAuthUserGet) => {
   }, [apiResult, setTransactionsState]);
 
   return {
-    transactions: transactions,
-    transactionsSorting: sorting,
-    transactionsPagination: pagination,
-    isTransactionsLoading: isLoading,
-    transactionsFetchingError: { error: { message: apiError?.toString() || '' } },
-    userTransactionsSetSorting: setSorting,
-    userTransactionsSetPagination: setPagination,
+    isLoading,
+    fetchingError: { error: { message: apiError?.toString() || '' } },
+
+    transactions,
+
+    sortingState: sorting,
+    setSortingState: setSorting,
+
+    paginationState: pagination,
+    setPaginstionState: setPagination,
   };
 };
 
 const getTransactionValidationError = (transaction: IUserTransactionPost) => {
-  if (!transaction.user.id) {
+  if (!transaction.user.id || transaction.user.id === '') {
     return 'Recipient is required';
   }
 
@@ -58,15 +60,14 @@ const getTransactionValidationError = (transaction: IUserTransactionPost) => {
 };
 
 export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTransactionGet | undefined) => {
-  const { recepients } = useAppSelector(x => x.usersState);
+  const { users, recepients } = useAppSelector(x => x.usersState);
 
-  const { closeModal, openModal } = useModalContext();
-
-  const { setRecepientsState, addTransactionToState } = useAppActions();
+  const { closeModal, setUsersState, setRecepientsState, addTransactionToState } = useAppActions();
 
   const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: false, errors: [] });
 
   const [getUsers, { isError: apiUsersHasError, data: apiUsersResult, error: apiUsersError }] = useLazyGetUsersQuery();
+  const [getUserBalance] = useLazyGetUserBalanceQuery();
   const [
     createTransaction,
     { isError: apiCreateTransactionHasError, data: apiCreateTransactionResult, error: apiCreateTransactionError },
@@ -91,6 +92,7 @@ export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTrans
     if (apiUsersResult) {
       if (apiUsersResult.isSuccess) {
         setValidationResult({ isValid: true });
+        setUsersState(apiUsersResult.data);
       } else {
         setValidationResult({ isValid: false, errors: [{ message: apiUsersResult.error.message }] });
       }
@@ -99,13 +101,14 @@ export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTrans
     } else {
       setValidationResult({ isValid: true });
     }
-  }, [apiUsersResult, apiUsersHasError, apiUsersError]);
+  }, [apiUsersResult, apiUsersHasError, apiUsersError, setUsersState]);
 
   // Transaction API error handling
   useEffect(() => {
     if (apiCreateTransactionResult) {
       if (apiCreateTransactionResult.isSuccess) {
         setValidationResult({ isValid: true });
+        getUserBalance(user.id);
       } else {
         setValidationResult({ isValid: false, errors: [{ message: apiCreateTransactionResult.error.message }] });
       }
@@ -114,7 +117,7 @@ export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTrans
     } else {
       setValidationResult({ isValid: true });
     }
-  }, [apiCreateTransactionResult, apiCreateTransactionHasError, apiCreateTransactionError]);
+  }, [apiCreateTransactionResult, apiCreateTransactionHasError, apiCreateTransactionError, getUserBalance, user.id]);
 
   // Validate transaction
   useEffect(() => {
@@ -129,12 +132,12 @@ export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTrans
 
   // Fetch recipients for transaction
   useEffect(() => {
-    if (transaction && transaction.type === 'Outcome') {
-      setRecepientsState([transaction.user]);
-    } else {
+    if (!transaction) {
       getUsers(null);
     }
-  }, [getUsers, setRecepientsState, transaction]);
+
+    setRecepientsState();
+  }, [transaction, getUsers, users, setRecepientsState]);
 
   useEffect(() => {
     if (apiCreateTransactionResult && apiCreateTransactionResult.isSuccess) {
@@ -151,6 +154,7 @@ export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTrans
   };
 
   return {
+    closeModal,
     userTransactionPostModel: transactionPost,
     userTransactionRecipients: recepients,
     userTransactionCreateValidationResult: validationResult,

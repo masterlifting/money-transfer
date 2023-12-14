@@ -1,5 +1,6 @@
 /** @format */
 
+import { HandledError } from '../../shred/errorTypes';
 import { IUserBalanceGet } from '../../types/userBalanceTypes';
 import { IUserGet } from '../../types/userTypes';
 
@@ -17,7 +18,7 @@ export const usersRepository = {
     const user = users.find(x => x.id === userId);
 
     if (!user) {
-      throw new Error('User not found');
+      throw new HandledError('User not found');
     }
 
     let balance = userBalances.get(userId);
@@ -42,7 +43,7 @@ export const usersRepository = {
     const newValue = balance.amount.value + value;
 
     if (newValue < 0) {
-      throw new Error('Not enough money');
+      throw new HandledError('Not enough money');
     }
 
     userBalances.set(userId, { ...balance, amount: { ...balance.amount, value: newValue } });

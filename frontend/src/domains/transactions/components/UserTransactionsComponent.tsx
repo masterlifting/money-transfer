@@ -3,7 +3,6 @@
 import { Error } from '../../../shared/components/errors/ErrorComponent';
 import { CircleLoader } from '../../../shared/components/loaders/CircleLoaderComponents';
 import { Modal } from '../../../shared/components/modals/ModalComponent';
-import { useModalContext } from '../../../shared/components/modals/modalHooks';
 import { Paginator } from '../../../shared/components/paginations/PaginationComponent';
 import { SortingField } from '../../../shared/components/sortings/SortingFieldComponent';
 import { ButtonClass } from '../../../shared/styles/button';
@@ -12,6 +11,7 @@ import { useTransactions } from '../transactionsHooks';
 import { UserTransaction } from './UserTransactionComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';
 import React from 'react';
+import { useAppActions } from '../../../shared/hooks/useAppActions';
 
 interface IUserTransactionsProps {
   user: IAuthUserGet;
@@ -20,16 +20,19 @@ interface IUserTransactionsProps {
 export const UserTransactions = ({ user }: IUserTransactionsProps) => {
   const newTransactionLabel = 'New money transfer';
 
-  const { openModal } = useModalContext();
+  const { openModal } = useAppActions();
 
   const {
-    isTransactionsLoading: userTransactionsLoading,
-    transactions: userTransactions,
-    transactionsFetchingError: userTransactionsError,
-    transactionsPagination: userTransactionsPagination,
-    transactionsSorting: userTransactionsSorting,
-    userTransactionsSetPagination,
-    userTransactionsSetSorting,
+    isLoading,
+    fetchingError,
+
+    transactions,
+
+    sortingState,
+    setSortingState,
+
+    paginationState,
+    setPaginstionState,
   } = useTransactions(user);
 
   return (
@@ -40,7 +43,7 @@ export const UserTransactions = ({ user }: IUserTransactionsProps) => {
 
       <div className='flex justify-between items-center mb-2'>
         <h1 className='align-middle text-xl font-bold'>
-          {userTransactions.totalCount} {userTransactions.totalCount === 1 ? 'Transaction' : 'Transactions'}
+          {transactions.totalCount} {transactions.totalCount === 1 ? 'Transaction' : 'Transactions'}
         </h1>
         <button title='Make a new money transfer' className={ButtonClass.Primary} onClick={() => openModal(newTransactionLabel)}>
           New
@@ -48,22 +51,22 @@ export const UserTransactions = ({ user }: IUserTransactionsProps) => {
       </div>
       <div>
         <div className={`border-b-2 border-black grid grid-cols-[20%_15%_10%_35%_20%] pb-1 gap-2 font-bold`}>
-          <SortingField name={'date'} configuration={userTransactionsSorting} setSorting={userTransactionsSetSorting} />
-          <SortingField name={'amount'} configuration={userTransactionsSorting} setSorting={userTransactionsSetSorting} />
-          <SortingField name={'type'} configuration={userTransactionsSorting} setSorting={userTransactionsSetSorting} />
-          <SortingField name={'user'} configuration={userTransactionsSorting} setSorting={userTransactionsSetSorting} />
-          <SortingField name={'status'} configuration={userTransactionsSorting} setSorting={userTransactionsSetSorting} />
+          <SortingField name={'date'} state={sortingState} setState={setSortingState} />
+          <SortingField name={'amount'} state={sortingState} setState={setSortingState} />
+          <SortingField name={'type'} state={sortingState} setState={setSortingState} />
+          <SortingField name={'user'} state={sortingState} setState={setSortingState} />
+          <SortingField name={'status'} state={sortingState} setState={setSortingState} />
         </div>
-        {userTransactionsLoading && <CircleLoader />}
-        {userTransactionsError && <Error error={userTransactionsError} />}
-        {userTransactions.items.map(x => (
+        {isLoading && <CircleLoader />}
+        {fetchingError && <Error error={fetchingError} />}
+        {transactions.items.map(x => (
           <UserTransaction user={user} key={x.id} transaction={x} />
         ))}
         <Paginator
-          totalItemsCount={userTransactions.totalCount}
-          pageItemsCount={userTransactions.items.length}
-          configuration={userTransactionsPagination}
-          setPaginator={userTransactionsSetPagination}
+          totalItemsCount={transactions.totalCount}
+          pageItemsCount={transactions.items.length}
+          state={paginationState}
+          setPaginatonState={setPaginstionState}
         />
       </div>
     </div>
