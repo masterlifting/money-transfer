@@ -1,6 +1,6 @@
 /** @format */
 
-import { IUser, IUserGet } from '../../shared/types/UserTypes';
+import { IUser, IUserGet } from './userTypes';
 
 export type AuthType = 'Login' | 'Register';
 
@@ -11,8 +11,4 @@ export interface IAuthUserGet extends IUserGet {
 
 export interface IAuthUserPost extends IUser {
   password: string;
-}
-
-export interface IAuthState {
-  authUser?: IAuthUserGet;
 }

@@ -1,7 +1,7 @@
 /** @format */
 
 import React from 'react';
-import { useModalContext } from './ModalHooks';
+import { useModalContext } from './modalHooks';
 
 interface IModalProps {
   children: React.ReactNode;

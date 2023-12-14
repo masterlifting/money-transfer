@@ -1,11 +1,11 @@
 /** @format */
 
 import { useEffect, useState } from 'react';
-import { AuthType, IAuthUserPost } from '../../../../shared/types/AuthTypes';
+import { AuthType, IAuthUserPost } from '../../../../shared/types/authTypes';
 import { useNavigate } from 'react-router-dom';
-import { ValidationResultType } from '../../../../shared/types/ErrorTypes';
-import { useAppSelector } from '../../shared/hooks/useReduxAppSelector';
-import { useAppActions } from '../../shared/hooks/useReduxAppActions';
+import { ValidationResultType } from '../../../../shared/types/errorTypes';
+import { useAppSelector } from '../../shared/hooks/useAppSelector';
+import { useAppActions } from '../../shared/hooks/useAppActions';
 import { useLoginUserMutation, useRegisterUserMutation } from './authApi';
 
 export const useAuthorize = () => {
@@ -33,8 +33,8 @@ export const useAuth = (authType: AuthType) => {
   useEffect(() => {
     if (authUser) {
       navigate('/');
+      setAuthState(authUser);
     }
-    setAuthState({ authUser });
   }, [authUser, navigate, setAuthState]);
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {

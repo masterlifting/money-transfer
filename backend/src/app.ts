@@ -3,8 +3,8 @@
 import express, { Application } from 'express';
 import authRouter from './domains/auth/authRoutes';
 import cors from 'cors';
-import transactionsRouter from './domains/transaction/transactionsRoutes';
-import usersRouter from './domains/user/usersRoutes';
+import transactionsRouter from './domains/transactions/transactionsRoutes';
+import usersRouter from './domains/users/usersRoutes';
 
 const app: Application = express();
 

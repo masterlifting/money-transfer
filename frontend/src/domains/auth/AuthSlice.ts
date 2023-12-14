@@ -1,9 +1,13 @@
 /** @format */
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IAuthState } from '../../../../shared/types/AuthTypes';
+import { IAuthUserGet } from '../../../../shared/types/authTypes';
 
 const authUserKey = 'authUser';
+
+interface IAuthState {
+  authUser?: IAuthUserGet;
+}
 
 const initialState: IAuthState = {
   authUser: JSON.parse(localStorage.getItem(authUserKey) || 'null'),
@@ -13,14 +17,13 @@ export const authSlice = createSlice({
   name: 'authSlice',
   initialState,
   reducers: {
-    setAuthState: (state, action: PayloadAction<IAuthState>) => {
-      state.authUser = action.payload.authUser;
-
-      if (state.authUser) {
-        localStorage.setItem(authUserKey, JSON.stringify(state.authUser));
-      } else {
-        localStorage.removeItem(authUserKey);
-      }
+    setAuthState: (state, action: PayloadAction<IAuthUserGet>) => {
+      state.authUser = action.payload;
+      localStorage.setItem(authUserKey, JSON.stringify(state.authUser));
+    },
+    clearAuthState: state => {
+      state.authUser = undefined;
+      localStorage.removeItem(authUserKey);
     },
   },
 });

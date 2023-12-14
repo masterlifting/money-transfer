@@ -1,8 +1,8 @@
 /** @format */
 
-import { IMoney } from '../../shared/types/MoneyTypes';
-import { IUserGet } from '../../shared/types/UserTypes';
-import { IAuthUserGet } from './AuthTypes';
+import { IMoney } from './moneyTypes';
+import { IUserGet } from './userTypes';
+import { IAuthUserGet } from './authTypes';
 
 export interface IUserBalanceGet {
   user: IUserGet;

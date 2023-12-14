@@ -1,17 +1,17 @@
 /** @format */
 
 import { Link, useNavigate } from 'react-router-dom';
-import { UserBalance } from '../../../domains/balance/UserBalanceComponent';
 import { SvgIcon } from '../icons/SvgIconComponent';
 import { SvgIcons } from '../icons/SvgIcons';
-import { useAppSelector } from '../../hooks/ReduxAppSelector';
-import { useAppActions } from '../../hooks/ReduxAppActions';
 import React from 'react';
+import { useAppSelector } from '../../hooks/useAppSelector';
+import { UserBalance } from '../../../domains/users/components/UserBalanceComponent';
+import { useAppActions } from '../../hooks/useAppActions';
 
 export const TopBar = () => {
   const navigate = useNavigate();
   const { authUser } = useAppSelector(x => x.authState);
-  const { setAuthState } = useAppActions();
+  const { clearAuthState } = useAppActions();
 
   return (
     <nav className='h-14 bg-gray-800 flex justify-between items-center px-5 shadow-md'>
@@ -27,7 +27,7 @@ export const TopBar = () => {
               icon={SvgIcons.Logout}
               title='Logout'
               handleClick={() => {
-                setAuthState({ authUser });
+                clearAuthState();
                 navigate('/login');
               }}
             />

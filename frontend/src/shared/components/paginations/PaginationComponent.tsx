@@ -1,8 +1,8 @@
 /** @format */
 
 import React from 'react';
-import { IPagination, PaginationPageItemsCountType } from './PaginationTypes';
-import { HoveredTextColor, TextColor } from '../../styles/Colors';
+import { HoveredTextColor, TextColor } from '../../styles/colors';
+import { IPagination, PaginationPageItemsCountType } from '../../../../../shared/types/paginationTypes';
 
 const pageItemsCounts: PaginationPageItemsCountType[] = [10, 20, 30, 40, 50];
 

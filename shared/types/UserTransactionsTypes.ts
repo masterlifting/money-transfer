@@ -1,9 +1,9 @@
 /** @format */
 
-import { IPagination } from '../../frontend/src/shared/components/paginations/paginationTypes';
-import { ISorting } from '../../frontend/src/shared/components/sortings/sortingFieldTypes';
-import { IMoney } from '../../shared/types/MoneyTypes';
-import { IUserGet } from '../../shared/types/UserTypes';
+import { IPagination } from './paginationTypes';
+import { ISorting } from './sortingFieldTypes';
+import { IMoney } from './moneyTypes';
+import { IUserGet } from './userTypes';
 
 type TransactionType = 'Income' | 'Outcome';
 type TransactionStatus = 'Created' | 'Pending' | 'Completed' | 'Failed';
@@ -22,6 +22,7 @@ export interface IUserTransactionGet extends IUserTransaction {
 }
 
 export interface IUserTransactionsFilter {
+  userId: string;
   pagination?: IPagination;
   sorting?: ISorting;
 }
@@ -31,4 +32,6 @@ export interface IUserTransactionsGet {
   items: IUserTransactionGet[];
 }
 
-export interface IUserTransactionPost extends IUserTransaction {}
+export interface IUserTransactionPost extends IUserTransaction {
+  senderId: string;
+}

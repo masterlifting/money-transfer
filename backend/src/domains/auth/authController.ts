@@ -1,7 +1,7 @@
 /** @format */
 
 import { Request, Response } from 'express';
-import { IAuthUserPost } from '../../types/AuthTypes';
+import { IAuthUserPost } from '../../types/authTypes';
 import { authServices } from './authService';
 
 export const login = (req: Request, res: Response) => {

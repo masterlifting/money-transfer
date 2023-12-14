@@ -1,16 +1,16 @@
 /** @format */
 
 import { useState } from 'react';
-import { IUserTransactionGet } from '../../../../../shared/types/UserTransactionsTypes';
-import { useModalContext } from '../../../shared/components/modals/ModalHooks';
+import { IUserTransactionGet } from '../../../../../shared/types/userTransactionsTypes';
 import { Modal } from '../../../shared/components/modals/ModalComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';
 import { UserTransactionDetails } from './UserTransactionDetailsComponent';
 import { SvgIcon } from '../../../shared/components/icons/SvgIconComponent';
 import { SvgIcons } from '../../../shared/components/icons/SvgIcons';
-import { IAuthUserGet } from '../../../../../shared/types/AuthTypes';
-import { TextColor } from '../../../shared/styles/Colors';
 import React from 'react';
+import { IAuthUserGet } from '../../../../../shared/types/authTypes';
+import { useModalContext } from '../../../shared/components/modals/modalHooks';
+import { TextColor } from '../../../shared/styles/colors';
 
 interface ITransactionProps {
   user: IAuthUserGet;

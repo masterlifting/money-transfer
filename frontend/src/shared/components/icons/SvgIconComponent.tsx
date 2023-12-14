@@ -1,7 +1,7 @@
 /** @format */
 
 import React from 'react';
-import { HoveredTextColor } from '../../styles/Colors';
+import { HoveredTextColor } from '../../styles/colors';
 
 interface ISvgIconProps {
   title?: string;

@@ -1,30 +1,29 @@
 /** @format */
 
 import { FetchBaseQueryError, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IAuthUserGet, IAuthUserPost } from '../../../../shared/types/authTypes';
+import { IUserBalanceGet } from '../../../../shared/types/userBalanceTypes';
+import { IUserGet } from '../../../../shared/types/userTypes';
 import { WebApiResponseType } from '../../../../shared/types/webApiTypes';
 import { constants } from '../../shared/constants';
 
-const controller = 'auth';
+const controller = 'users';
 
-export const authApi = createApi({
+export const usersApi = createApi({
   reducerPath: `${controller}Api`,
   baseQuery: fetchBaseQuery({ baseUrl: constants.http.baseFetchUrl }),
   endpoints: builder => ({
-    loginUser: builder.mutation<WebApiResponseType<IAuthUserGet>, IAuthUserPost>({
-      query: user => ({
-        url: `${controller}/login`,
-        method: constants.http.methods.POST,
-        body: user,
+    getUsers: builder.query<WebApiResponseType<IUserGet[]>, null>({
+      query: _ => ({
+        url: `${controller}`,
+        method: constants.http.methods.GET,
       }),
       transformErrorResponse: (error: FetchBaseQueryError): string =>
         typeof error.status !== 'number' ? error.error : constants.http.defaultErrorMessage,
     }),
-    registerUser: builder.mutation<WebApiResponseType<IAuthUserGet>, IAuthUserPost>({
-      query: user => ({
-        url: `${controller}/register`,
-        method: constants.http.methods.POST,
-        body: user,
+    getUserBalance: builder.query<WebApiResponseType<IUserBalanceGet>, string>({
+      query: userId => ({
+        url: `${controller}/${userId}/balance`,
+        method: constants.http.methods.GET,
       }),
       transformErrorResponse: (error: FetchBaseQueryError): string =>
         typeof error.status !== 'number' ? error.error : constants.http.defaultErrorMessage,
@@ -32,4 +31,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginUserMutation, useRegisterUserMutation } = authApi;
+export const { useLazyGetUsersQuery, useGetUserBalanceQuery } = usersApi;

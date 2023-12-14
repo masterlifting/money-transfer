@@ -1,6 +1,6 @@
 /** @format */
 
-import { IError } from './ErrorTypes';
+import { IError } from './errorTypes';
 
 interface IWebApiError extends IError {
   code?: number;

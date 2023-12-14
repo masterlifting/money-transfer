@@ -1,12 +1,12 @@
 /** @format */
 
 import { Error } from '../../../shared/components/errors/ErrorComponent';
-import { InputClass } from '../../../shared/styles/Input';
-import { useAuth } from '../AuthHooks';
-import { ButtonClass } from '../../../shared/styles/Button';
-import { AuthType } from '../../../../../shared/types/AuthTypes';
+import { InputClass } from '../../../shared/styles/input';
+import { useAuth } from '../authHooks';
+import { ButtonClass } from '../../../shared/styles/button';
 import { CircleLoader } from '../../../shared/components/loaders/CircleLoaderComponents';
 import React from 'react';
+import { AuthType } from '../../../../../shared/types/authTypes';
 
 interface IAuthUserProps {
   authType: AuthType;

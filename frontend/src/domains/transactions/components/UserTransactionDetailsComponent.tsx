@@ -1,7 +1,7 @@
 /** @format */
 
 import React from 'react';
-import { TextColor } from '../../../shared/styles/Colors';
+import { TextColor } from '../../../shared/styles/colors';
 
 interface ITransactionDetailsProps {
   transactionId: string;

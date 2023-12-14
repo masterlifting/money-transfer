@@ -1,10 +1,10 @@
 /** @format */
 
 import React from 'react';
-import { useUserBalanceContext } from '../userBalanceHooks';
+import { useAppSelector } from '../../../shared/hooks/useAppSelector';
 
 export const UserBalance = () => {
-  const { userBalance } = useUserBalanceContext();
+  const { userBalance } = useAppSelector(state => state.usersState);
   return (
     <span className='text-yellow-400 font-bold'>
       {userBalance?.amount.symbol}

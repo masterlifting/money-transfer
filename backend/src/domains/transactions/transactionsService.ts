@@ -5,22 +5,22 @@ import {
   IUserTransactionPost,
   IUserTransactionsFilter,
   IUserTransactionsGet,
-} from '../../types/UserTransactionsTypes';
-import { WebApiResponseType } from '../../types/WebApiTypes';
-import { usersRepository } from '../user/usersRepository';
+} from '../../types/userTransactionsTypes';
+import { WebApiResponseType } from '../../types/webApiTypes';
+import { usersRepository } from '../users/usersRepository';
 import { transactionsRepository } from './transactionsRepository';
 import { v4 as guid } from 'uuid';
 
 export const transactionsService = {
-  get: (userId: string, filter: IUserTransactionsFilter): WebApiResponseType<IUserTransactionsGet> => {
+  get: (filter: IUserTransactionsFilter): WebApiResponseType<IUserTransactionsGet> => {
     return {
       isSuccess: true,
-      data: transactionsRepository.get(userId, filter),
+      data: transactionsRepository.get(filter),
     };
   },
 
-  add: (userId: string, transaction: IUserTransactionPost): WebApiResponseType<IUserTransactionGet> => {
-    const sender = usersRepository.getById(userId);
+  add: (transaction: IUserTransactionPost): WebApiResponseType<IUserTransactionGet> => {
+    const sender = usersRepository.getById(transaction.senderId);
 
     if (!sender) {
       return {

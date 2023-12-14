@@ -1,8 +1,8 @@
 /** @format */
 
 import React from 'react';
-import { TextColor } from '../../styles/Colors';
-import { ISorting } from './SortingFieldTypes';
+import { TextColor } from '../../styles/colors';
+import { ISorting } from '../../../../../shared/types/sortingFieldTypes';
 
 interface ISortingFieldProps {
   name: string;

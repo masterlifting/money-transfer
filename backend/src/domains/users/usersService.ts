@@ -1,8 +1,8 @@
 /** @format */
 
-import { IUserBalanceGet } from '../../types/UserBalanceTypes';
-import { IUserGet } from '../../types/UserTypes';
-import { WebApiResponseType } from '../../types/WebApiTypes';
+import { IUserBalanceGet } from '../../types/userBalanceTypes';
+import { IUserGet } from '../../types/userTypes';
+import { WebApiResponseType } from '../../types/webApiTypes';
 import { usersRepository } from './usersRepository';
 
 export const usersService = {

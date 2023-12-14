@@ -1,13 +1,13 @@
 /** @format */
 
 import { Error } from '../../../shared/components/errors/ErrorComponent';
-import { useModalContext } from '../../../shared/components/modals/ModalHooks';
-import { ButtonClass } from '../../../shared/styles/Button';
-import { TextColor } from '../../../shared/styles/Colors';
-import { InputClass } from '../../../shared/styles/Input';
-import { IAuthUserGet } from '../../../../../shared/types/AuthTypes';
-import { useUserTransactionCreate } from '../UserTransactionsHooks';
-import { IUserTransactionGet } from '../../../../../shared/types/UserTransactionsTypes';
+import { useModalContext } from '../../../shared/components/modals/modalHooks';
+import { ButtonClass } from '../../../shared/styles/button';
+import { TextColor } from '../../../shared/styles/colors';
+import { InputClass } from '../../../shared/styles/input';
+import { IAuthUserGet } from '../../../../../shared/types/authTypes';
+import { useTransactionCreate } from '../transactionsHooks';
+import { IUserTransactionGet } from '../../../../../shared/types/userTransactionsTypes';
 import React from 'react';
 
 interface ITransactionProps {
@@ -24,7 +24,7 @@ export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) 
     onChangeAmountUserTransactionCreate,
     onChangeRecipientUserTransactionCreate,
     onSubmitUserTransactionCreate,
-  } = useUserTransactionCreate(user, transaction);
+  } = useTransactionCreate(user, transaction);
 
   return (
     <form onSubmit={onSubmitUserTransactionCreate}>

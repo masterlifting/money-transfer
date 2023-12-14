@@ -1,7 +1,7 @@
 /** @format */
 
 import React from 'react';
-import { useAuthorize } from '../domains/auth/AuthHooks';
+import { useAuthorize } from '../domains/auth/authHooks';
 import { UserTransactions } from '../domains/transactions/components/UserTransactionsComponent';
 
 export const Home = () => {

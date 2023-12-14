@@ -1,7 +1,7 @@
 /** @format */
 
-import { IUserBalanceGet } from '../../types/UserBalanceTypes';
-import { IUserGet } from '../../types/UserTypes';
+import { IUserBalanceGet } from '../../types/userBalanceTypes';
+import { IUserGet } from '../../types/userTypes';
 
 const users: IUserGet[] = [];
 const userBalances = new Map<string, IUserBalanceGet>();

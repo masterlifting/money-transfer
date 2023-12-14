@@ -3,12 +3,12 @@
 import { Error } from '../../../shared/components/errors/ErrorComponent';
 import { CircleLoader } from '../../../shared/components/loaders/CircleLoaderComponents';
 import { Modal } from '../../../shared/components/modals/ModalComponent';
-import { useModalContext } from '../../../shared/components/modals/ModalHooks';
+import { useModalContext } from '../../../shared/components/modals/modalHooks';
 import { Paginator } from '../../../shared/components/paginations/PaginationComponent';
 import { SortingField } from '../../../shared/components/sortings/SortingFieldComponent';
-import { ButtonClass } from '../../../shared/styles/Button';
-import { IAuthUserGet } from '../../../../../shared/types/AuthTypes';
-import { useUserTransactions } from '../UserTransactionsHooks';
+import { ButtonClass } from '../../../shared/styles/button';
+import { IAuthUserGet } from '../../../../../shared/types/authTypes';
+import { useTransactions } from '../transactionsHooks';
 import { UserTransaction } from './UserTransactionComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';
 import React from 'react';
@@ -23,14 +23,14 @@ export const UserTransactions = ({ user }: IUserTransactionsProps) => {
   const { openModal } = useModalContext();
 
   const {
-    userTransactions,
-    userTransactionsLoading,
-    userTransactionsError,
-    userTransactionsPagination,
-    userTransactionsSorting,
+    isTransactionsLoading: userTransactionsLoading,
+    transactions: userTransactions,
+    transactionsFetchingError: userTransactionsError,
+    transactionsPagination: userTransactionsPagination,
+    transactionsSorting: userTransactionsSorting,
     userTransactionsSetPagination,
     userTransactionsSetSorting,
-  } = useUserTransactions(user);
+  } = useTransactions(user);
 
   return (
     <div>

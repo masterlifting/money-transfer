@@ -13,6 +13,6 @@
     "noEmit": true,
     "jsx": "preserve"
   },
-  "include": ["src/**/*.ts", "../shared/types/ErrorTypes.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

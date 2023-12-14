@@ -1,10 +1,10 @@
 /** @format */
 
-import { IAuthUserGet, IAuthUserPost } from '../../types/AuthTypes';
-import { IUserTransactionGet } from '../../types/UserTransactionsTypes';
-import { WebApiResponseType } from '../../types/WebApiTypes';
-import { transactionsRepository } from '../transaction/transactionsRepository';
-import { usersRepository } from '../user/usersRepository';
+import { IAuthUserGet, IAuthUserPost } from '../../types/authTypes';
+import { IUserTransactionGet } from '../../types/userTransactionsTypes';
+import { WebApiResponseType } from '../../types/webApiTypes';
+import { transactionsRepository } from '../transactions/transactionsRepository';
+import { usersRepository } from '../users/usersRepository';
 import { v4 as guid } from 'uuid';
 
 export const authServices = {

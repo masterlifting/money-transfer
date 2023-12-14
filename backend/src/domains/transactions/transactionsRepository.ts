@@ -1,13 +1,13 @@
 /** @format */
 
-import { IUserTransactionGet, IUserTransactionsFilter, IUserTransactionsGet } from '../../types/UserTransactionsTypes';
-import { usersRepository } from '../user/usersRepository';
+import { IUserTransactionGet, IUserTransactionsFilter, IUserTransactionsGet } from '../../types/userTransactionsTypes';
+import { usersRepository } from '../users/usersRepository';
 
 const transactions = new Map<string, IUserTransactionGet[]>();
 
 export const transactionsRepository = {
-  get: (userId: string, filter: IUserTransactionsFilter): IUserTransactionsGet => {
-    let userTransactions = transactions.get(userId) ?? [];
+  get: (filter: IUserTransactionsFilter): IUserTransactionsGet => {
+    let userTransactions = transactions.get(filter.userId) ?? [];
 
     if (filter.sorting) {
       const compareNumbers = (a: number, b: number, direction: 'asc' | 'desc') => (direction === 'asc' ? a - b : b - a);

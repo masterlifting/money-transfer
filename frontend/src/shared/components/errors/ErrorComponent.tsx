@@ -1,8 +1,8 @@
 /** @format */
 
 import React from 'react';
-import { TextColor } from '../../styles/Colors';
-import { IError, IValidationFailure } from '../../../../../shared/types/ErrorTypes';
+import { TextColor } from '../../styles/colors';
+import { IError, IValidationFailure } from '../../../../../shared/types/errorTypes';
 
 export interface IErrorProps {
   error: IError | IValidationFailure;
