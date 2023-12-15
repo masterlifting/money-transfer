@@ -5,8 +5,8 @@ import { ISorting } from './sortingFieldTypes';
 import { IMoney } from './moneyTypes';
 import { IUserGet } from './userTypes';
 
-type TransactionType = 'Income' | 'Outcome';
-type TransactionStatus = 'Created' | 'Pending' | 'Completed' | 'Failed';
+export type TransactionType = 'Income' | 'Outcome';
+export type TransactionStatus = 'Created' | 'Pending' | 'Completed' | 'Failed';
 
 interface IUserTransaction {
   user: IUserGet;

@@ -1,7 +1,7 @@
 /** @format */
 
 import { useState } from 'react';
-import { IUserTransactionGet } from '../../../../../shared/types/userTransactionsTypes';
+import { IUserTransactionGet, TransactionStatus } from '../../../../../shared/types/userTransactionsTypes';
 import { Modal } from '../../../shared/components/modals/ModalComponent';
 import { UserTransactionCreate } from './UserTransactionCreateComponent';
 import { UserTransactionDetails } from './UserTransactionDetailsComponent';
@@ -17,6 +17,38 @@ interface ITransactionProps {
   transaction: IUserTransactionGet;
 }
 
+export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
+  const [showDetails, setShowDetails] = useState(false);
+  const { openModal, closeModal } = useAppActions();
+
+  return (
+    <div className='border-b-2 border-gray'>
+      <Modal id={transaction.id} title={`Repeat transfer for ${transaction.user.email}`} onClose={closeModal}>
+        <UserTransactionCreate user={user} transaction={transaction} />
+      </Modal>
+
+      <div
+        className='grid grid-cols-[20%_15%_10%_35%_15%_5%] gap-2 py-1 cursor-pointer hover:bg-gray-100'
+        onClick={() => setShowDetails(!showDetails)}
+      >
+        <span>{formatDate(transaction.date)}</span>
+        <span
+          className={transaction.type === 'Income' ? TextColor.Success : TextColor.Danger}
+        >{`${transaction.amount.value}${transaction.amount.symbol}`}</span>
+        <span>{transaction.type === 'Outcome' ? 'to' : 'from'}</span>
+        <span>{transaction.user.email}</span>
+        <span className={getTransactionStatusColor(transaction.status)}>{transaction.status}</span>
+        <div className='flex justify-end items-center'>
+          {transaction.type === 'Outcome' && (
+            <SvgIcon icon={SvgIcons.Repeat} title='Repeat transfer' handleClick={() => openModal(transaction.id)} />
+          )}
+        </div>
+      </div>
+      {showDetails && <UserTransactionDetails transactionId={transaction.id} description={transaction.description} />}
+    </div>
+  );
+};
+
 const formatDate = (dateString: any) => {
   const date = new Date(dateString);
 
@@ -29,48 +61,15 @@ const formatDate = (dateString: any) => {
   return `${year}.${month}.${day} ${hour}:${minute}`;
 };
 
-export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
-  const [showDetails, setShowDetails] = useState(false);
-  const { openModal, closeModal } = useAppActions();
-
-  return (
-    <div className='border-b-2 border-gray'>
-      <Modal id={transaction.id} title={`Repeat transfer for ${transaction.user.email}`} onClose={closeModal}>
-        <UserTransactionCreate user={user} transaction={transaction} />
-      </Modal>
-      <div
-        className='grid grid-cols-[20%_15%_10%_35%_15%_5%] gap-2 py-1 cursor-pointer hover:bg-gray-100'
-        onClick={() => setShowDetails(!showDetails)}
-      >
-        <span>{formatDate(transaction.date)}</span>
-        <span
-          className={transaction.type === 'Income' ? TextColor.Success : TextColor.Danger}
-        >{`${transaction.amount.value}${transaction.amount.symbol}`}</span>
-        <span>{transaction.type === 'Outcome' ? 'to' : 'from'}</span>
-        <span>{transaction.user.email}</span>
-        <span
-          className={(() => {
-            switch (transaction.status) {
-              case 'Pending':
-                return TextColor.Warning;
-              case 'Completed':
-                return TextColor.Success;
-              case 'Failed':
-                return TextColor.Danger;
-              default:
-                return '';
-            }
-          })()}
-        >
-          {transaction.status}
-        </span>
-        <div className='flex justify-end items-center'>
-          {transaction.type === 'Outcome' && (
-            <SvgIcon icon={SvgIcons.Repeat} title='Repeat transfer' handleClick={() => openModal(transaction.id)} />
-          )}
-        </div>
-      </div>
-      {showDetails && <UserTransactionDetails transactionId={transaction.id} description={transaction.description} />}
-    </div>
-  );
+const getTransactionStatusColor = (status: TransactionStatus) => {
+  switch (status) {
+    case 'Pending':
+      return TextColor.Warning;
+    case 'Completed':
+      return TextColor.Success;
+    case 'Failed':
+      return TextColor.Danger;
+    default:
+      return '';
+  }
 };

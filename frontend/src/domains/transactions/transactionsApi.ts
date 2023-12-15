@@ -39,4 +39,4 @@ export const transactionsApi = createApi({
   }),
 });
 
-export const { useGetTransactionsQuery, useCreateTransactionMutation } = transactionsApi;
+export const { useGetTransactionsQuery, useLazyGetTransactionsQuery, useCreateTransactionMutation } = transactionsApi;

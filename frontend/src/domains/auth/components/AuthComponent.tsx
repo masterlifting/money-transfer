@@ -14,13 +14,16 @@ interface IAuthUserProps {
 
 export const Auth = ({ authType }: IAuthUserProps) => {
   const {
-    user,
     isLoading,
     validationResult,
+
+    user,
     confirmedPassword,
+
     onChangeEmail,
     onChangePassword,
     onChangeConfirmedPassword,
+
     onSubmit,
   } = useAuth(authType);
 

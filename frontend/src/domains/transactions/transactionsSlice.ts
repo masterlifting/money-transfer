@@ -4,14 +4,13 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { IUserTransactionGet, IUserTransactionsGet } from '../../../../shared/types/userTransactionsTypes';
 
 interface ITransactionsState {
-  transactions: IUserTransactionsGet;
+  totalCount: number;
+  transactions: IUserTransactionGet[];
 }
 
 const initialState: ITransactionsState = {
-  transactions: {
-    items: [],
-    totalCount: 0,
-  },
+  totalCount: 0,
+  transactions: [],
 };
 
 export const transactionsSlice = createSlice({
@@ -19,11 +18,11 @@ export const transactionsSlice = createSlice({
   initialState,
   reducers: {
     setTransactionsState: (state, action: PayloadAction<IUserTransactionsGet>) => {
-      state.transactions = action.payload;
+      state.totalCount = action.payload.totalCount;
+      state.transactions = action.payload.items;
     },
-    addTransactionToState: (state, action: PayloadAction<IUserTransactionGet>) => {
-      state.transactions.items.push(action.payload);
-      state.transactions.totalCount++;
+    changeState: state => {
+      state.totalCount++;
     },
   },
 });

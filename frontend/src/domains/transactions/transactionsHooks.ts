@@ -2,43 +2,43 @@
 
 import { useEffect, useState } from 'react';
 import { IUserTransactionGet, IUserTransactionPost } from '../../../../shared/types/userTransactionsTypes';
-import { IAuthUserGet } from '../../../../shared/types/authTypes';
 import { ValidationResultType } from '../../../../shared/types/errorTypes';
-import { useCreateTransactionMutation, useGetTransactionsQuery } from './transactionsApi';
+import { useCreateTransactionMutation, useLazyGetTransactionsQuery } from './transactionsApi';
 import { useAppActions } from '../../shared/hooks/useAppActions';
 import { useAppSelector } from '../../shared/hooks/useAppSelector';
-import { useLazyGetUserBalanceQuery, useLazyGetUsersQuery } from '../users/usersApi';
+import { useLazyGetUsersQuery } from '../users/usersApi';
 import { ISorting } from '../../../../shared/types/sortingFieldTypes';
 import { IPagination } from '../../../../shared/types/paginationTypes';
+import { useValidateApiResult } from '../../shared/hooks/useValidateApiResult';
+import { IUserGet } from '../../../../shared/types/userTypes';
+import { IAuthUserGet } from '../../../../shared/types/authTypes';
 
 export const useTransactions = (user: IAuthUserGet) => {
-  const { transactions } = useAppSelector(x => x.transactionsState);
+  const { transactions, totalCount } = useAppSelector(x => x.transactionsState);
 
-  const { setTransactionsState } = useAppActions();
+  const { openModal, setTransactionsState } = useAppActions();
 
   const [sorting, setSorting] = useState<ISorting>({ fieldName: 'date', direction: 'desc' });
   const [pagination, setPagination] = useState<IPagination>({ pageNumber: 1, pageItemsCount: 10 });
 
-  const {
-    isLoading,
-    data: apiResult,
-    error: apiError,
-  } = useGetTransactionsQuery({
-    userId: user.id,
-    sorting: sorting,
-    pagination: pagination,
-  });
+  const [getTransactions, { isLoading, data, error }] = useLazyGetTransactionsQuery();
+  const validationResult = useValidateApiResult(data, error, setTransactionsState);
 
   useEffect(() => {
-    if (apiResult && apiResult.isSuccess) {
-      setTransactionsState(apiResult.data);
-    }
-  }, [apiResult, setTransactionsState]);
+    getTransactions({
+      userId: user.id,
+      sorting: sorting,
+      pagination: pagination,
+    });
+  }, [user.id, getTransactions, pagination, sorting, totalCount]);
 
   return {
-    isLoading,
-    fetchingError: { error: { message: apiError?.toString() || '' } },
+    openModal,
 
+    isLoading,
+    validationResult,
+
+    totalCount,
     transactions,
 
     sortingState: sorting,
@@ -49,21 +49,8 @@ export const useTransactions = (user: IAuthUserGet) => {
   };
 };
 
-export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTransactionGet | undefined) => {
-  const { users, recepients } = useAppSelector(x => x.usersState);
-
-  const { closeModal, setUsersState, setRecepientsState, addTransactionToState } = useAppActions();
-
-  const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: false, errors: [] });
-
-  const [getUsers, { isError: apiUsersHasError, data: apiUsersResult, error: apiUsersError }] = useLazyGetUsersQuery();
-  const [getUserBalance] = useLazyGetUserBalanceQuery();
-  const [
-    createTransaction,
-    { isError: apiCreateTransactionHasError, data: apiCreateTransactionResult, error: apiCreateTransactionError },
-  ] = useCreateTransactionMutation();
-
-  const setDefaultTransactionPostModel = (transaction: IUserTransactionGet | undefined): IUserTransactionPost =>
+export const useTransactionCreate = (user: IUserGet, transaction: IUserTransactionGet | undefined) => {
+  const [newTransaction, setNewTransaction] = useState<IUserTransactionPost>(() =>
     transaction && transaction.type === 'Outcome'
       ? { ...transaction, senderId: user.id, amount: { ...transaction.amount, value: -transaction.amount.value } }
       : {
@@ -73,85 +60,90 @@ export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTrans
             id: '',
             email: '',
           },
-        };
+        },
+  );
 
-  const [newTransaction, setTransactionPost] = useState<IUserTransactionPost>(() => setDefaultTransactionPostModel(transaction));
+  const { recepients } = useAppSelector(x => x.usersState);
+  const { closeModal, setUsersState, setRecepientsState, setRecepientState, changeState } = useAppActions();
 
-  // Users API error handling
+  const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: true });
+
+  const [getUsers, { isLoading: isApiUsersLoading, data: apiUsersResult, error: apiUsersError }] = useLazyGetUsersQuery();
+  const usersValidationResult = useValidateApiResult(apiUsersResult, apiUsersError, setUsersState);
+
+  const [
+    commitTransaction,
+    { isLoading: isApiNewTransactionLoading, data: apiNewTransactionResult, error: apiNewTransactionError },
+  ] = useCreateTransactionMutation();
+  const newTransactionValidationResult = useValidateApiResult(apiNewTransactionResult, apiNewTransactionError, _ => {
+    changeState();
+    closeModal();
+  });
+
+  // Validation
   useEffect(() => {
-    if (apiUsersResult) {
-      if (apiUsersResult.isSuccess) {
-        setValidationResult({ isValid: true });
-        setUsersState(apiUsersResult.data);
-      } else {
-        setValidationResult({ isValid: false, errors: [{ message: apiUsersResult.error.message }] });
-      }
-    } else if (apiUsersHasError) {
-      setValidationResult({ isValid: false, errors: [{ message: apiUsersError?.toString() || '' }] });
-    } else {
-      setValidationResult({ isValid: true });
+    if (!usersValidationResult.isValid) {
+      return setValidationResult(usersValidationResult);
     }
-  }, [apiUsersResult, apiUsersHasError, apiUsersError, setUsersState]);
 
-  // Transaction API error handling
-  useEffect(() => {
-    if (apiCreateTransactionResult) {
-      if (apiCreateTransactionResult.isSuccess) {
-        setValidationResult({ isValid: true });
-        getUserBalance(user.id);
-      } else {
-        setValidationResult({ isValid: false, errors: [{ message: apiCreateTransactionResult.error.message }] });
-      }
-    } else if (apiCreateTransactionHasError) {
-      setValidationResult({ isValid: false, errors: [{ message: apiCreateTransactionError?.toString() || '' }] });
-    } else {
-      setValidationResult({ isValid: true });
+    if (!newTransactionValidationResult.isValid) {
+      return setValidationResult(newTransactionValidationResult);
     }
-  }, [apiCreateTransactionResult, apiCreateTransactionHasError, apiCreateTransactionError, getUserBalance, user.id]);
 
-  // Validate transaction
-  useEffect(() => {
-    if (!newTransaction.user.id || newTransaction.user.id === '') {
-      return setValidationResult({ isValid: false, errors: [{ message: 'Recipient is required' }] });
-    }
-    if (newTransaction.amount.value <= 0) {
-      return setValidationResult({ isValid: false, errors: [{ message: 'Amount must be greater than 0' }] });
+    const transactionValidationResult = getTransactionValidationResult(transaction);
+
+    if (!transactionValidationResult.isValid) {
+      return setValidationResult(transactionValidationResult);
     }
 
     return setValidationResult({ isValid: true });
-  }, [newTransaction]);
+  }, [usersValidationResult, newTransactionValidationResult, transaction]);
 
-  // Fetch recipients for transaction
+  // Fetch recipients for the transaction
   useEffect(() => {
     if (!transaction) {
       getUsers(null);
+      setRecepientsState();
+    } else {
+      setRecepientState(transaction.user);
     }
+  }, [getUsers, setRecepientState, setRecepientsState, transaction]);
 
-    setRecepientsState();
-  }, [transaction, getUsers, users, setRecepientsState]);
-
-  useEffect(() => {
-    if (apiCreateTransactionResult && apiCreateTransactionResult.isSuccess) {
-      addTransactionToState(apiCreateTransactionResult.data);
-      closeModal();
-    }
-  }, [apiCreateTransactionResult, addTransactionToState, closeModal]);
-
-  // Submit transaction
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    validationResult.isValid && createTransaction(newTransaction);
+    validationResult.isValid && commitTransaction(newTransaction);
   };
 
   return {
     closeModal: () => closeModal(),
+
+    isLoading: isApiUsersLoading || isApiNewTransactionLoading,
+    validationResult,
+
     newTransaction,
     recepients,
-    validationResult,
-    onSubmit: onSubmit,
+
     onChangeAmount: (event: React.ChangeEvent<HTMLInputElement>) =>
-      setTransactionPost({ ...newTransaction, amount: { ...newTransaction.amount, value: +event.target.value } }),
+      setNewTransaction({ ...newTransaction, amount: { ...newTransaction.amount, value: +event.target.value } }),
     onChangeRecipient: (event: React.ChangeEvent<HTMLSelectElement>) =>
-      setTransactionPost({ ...newTransaction, user: { ...newTransaction.user, id: event.target.value } }),
+      setNewTransaction({ ...newTransaction, user: { ...newTransaction.user, id: event.target.value } }),
+
+    onSubmit,
   };
+};
+
+const getTransactionValidationResult = (transaction: IUserTransactionGet | undefined): ValidationResultType => {
+  if (!transaction) {
+    return { isValid: true };
+  }
+
+  if (!transaction.user || !transaction.user.id || transaction.user.id === '') {
+    return { isValid: false, errors: [{ message: 'Recipient is required' }] };
+  }
+
+  if (transaction.amount.value <= 0) {
+    return { isValid: false, errors: [{ message: 'Amount must be greater than 0' }] };
+  }
+
+  return { isValid: true };
 };

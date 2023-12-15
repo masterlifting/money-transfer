@@ -25,7 +25,10 @@ export const usersSlice = createSlice({
     setRecepientsState: state => {
       state.recepients = state.users.filter(x => x.id !== state.userBalance!.user.id);
     },
-    setUserBalance: (state, action: PayloadAction<IUserBalanceGet>) => {
+    setRecepientState: (state, action: PayloadAction<IUserGet>) => {
+      state.recepients = [action.payload];
+    },
+    setUserBalanceState: (state, action: PayloadAction<IUserBalanceGet>) => {
       state.userBalance = action.payload;
     },
   },
