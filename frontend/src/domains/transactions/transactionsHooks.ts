@@ -64,7 +64,7 @@ export const useTransactionCreate = (user: IUserGet, transaction: IUserTransacti
   );
 
   const { recepients } = useAppSelector(x => x.usersState);
-  const { closeModal, setUsersState, setRecepientsState, setRecepientState, changeState } = useAppActions();
+  const { closeModal, setUsersState, setRecepientState, changeState } = useAppActions();
 
   const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: true });
 
@@ -103,11 +103,10 @@ export const useTransactionCreate = (user: IUserGet, transaction: IUserTransacti
   useEffect(() => {
     if (!transaction) {
       getUsers(null);
-      setRecepientsState();
     } else {
       setRecepientState(transaction.user);
     }
-  }, [getUsers, setRecepientState, setRecepientsState, transaction]);
+  }, [getUsers, setRecepientState, transaction]);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
