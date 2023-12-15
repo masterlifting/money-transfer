@@ -22,7 +22,7 @@ export interface IUserTransactionGet extends IUserTransaction {
 }
 
 export interface IUserTransactionsFilter {
-  userId: string;
+  userId?: string;
   pagination?: IPagination;
   sorting?: ISorting;
 }

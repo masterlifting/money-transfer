@@ -1,6 +1,6 @@
 /** @format */
 
-import { FetchBaseQueryError, createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IAuthUserGet, IAuthUserPost } from '../../../../shared/types/authTypes';
 import { WebApiResponseType } from '../../../../shared/types/webApiTypes';
 import { constants } from '../../shared/constants';
@@ -17,8 +17,6 @@ export const authApi = createApi({
         method: constants.http.methods.POST,
         body: user,
       }),
-      transformErrorResponse: (error: FetchBaseQueryError): string =>
-        typeof error.status !== 'number' ? error.error : constants.http.defaultErrorMessage,
     }),
     registerUser: builder.mutation<WebApiResponseType<IAuthUserGet>, IAuthUserPost>({
       query: user => ({
@@ -26,8 +24,6 @@ export const authApi = createApi({
         method: constants.http.methods.POST,
         body: user,
       }),
-      transformErrorResponse: (error: FetchBaseQueryError): string =>
-        typeof error.status !== 'number' ? error.error : constants.http.defaultErrorMessage,
     }),
   }),
 });

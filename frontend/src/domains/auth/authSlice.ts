@@ -10,7 +10,7 @@ interface IAuthState {
 }
 
 const initialState: IAuthState = {
-  authUser: JSON.parse(localStorage.getItem(authUserKey) || 'null'),
+  //authUser: JSON.parse(localStorage.getItem(authUserKey) || 'null'),
 };
 
 export const authSlice = createSlice({
