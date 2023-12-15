@@ -38,6 +38,7 @@ export const useValidateApiResult = <T>(
     } else {
       setValidationResult({ isValid: true });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiError, apiResult]);
 
   return validationResult;
