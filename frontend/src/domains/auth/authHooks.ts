@@ -19,7 +19,7 @@ export const useAuthorize = () => {
     }
   }, [authUser, navigate]);
 
-  return { authUser: authUser! };
+  return { authUser };
 };
 
 export const useAuth = (authType: AuthType) => {

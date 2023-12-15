@@ -90,14 +90,14 @@ export const useTransactionCreate = (user: IUserGet, transaction: IUserTransacti
       return setValidationResult(newTransactionValidationResult);
     }
 
-    const transactionValidationResult = getTransactionValidationResult(transaction);
+    const transactionValidationResult = getTransactionValidationResult(newTransaction);
 
     if (!transactionValidationResult.isValid) {
       return setValidationResult(transactionValidationResult);
     }
 
     return setValidationResult({ isValid: true });
-  }, [usersValidationResult, newTransactionValidationResult, transaction]);
+  }, [usersValidationResult, newTransactionValidationResult, newTransaction]);
 
   // Fetch recipients for the transaction
   useEffect(() => {
@@ -132,11 +132,7 @@ export const useTransactionCreate = (user: IUserGet, transaction: IUserTransacti
   };
 };
 
-const getTransactionValidationResult = (transaction: IUserTransactionGet | undefined): ValidationResultType => {
-  if (!transaction) {
-    return { isValid: true };
-  }
-
+const getTransactionValidationResult = (transaction: IUserTransactionPost): ValidationResultType => {
   if (!transaction.user || !transaction.user.id || transaction.user.id === '') {
     return { isValid: false, errors: [{ message: 'Recipient is required' }] };
   }

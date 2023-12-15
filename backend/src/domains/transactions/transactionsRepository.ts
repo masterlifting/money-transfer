@@ -1,5 +1,6 @@
 /** @format */
 
+import { HandledError } from '../../shred/errorTypes';
 import { IUserTransactionGet, IUserTransactionsFilter, IUserTransactionsGet } from '../../types/userTransactionsTypes';
 import { usersRepository } from '../users/usersRepository';
 
@@ -8,10 +9,12 @@ const transactions = new Map<string, IUserTransactionGet[]>();
 export const transactionsRepository = {
   get: (filter: IUserTransactionsFilter): IUserTransactionsGet => {
     if (!filter.userId) {
-      return {
-        totalCount: 0,
-        items: [],
-      };
+      throw new HandledError('User id is required');
+    }
+    const user = usersRepository.getById(filter.userId);
+
+    if (!user) {
+      throw new HandledError('User not found');
     }
 
     let userTransactions = transactions.get(filter.userId) ?? [];

@@ -14,18 +14,9 @@ export const usersService = {
   },
 
   getBalance: (userId: string): WebApiResponseType<IUserBalanceGet> => {
-    try {
-      const userBalance = usersRepository.getBalance(userId);
-
-      return {
-        isSuccess: true,
-        data: userBalance,
-      };
-    } catch (error: any) {
-      return {
-        isSuccess: false,
-        error: error.message,
-      };
-    }
+    return {
+      isSuccess: true,
+      data: usersRepository.getBalance(userId),
+    };
   },
 };

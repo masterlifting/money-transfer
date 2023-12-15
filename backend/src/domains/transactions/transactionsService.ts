@@ -37,7 +37,7 @@ export const transactionsService = {
       id: guid(),
       date: new Date(),
       type: 'Outcome',
-      status: 'Pending',
+      status: 'Completed',
       amount: transaction.amount,
       user: receiver,
     };

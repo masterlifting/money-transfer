@@ -1,12 +1,12 @@
 /** @format */
 
-import { Request, Response, NextFunction } from 'express';
+import e, { Request, Response, NextFunction } from 'express';
 import { HandledError } from './shred/errorTypes';
 import { IWebApiErrorResponse } from './types/webApiTypes';
 
-export const errorHandling = (err: any, _: Request, res: Response, __: NextFunction) => {
+export const errorHandling = (err: any, _: Request, res: Response, next: NextFunction) => {
   if (err instanceof HandledError) {
-    console.error('HandledError: ', err.message);
+    console.error('\nHandledError: ', err.message);
     const response: IWebApiErrorResponse = {
       isSuccess: false,
       error: {
@@ -15,7 +15,7 @@ export const errorHandling = (err: any, _: Request, res: Response, __: NextFunct
     };
     res.send(response);
   } else {
-    console.error('Error: ', err.message);
+    console.error('\nError: ', err.message);
     res.status(500).send({ error: err.message });
   }
 };
