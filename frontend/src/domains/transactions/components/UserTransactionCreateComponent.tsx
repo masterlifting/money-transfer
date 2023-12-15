@@ -15,19 +15,12 @@ interface ITransactionProps {
 }
 
 export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) => {
-  const {
-    closeModal,
-    userTransactionPostModel,
-    userTransactionRecipients,
-    userTransactionCreateValidationResult,
-    onChangeAmountUserTransactionCreate,
-    onChangeRecipientUserTransactionCreate,
-    onSubmitUserTransactionCreate,
-  } = useTransactionCreate(user, transaction);
+  const { newTransaction, recepients, validationResult, closeModal, onChangeAmount, onChangeRecipient, onSubmit } =
+    useTransactionCreate(user, transaction);
 
   return (
-    <form onSubmit={onSubmitUserTransactionCreate}>
-      {!userTransactionCreateValidationResult.isValid && <Error error={userTransactionCreateValidationResult} />}
+    <form onSubmit={onSubmit}>
+      {!validationResult.isValid && <Error error={validationResult} />}
       <div className='grid grid-cols-[30%_70%] gap-2'>
         <div className='grid grid-row-2'>
           <label className={TextColor.Secondary + 'text-sm'}>{transaction?.amount.symbol} amount</label>
@@ -35,8 +28,8 @@ export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) 
             className={InputClass.Text}
             type='number'
             placeholder='Amount'
-            value={userTransactionPostModel.amount.value}
-            onChange={onChangeAmountUserTransactionCreate}
+            value={newTransaction.amount.value}
+            onChange={onChangeAmount}
           />
         </div>
         <div className='grid grid-row-2'>
@@ -44,15 +37,15 @@ export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) 
           <select
             title='Choose a recipient'
             className={InputClass.Select}
-            value={userTransactionPostModel.user.id}
-            onChange={onChangeRecipientUserTransactionCreate}
+            value={newTransaction.user.id}
+            onChange={onChangeRecipient}
             placeholder='Choose a recipient'
           >
             <option style={{ color: 'red' }} value=''>
               Choose a recipient
             </option>
 
-            {userTransactionRecipients.map(x => (
+            {recepients.map(x => (
               <option key={x.id} value={x.id}>
                 {x.email}
               </option>
@@ -65,9 +58,9 @@ export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) 
           Close
         </button>
         <button
-          title={!userTransactionCreateValidationResult.isValid ? 'Fill in all fields' : undefined}
-          disabled={!userTransactionCreateValidationResult.isValid}
-          className={userTransactionCreateValidationResult.isValid ? ButtonClass.Success : ButtonClass.Disable}
+          title={!validationResult.isValid ? 'Fill in all fields' : undefined}
+          disabled={!validationResult.isValid}
+          className={validationResult.isValid ? ButtonClass.Success : ButtonClass.Disable}
         >
           Commit
         </button>

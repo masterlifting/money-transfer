@@ -49,16 +49,6 @@ export const useTransactions = (user: IAuthUserGet) => {
   };
 };
 
-const getTransactionValidationError = (transaction: IUserTransactionPost) => {
-  if (!transaction.user.id || transaction.user.id === '') {
-    return 'Recipient is required';
-  }
-
-  if (transaction.amount.value <= 0) {
-    return 'Amount must be greater than 0';
-  }
-};
-
 export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTransactionGet | undefined) => {
   const { users, recepients } = useAppSelector(x => x.usersState);
 
@@ -85,7 +75,7 @@ export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTrans
           },
         };
 
-  const [transactionPost, setTransactionPost] = useState<IUserTransactionPost>(() => setDefaultTransactionPostModel(transaction));
+  const [newTransaction, setTransactionPost] = useState<IUserTransactionPost>(() => setDefaultTransactionPostModel(transaction));
 
   // Users API error handling
   useEffect(() => {
@@ -121,14 +111,15 @@ export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTrans
 
   // Validate transaction
   useEffect(() => {
-    const transactionValidationError = getTransactionValidationError(transactionPost);
-
-    if (transactionValidationError) {
-      setValidationResult({ isValid: false, errors: [{ message: transactionValidationError }] });
-    } else {
-      setValidationResult({ isValid: true });
+    if (!newTransaction.user.id || newTransaction.user.id === '') {
+      return setValidationResult({ isValid: false, errors: [{ message: 'Recipient is required' }] });
     }
-  }, [transactionPost]);
+    if (newTransaction.amount.value <= 0) {
+      return setValidationResult({ isValid: false, errors: [{ message: 'Amount must be greater than 0' }] });
+    }
+
+    return setValidationResult({ isValid: true });
+  }, [newTransaction]);
 
   // Fetch recipients for transaction
   useEffect(() => {
@@ -149,19 +140,18 @@ export const useTransactionCreate = (user: IAuthUserGet, transaction: IUserTrans
   // Submit transaction
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    validationResult.isValid && createTransaction(transactionPost);
+    validationResult.isValid && createTransaction(newTransaction);
   };
 
   return {
-    closeModal,
-    userTransactionPostModel: transactionPost,
-    userTransactionRecipients: recepients,
-    userTransactionCreateValidationResult: validationResult,
-    onSubmitUserTransactionCreate: onSubmit,
-    onChangeAmountUserTransactionCreate: (event: React.ChangeEvent<HTMLInputElement>) =>
-      setTransactionPost({ ...transactionPost, amount: { ...transactionPost.amount, value: +event.target.value } }),
-    onChangeRecipientUserTransactionCreate: (event: React.ChangeEvent<HTMLSelectElement>) =>
-      setTransactionPost({ ...transactionPost, user: { ...transactionPost.user, id: event.target.value } }),
+    closeModal: () => closeModal(),
+    newTransaction,
+    recepients,
+    validationResult,
+    onSubmit: onSubmit,
+    onChangeAmount: (event: React.ChangeEvent<HTMLInputElement>) =>
+      setTransactionPost({ ...newTransaction, amount: { ...newTransaction.amount, value: +event.target.value } }),
+    onChangeRecipient: (event: React.ChangeEvent<HTMLSelectElement>) =>
+      setTransactionPost({ ...newTransaction, user: { ...newTransaction.user, id: event.target.value } }),
   };
 };

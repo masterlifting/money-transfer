@@ -6,8 +6,11 @@ import cors from 'cors';
 import transactionsRouter from './domains/transactions/transactionsRoutes';
 import usersRouter from './domains/users/usersRoutes';
 import { errorHandling } from './middlewares';
+import morgan from 'morgan';
 
 const app: Application = express();
+
+app.use(morgan('dev'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
