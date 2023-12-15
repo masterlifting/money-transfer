@@ -4,24 +4,21 @@ version: '3'
 
 services:
   frontend:
-    image: sharpdev-frontend-image
-    container_name: sharpdev-frontend
+    image: internal_money-frontend-image
+    container_name: internal_money-frontend
     build:
-      context: ./frontend
+      context: .
+      dockerfile: frontend/Dockerfile
     ports:
       - '3000:3000'
     depends_on:
       - backend
 
   backend:
-    image: sharpdev-backend-image
-    container_name: sharpdev-backend
+    image: internal_money-backend-image
+    container_name: internal_money-backend
     build:
-      context: ./backend
+      context: .
+      dockerfile: backend/Dockerfile
     ports:
       - '5000:5000'
-    environment:
-      - NODE_ENV=development
-    volumes:
-      - ./backend:/app
-    command: ['npm', 'run', 'dev']

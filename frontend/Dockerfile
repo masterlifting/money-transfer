@@ -1,32 +1,24 @@
-# Use an official Node.js image as the base image
-FROM node:14-alpine as builder
-
-# Set the working directory in the container
-WORKDIR /app
-
-# Copy package.json and yarn.lock to the working directory
-COPY package.json yarn.lock ./
-
-# Install dependencies
-RUN yarn install --frozen-lockfile
-
-# Copy the rest of the application code to the working directory
-COPY . .
-
-# Build the application
-RUN yarn build
-
-# Use a lightweight Node.js image for the final image
 FROM node:14-alpine
 
-# Set the working directory to /app
 WORKDIR /app
 
-# Copy the built app from the builder stage
-COPY --from=builder /app/build ./build
+COPY tsconfig.json .
+COPY shared ./shared
 
-# Expose the port the app runs on
+COPY frontend/src ./frontend/src
+COPY frontend/public ./frontend/public
+
+COPY frontend/package.json ./frontend/
+
+COPY frontend/tsconfig.json ./frontend/
+COPY frontend/postcss.config.js ./frontend/
+COPY frontend/tailwind.config.js ./frontend/
+
+WORKDIR /app/frontend
+
+RUN npm install
+RUN npm run build
+
 EXPOSE 3000
 
-# Command to run the application
-CMD ["node", "./build/index.js"]
+CMD ["npm", "start"]

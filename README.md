@@ -8,16 +8,15 @@
 
 #### I was focusing on the following points:
 
-- The application does not have a backend
-- The application should be written in React and TypeScript
-- The application should be written in a functional style
-- The application should be written using React Hooks and Hooks Patterns
-- Tha application should have a responsive design
-- The application should have a minimum of rendering
-- The application should have a sorting and pagination
-- The application should have a simple authorization and authentication
-- The application should have a simple validation
-- The application should not use the external component libraries
+- The application consists of a backend and a frontend.
+- The application is written using Node.js, TypeScript, React, and Redux Toolkit.
+- The application is written in a functional style.
+- The application features a responsive design.
+- The application should minimize rendering.
+- The application includes sorting and pagination features.
+- The application implements simple authorization and authentication.
+- The application incorporates simple validation.
+- The application does not use external component libraries.
 
 ## Run the application
 
@@ -25,15 +24,19 @@
 
 - Clone the repository
 
-  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react-redux`
+  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react`
+
+- Go to the root directory of the repository
+
+  `cd sharpdevelopers`
 
 - Run the application from the root directory of the repository
 
-  `docker-compose -p sharp-dev-react-app up -d --build`
+  `docker-compose -p internal_money up -d --build`
 
 - Stop the application
 
-  `docker-compose -p sharp-dev-react-app down -v`
+  `docker-compose -p internal_money down -v`
 
 ### If you do not want to use the Docker, use the following commands:
 
@@ -47,7 +50,13 @@
 
 - Clone the repository
 
-  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react-redux`
+  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react`
+
+#### Backend
+
+- Go to the 'backend' directory
+
+  `cd backend`
 
 - Install the dependencies
 
@@ -57,7 +66,23 @@
 
   `npm start`
 
-### The application will be available on the http://localhost:3000
+#### Frontend
+
+- Go to the 'frontend' directory
+
+  `cd frontend`
+
+- Install the dependencies
+
+  `npm install`
+
+- Run the application
+
+  `npm start`
+
+### The backend will be available on the http://localhost:5000
+
+### The frontend will be available on the http://localhost:3000
 
 ## Use the application
 
