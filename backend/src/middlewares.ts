@@ -1,6 +1,6 @@
 /** @format */
 
-import e, { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { HandledError } from './shred/errorTypes';
 import { IWebApiErrorResponse } from './interfacesDto';
 

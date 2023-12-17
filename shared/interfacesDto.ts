@@ -1,6 +1,6 @@
 /** @format */
 
-import { IAmount, IDataFilter, IError, IUser, IUserBalance, IUserTransaction } from './interfaces';
+import { IAmount, IError, IUser, IUserBalance, IUserTransaction } from './interfaces';
 
 interface IWebApiError extends IError {
   code?: number;
