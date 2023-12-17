@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { TextColor } from '../../styles/colors';
-import { IError, IValidationFailure } from '../../../../../shared/types/errorTypes';
+import { IError, IValidationFailure } from '../../../../../shared/interfaces';
 
 export interface IErrorProps {
   error: IError | IValidationFailure;

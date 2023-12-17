@@ -4,8 +4,8 @@ version: '3'
 
 services:
   frontend:
-    image: internal_money-frontend-image
-    container_name: internal_money-frontend
+    image: internal_money/frontend
+    container_name: frontend
     build:
       context: .
       dockerfile: frontend/Dockerfile
@@ -15,8 +15,8 @@ services:
       - backend
 
   backend:
-    image: internal_money-backend-image
-    container_name: internal_money-backend
+    image: internal_money/backend
+    container_name: backend
     build:
       context: .
       dockerfile: backend/Dockerfile

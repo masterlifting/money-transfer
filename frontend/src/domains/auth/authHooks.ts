@@ -1,9 +1,9 @@
 /** @format */
 
+import { AuthType, ValidationResultType } from '../../../../shared/types';
+import { IAuthRequest } from '../../../../shared/interfacesDto';
 import { useEffect, useState } from 'react';
-import { AuthType, IAuthUserPost } from '../../../../shared/types/authTypes';
 import { useNavigate } from 'react-router-dom';
-import { ValidationResultType } from '../../../../shared/types/errorTypes';
 import { useAppSelector } from '../../shared/hooks/useAppSelector';
 import { useAppActions } from '../../shared/hooks/useAppActions';
 import { useLoginUserMutation, useRegisterUserMutation } from './authApi';
@@ -11,19 +11,19 @@ import { useValidateApiResult } from '../../shared/hooks/useValidateApiResult';
 
 export const useAuthorize = () => {
   const navigate = useNavigate();
-  const { authUser } = useAppSelector(x => x.authState);
+  const { user } = useAppSelector(x => x.authState);
 
   useEffect(() => {
-    if (!authUser) {
+    if (!user) {
       navigate('/login');
     }
-  }, [authUser, navigate]);
+  }, [user, navigate]);
 
-  return { authUser };
+  return { user };
 };
 
 export const useAuth = (authType: AuthType) => {
-  const [user, setUser] = useState<IAuthUserPost>({ email: '', password: '' });
+  const [user, setUser] = useState<IAuthRequest>({ email: '', password: '' });
   const [confirmedPassword, setConfirmedPassword] = useState('');
 
   const { isLoading, submitUser, validationResult } = useSubmitUser(authType, user, confirmedPassword);
@@ -48,15 +48,16 @@ export const useAuth = (authType: AuthType) => {
   };
 };
 
-const useSubmitUser = (authType: AuthType, user: IAuthUserPost, confirmedPassword?: string) => {
+const useSubmitUser = (authType: AuthType, user: IAuthRequest, confirmedPassword?: string) => {
   const useUserSubmitMutation = authType === 'Login' ? useLoginUserMutation : useRegisterUserMutation;
 
   const navigate = useNavigate();
-  const { setAuthState } = useAppActions();
+  const { setAuthState, setUserIdState } = useAppActions();
 
   const [submitUser, { isLoading, data, error }] = useUserSubmitMutation();
   const submitValidationResulrt = useValidateApiResult(data, error, autUser => {
     setAuthState(autUser);
+    setUserIdState(autUser);
     navigate('/');
   });
 
@@ -64,7 +65,7 @@ const useSubmitUser = (authType: AuthType, user: IAuthUserPost, confirmedPasswor
 
   // Validate user on submit
   useEffect(() => {
-    if (submitValidationResulrt) {
+    if (!submitValidationResulrt.isValid) {
       return setValidationResult(submitValidationResulrt);
     }
 
@@ -80,7 +81,7 @@ const useSubmitUser = (authType: AuthType, user: IAuthUserPost, confirmedPasswor
   return { isLoading, submitUser, validationResult };
 };
 
-const getUserValidationResult = (authType: AuthType, user: IAuthUserPost, confirmedPassword?: string): ValidationResultType => {
+const getUserValidationResult = (authType: AuthType, user: IAuthRequest, confirmedPassword?: string): ValidationResultType => {
   const { email, password } = user;
 
   if (email.length === 0) {

@@ -1,30 +1,30 @@
 /** @format */
 
+import { UserTransactionStatusType } from '../../../../../../shared/types';
+import { IUserTransaction, IUser } from '../../../interfaces';
 import { useState } from 'react';
-import { IUserTransactionGet, TransactionStatus } from '../../../../../shared/types/userTransactionsTypes';
-import { Modal } from '../../../shared/components/modals/ModalComponent';
-import { UserTransactionCreate } from './UserTransactionCreateComponent';
-import { UserTransactionDetails } from './UserTransactionDetailsComponent';
-import { SvgIcon } from '../../../shared/components/icons/SvgIconComponent';
-import { SvgIcons } from '../../../shared/components/icons/SvgIcons';
+import { Modal } from '../../../../shared/components/modals/ModalComponent';
+import { SvgIcon } from '../../../../shared/components/icons/SvgIconComponent';
+import { SvgIcons } from '../../../../shared/components/icons/SvgIcons';
 import React from 'react';
-import { IAuthUserGet } from '../../../../../shared/types/authTypes';
-import { TextColor } from '../../../shared/styles/colors';
-import { useAppActions } from '../../../shared/hooks/useAppActions';
+import { TextColor } from '../../../../shared/styles/colors';
+import { useAppActions } from '../../../../shared/hooks/useAppActions';
+import { CreateUserTransaction } from './CreateUserTransactionComponent';
+import { ShowUserTransactionDetails } from './ShowUserTransactionDetailsComponent';
 
 interface ITransactionProps {
-  user: IAuthUserGet;
-  transaction: IUserTransactionGet;
+  user: IUser;
+  transaction: IUserTransaction;
 }
 
-export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
+export const ShowUserTransaction = ({ user, transaction }: ITransactionProps) => {
   const [showDetails, setShowDetails] = useState(false);
   const { openModal, closeModal } = useAppActions();
 
   return (
     <div className='border-b-2 border-gray'>
       <Modal id={transaction.id} title={`Repeat transfer for ${transaction.user.email}`} onClose={closeModal}>
-        <UserTransactionCreate user={user} transaction={transaction} />
+        <CreateUserTransaction user={user} transaction={transaction} />
       </Modal>
 
       <div
@@ -44,7 +44,7 @@ export const UserTransaction = ({ user, transaction }: ITransactionProps) => {
           )}
         </div>
       </div>
-      {showDetails && <UserTransactionDetails transactionId={transaction.id} description={transaction.description} />}
+      {showDetails && <ShowUserTransactionDetails transactionId={transaction.id} description={transaction.description} />}
     </div>
   );
 };
@@ -61,7 +61,7 @@ const formatDate = (dateString: any) => {
   return `${year}.${month}.${day} ${hour}:${minute}`;
 };
 
-const getTransactionStatusColor = (status: TransactionStatus) => {
+const getTransactionStatusColor = (status: UserTransactionStatusType) => {
   switch (status) {
     case 'Pending':
       return TextColor.Warning;

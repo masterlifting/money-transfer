@@ -1,23 +1,22 @@
 /** @format */
 
-import { Error } from '../../../shared/components/errors/ErrorComponent';
-import { ButtonClass } from '../../../shared/styles/button';
-import { TextColor } from '../../../shared/styles/colors';
-import { InputClass } from '../../../shared/styles/input';
-import { useTransactionCreate } from '../transactionsHooks';
-import { IUserTransactionGet } from '../../../../../shared/types/userTransactionsTypes';
+import { IUser, IUserTransaction } from '../../../interfaces';
+import { Error } from '../../../../shared/components/errors/ErrorComponent';
+import { ButtonClass } from '../../../../shared/styles/button';
+import { TextColor } from '../../../../shared/styles/colors';
+import { InputClass } from '../../../../shared/styles/input';
 import React from 'react';
-import { IUserGet } from '../../../../../shared/types/userTypes';
-import { CircleLoader } from '../../../shared/components/loaders/CircleLoaderComponents';
+import { CircleLoader } from '../../../../shared/components/loaders/CircleLoaderComponents';
+import { useCreateUserTransaction } from '../userUserTransactionsHooks';
 
 interface ITransactionProps {
-  user: IUserGet;
-  transaction?: IUserTransactionGet;
+  user: IUser;
+  transaction?: IUserTransaction;
 }
 
-export const UserTransactionCreate = ({ user, transaction }: ITransactionProps) => {
+export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) => {
   const { isLoading, newTransaction, recepients, validationResult, closeModal, onChangeAmount, onChangeRecipient, onSubmit } =
-    useTransactionCreate(user, transaction);
+    useCreateUserTransaction(user, transaction);
 
   return (
     <form onSubmit={onSubmit}>

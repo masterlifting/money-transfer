@@ -5,12 +5,11 @@ import { SvgIcon } from '../icons/SvgIconComponent';
 import { SvgIcons } from '../icons/SvgIcons';
 import React from 'react';
 import { useAppSelector } from '../../hooks/useAppSelector';
-import { UserBalance } from '../../../domains/users/components/UserBalanceComponent';
 import { useAppActions } from '../../hooks/useAppActions';
-
+import { ShowUserBalance } from './../../../domains/user/balance/ShowUserBalanceComponent';
 export const TopBar = () => {
   const navigate = useNavigate();
-  const { authUser } = useAppSelector(x => x.authState);
+  const { user } = useAppSelector(x => x.authState);
   const { clearAuthState } = useAppActions();
 
   return (
@@ -19,10 +18,10 @@ export const TopBar = () => {
         internal money
       </Link>
       <div className='flex gap-2'>
-        {authUser ? (
+        {user ? (
           <div className='flex gap-4'>
-            <p className='text-white'>{authUser.email}</p>
-            <UserBalance />
+            <p className='text-white'>{user.email}</p>
+            <ShowUserBalance />
             <SvgIcon
               icon={SvgIcons.Logout}
               title='Logout'

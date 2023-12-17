@@ -1,8 +1,7 @@
 /** @format */
 
+import { ValidationResultType, WebApiResponseType } from '../../../../shared/types';
 import { useEffect, useState } from 'react';
-import { ValidationResultType } from '../../../../shared/types/errorTypes';
-import { WebApiResponseType } from '../../../../shared/types/webApiTypes';
 import { useAppActions } from './useAppActions';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { SerializedError } from '@reduxjs/toolkit';

@@ -2,7 +2,7 @@
 
 import e, { Request, Response, NextFunction } from 'express';
 import { HandledError } from './shred/errorTypes';
-import { IWebApiErrorResponse } from './types/webApiTypes';
+import { IWebApiErrorResponse } from './interfacesDto';
 
 export const errorHandling = (err: any, _: Request, res: Response, next: NextFunction) => {
   if (err instanceof HandledError) {

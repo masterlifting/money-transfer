@@ -1,15 +1,12 @@
 /** @format */
 
 import { HandledError } from '../../shred/errorTypes';
-import { IAuthUserGet, IAuthUserPost } from '../../types/authTypes';
-import { IUserTransactionGet } from '../../types/userTransactionsTypes';
-import { IWebApiSuccessResponse } from '../../types/webApiTypes';
-import { transactionsRepository } from '../transactions/transactionsRepository';
+import { IAuthRequest, IAuthResponse, IWebApiSuccessResponse } from '../../interfacesDto';
 import { usersRepository } from '../users/usersRepository';
 import { v4 as guid } from 'uuid';
 
 export const authServices = {
-  login: (request: IAuthUserPost): IWebApiSuccessResponse<IAuthUserGet> => {
+  login: (request: IAuthRequest): IWebApiSuccessResponse<IAuthResponse> => {
     const user = usersRepository.getByEmail(request.email);
 
     if (!user) {
@@ -19,52 +16,34 @@ export const authServices = {
     return {
       isSuccess: true,
       data: {
-        ...user,
+        user,
         token: guid(),
-        refreshToken: guid(),
       },
     };
   },
 
-  register: (request: IAuthUserPost): IWebApiSuccessResponse<IAuthUserGet> => {
-    let user = usersRepository.getByEmail(request.email);
+  register: (request: IAuthRequest): IWebApiSuccessResponse<IAuthResponse> => {
+    const newUser = usersRepository.create({ email: request.email });
 
-    if (user) {
-      throw new HandledError('User already exists');
-    }
-
-    user = {
-      id: guid(),
-      email: request.email,
-    };
-
-    usersRepository.add(user);
-
-    const presentTransaction: IUserTransactionGet = {
-      id: guid(),
-      date: new Date(),
+    usersRepository.createTransaction(newUser.id, {
       type: 'Income',
-      status: 'Completed',
       amount: {
         value: 500,
         currency: 'USD',
         symbol: '$',
       },
       user: {
-        id: guid(),
+        id: '1',
         email: 'internalmoney@gmail.com',
       },
       description: 'Welcome bonus from Internal Money',
-    };
-
-    transactionsRepository.add(user.id, presentTransaction);
+    });
 
     return {
       isSuccess: true,
       data: {
-        ...user,
+        user: newUser,
         token: guid(),
-        refreshToken: guid(),
       },
     };
   },

@@ -2,35 +2,34 @@
 
 import React, { useEffect } from 'react';
 import { useAppSelector } from '../../../shared/hooks/useAppSelector';
-import { useLazyGetUserBalanceQuery } from '../usersApi';
 import { useAppActions } from '../../../shared/hooks/useAppActions';
 import { TextColor } from '../../../shared/styles/colors';
 import { useValidateApiResult } from '../../../shared/hooks/useValidateApiResult';
 import { Error } from '../../../shared/components/errors/ErrorComponent';
+import { useLazyGetBalanceQuery } from '../usersApi';
 
-export const UserBalance = () => {
-  const { authUser } = useAppSelector(x => x.authState);
-  const { userBalance } = useAppSelector(x => x.usersState);
-  const { totalCount } = useAppSelector(x => x.transactionsState);
+export const ShowUserBalance = () => {
+  const { user } = useAppSelector(x => x.authState);
+  const { balance, transactionsTotalCount } = useAppSelector(x => x.usersState);
 
   const { setUserBalanceState } = useAppActions();
 
-  const [getBalance, { data, error }] = useLazyGetUserBalanceQuery();
+  const [getBalance, { data, error }] = useLazyGetBalanceQuery();
 
   const validationResult = useValidateApiResult(data, error, setUserBalanceState);
 
   useEffect(() => {
-    if (authUser) {
-      getBalance(authUser.id);
+    if (user) {
+      getBalance(user.id);
     }
-  }, [authUser, getBalance, totalCount]);
+  }, [user, getBalance, transactionsTotalCount]);
 
   return !validationResult.isValid ? (
     <Error error={validationResult} />
   ) : (
     <span className={`${TextColor.Warning} font-bold`}>
-      {userBalance?.amount.symbol}
-      {userBalance?.amount.value}
+      {balance?.amount.symbol}
+      {balance?.amount.value}
     </span>
   );
 };

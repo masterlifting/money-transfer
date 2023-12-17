@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { TextColor } from '../../styles/colors';
-import { ISorting } from '../../../../../shared/types/sortingFieldTypes';
+import { ISorting } from '../../../../../shared/interfaces';
 
 interface ISortingFieldProps {
   name: string;

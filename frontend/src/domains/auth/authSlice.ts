@@ -1,29 +1,33 @@
 /** @format */
 
+import { IAuthResponse } from '../../../../shared/interfacesDto';
+import { IUser } from '../interfaces';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IAuthUserGet } from '../../../../shared/types/authTypes';
 
-const authUserKey = 'authUser';
+//const authKey = 'internal_money-authkey';
 
 interface IAuthState {
-  authUser?: IAuthUserGet;
+  user?: IUser;
+  token?: string;
 }
 
 const initialState: IAuthState = {
-  authUser: JSON.parse(localStorage.getItem(authUserKey) || 'null'),
+  //user: JSON.parse(localStorage.getItem(authKey) || 'null'),
 };
 
 export const authSlice = createSlice({
   name: 'authSlice',
   initialState,
   reducers: {
-    setAuthState: (state, action: PayloadAction<IAuthUserGet>) => {
-      state.authUser = action.payload;
-      localStorage.setItem(authUserKey, JSON.stringify(state.authUser));
+    setAuthState: (state, action: PayloadAction<IAuthResponse>) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+      //localStorage.setItem(authKey, JSON.stringify(state.authUser));
     },
     clearAuthState: state => {
-      state.authUser = undefined;
-      localStorage.removeItem(authUserKey);
+      state.user = undefined;
+      state.token = undefined;
+      //localStorage.removeItem(authKey);
     },
   },
 });

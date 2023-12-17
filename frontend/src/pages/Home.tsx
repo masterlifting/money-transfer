@@ -2,9 +2,9 @@
 
 import React from 'react';
 import { useAuthorize } from '../domains/auth/authHooks';
-import { UserTransactions } from '../domains/transactions/components/UserTransactionsComponent';
+import { ShowUserTransactions } from '../domains/user/transactions/components/ShowUserTransactionsComponent';
 
 export const Home = () => {
-  const { authUser } = useAuthorize();
-  return authUser && <UserTransactions user={authUser} />;
+  const { user } = useAuthorize();
+  return user && <ShowUserTransactions user={user} />;
 };
