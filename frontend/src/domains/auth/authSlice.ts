@@ -4,15 +4,14 @@ import { IAuthResponse } from '../../../../shared/interfacesDto';
 import { IUser } from '../interfaces';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-//const authKey = 'internal_money-authkey';
+const sessionStarageKey = 'user-internal_money';
 
 interface IAuthState {
   user?: IUser;
-  token?: string;
 }
 
 const initialState: IAuthState = {
-  //user: JSON.parse(localStorage.getItem(authKey) || 'null'),
+  user: JSON.parse(sessionStorage.getItem(sessionStarageKey) || 'null'),
 };
 
 export const authSlice = createSlice({
@@ -20,14 +19,14 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setAuthState: (state, action: PayloadAction<IAuthResponse>) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      //localStorage.setItem(authKey, JSON.stringify(state.authUser));
+      const token = `Bearer ${action.payload.token}`;
+      state.user = { ...action.payload.user, token };
+
+      sessionStorage.setItem(sessionStarageKey, JSON.stringify(action.payload.user));
     },
     clearAuthState: state => {
       state.user = undefined;
-      state.token = undefined;
-      //localStorage.removeItem(authKey);
+      sessionStorage.removeItem(sessionStarageKey);
     },
   },
 });

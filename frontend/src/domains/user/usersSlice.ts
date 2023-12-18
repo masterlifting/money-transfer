@@ -1,7 +1,8 @@
 /** @format */
 
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IUser, IUserBalance, IUserTransaction } from '../interfaces';
+import { IUserBalance, IUserTransaction } from '../interfaces';
+import { IUser } from '../../../../shared/interfaces';
 import { IAuthResponse, IUserBalanceResponse, IUserTransactionsResponse, IUsersResponse } from '../../../../shared/interfacesDto';
 
 interface IUserState {

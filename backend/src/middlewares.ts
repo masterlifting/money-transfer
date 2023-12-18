@@ -10,6 +10,7 @@ export const errorHandling = (err: any, _: Request, res: Response, next: NextFun
     const response: IWebApiErrorResponse = {
       isSuccess: false,
       error: {
+        code: 400,
         message: err.message,
       },
     };

@@ -8,14 +8,24 @@ import {
 } from '../../../shared/interfaces';
 import { IUserTransactionRequest } from '../../../shared/interfacesDto';
 
-export interface IUser extends ISharedUser {}
+export interface IUser extends ISharedUser {
+  token: string;
+}
 export interface IUserBalance extends ISharedUserBalance {}
 export interface IUserTransaction extends ISharedUserTransaction {}
+
+export interface IUsersGetRequest {
+  token: string;
+  filter?: IDataFilter;
+}
+export interface IUserBalanceGetRequest {
+  user: IUser;
+}
 export interface IUserTransactionsGetRequest {
-  userId: string;
+  user: IUser;
   filter?: IDataFilter;
 }
 export interface IUserTransactionPostRequest {
-  userId: string;
+  user: IUser;
   transaction: IUserTransactionRequest;
 }

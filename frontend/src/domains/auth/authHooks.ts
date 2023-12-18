@@ -26,7 +26,22 @@ export const useAuth = (authType: AuthType) => {
   const [user, setUser] = useState<IAuthRequest>({ email: '', password: '' });
   const [confirmedPassword, setConfirmedPassword] = useState('');
 
-  const { isLoading, submitUser, validationResult } = useSubmitUser(authType, user, confirmedPassword);
+  const { isLoading, submitUser, validationResult, resetValidationResult } = useSubmitUser(authType, user, confirmedPassword);
+
+  const onChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    resetValidationResult();
+    return setUser({ ...user, email: event.target.value });
+  };
+
+  const onChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    resetValidationResult();
+    return setUser({ ...user, password: event.target.value });
+  };
+
+  const onChangeConfirmedPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    resetValidationResult();
+    return setConfirmedPassword(event.target.value);
+  };
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -40,9 +55,9 @@ export const useAuth = (authType: AuthType) => {
     user,
     confirmedPassword,
 
-    onChangeEmail: (e: React.ChangeEvent<HTMLInputElement>) => setUser({ ...user, email: e.target.value }),
-    onChangePassword: (e: React.ChangeEvent<HTMLInputElement>) => setUser({ ...user, password: e.target.value }),
-    onChangeConfirmedPassword: (e: React.ChangeEvent<HTMLInputElement>) => setConfirmedPassword(e.target.value),
+    onChangeEmail,
+    onChangePassword,
+    onChangeConfirmedPassword,
 
     onSubmit,
   };
@@ -54,7 +69,7 @@ const useSubmitUser = (authType: AuthType, user: IAuthRequest, confirmedPassword
   const navigate = useNavigate();
   const { setAuthState, setUserIdState } = useAppActions();
 
-  const [submitUser, { isLoading, data, error }] = useUserSubmitMutation();
+  const [submitUser, { isLoading, data, error, reset: resetValidationResult }] = useUserSubmitMutation();
   const submitValidationResulrt = useValidateApiResult(data, error, autUser => {
     setAuthState(autUser);
     setUserIdState(autUser);
@@ -78,7 +93,7 @@ const useSubmitUser = (authType: AuthType, user: IAuthRequest, confirmedPassword
     return setValidationResult({ isValid: true });
   }, [authType, confirmedPassword, submitValidationResulrt, user]);
 
-  return { isLoading, submitUser, validationResult };
+  return { isLoading, submitUser, validationResult, resetValidationResult };
 };
 
 const getUserValidationResult = (authType: AuthType, user: IAuthRequest, confirmedPassword?: string): ValidationResultType => {

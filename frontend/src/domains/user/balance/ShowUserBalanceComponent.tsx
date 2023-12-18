@@ -20,7 +20,7 @@ export const ShowUserBalance = () => {
 
   useEffect(() => {
     if (user) {
-      getBalance(user.id);
+      getBalance({ user });
     }
   }, [user, getBalance, transactionsTotalCount]);
 

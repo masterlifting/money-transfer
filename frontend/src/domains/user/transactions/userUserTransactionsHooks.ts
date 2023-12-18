@@ -23,7 +23,7 @@ export const useGetUserTransactions = (user: IUser) => {
 
   useEffect(() => {
     getTransactions({
-      userId: user.id,
+      user: user,
       filter: {
         pageNumber: pagination.pageNumber,
         pageItemsCount: pagination.pageItemsCount,
@@ -31,7 +31,7 @@ export const useGetUserTransactions = (user: IUser) => {
         sortingDirection: sorting.direction,
       },
     });
-  }, [user.id, getTransactions, pagination, sorting, transactionsTotalCount]);
+  }, [user, getTransactions, pagination, sorting, transactionsTotalCount]);
 
   return {
     openModal,
@@ -64,7 +64,7 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
   );
 
   const { recepients } = useAppSelector(x => x.usersState);
-  const { closeModal, setRecepientsState, setRecepientState, setTransactionsTotalCountState: changeState } = useAppActions();
+  const { closeModal, setRecepientsState, setRecepientState, setTransactionsTotalCountState } = useAppActions();
 
   const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: true });
 
@@ -74,10 +74,15 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
 
   const [
     commitTransaction,
-    { isLoading: isApiNewTransactionLoading, data: apiNewTransactionResult, error: apiNewTransactionError },
+    {
+      isLoading: isApiNewTransactionLoading,
+      data: apiNewTransactionResult,
+      error: apiNewTransactionError,
+      reset: resetCommitTransactionState,
+    },
   ] = usePostTransactionMutation();
   const newTransactionValidationResult = useValidateApiResult(apiNewTransactionResult, apiNewTransactionError, _ => {
-    changeState();
+    setTransactionsTotalCountState();
     closeModal();
   });
 
@@ -103,15 +108,25 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
   // Fetch recipients for the transaction
   useEffect(() => {
     if (!transaction) {
-      getRecepients(undefined);
+      getRecepients({ token: user.token });
     } else {
       setRecepientState(transaction.user);
     }
-  }, [getRecepients, setRecepientState, transaction]);
+  }, [getRecepients, setRecepientState, transaction, user.token]);
+
+  const onChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    resetCommitTransactionState();
+    return setNewTransaction({ ...newTransaction, amount: { ...newTransaction.amount, value: +event.target.value } });
+  };
+
+  const onChangeRecipient = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    resetCommitTransactionState();
+    return setNewTransaction({ ...newTransaction, user: { ...newTransaction.user, id: event.target.value } });
+  };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    validationResult.isValid && commitTransaction({ userId: user.id, transaction: newTransaction });
+    validationResult.isValid && commitTransaction({ user, transaction: newTransaction });
   };
 
   return {
@@ -123,10 +138,8 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
     newTransaction,
     recepients,
 
-    onChangeAmount: (event: React.ChangeEvent<HTMLInputElement>) =>
-      setNewTransaction({ ...newTransaction, amount: { ...newTransaction.amount, value: +event.target.value } }),
-    onChangeRecipient: (event: React.ChangeEvent<HTMLSelectElement>) =>
-      setNewTransaction({ ...newTransaction, user: { ...newTransaction.user, id: event.target.value } }),
+    onChangeAmount,
+    onChangeRecipient,
 
     onSubmit,
   };
