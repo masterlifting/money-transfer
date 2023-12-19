@@ -36,7 +36,7 @@ export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) 
           {!validationResult.isValid && <Error error={validationResult} />}
           <div className='grid grid-cols-[30%_70%] gap-2'>
             <div className='grid grid-row-2'>
-              <label className={TextColor.Secondary + 'text-sm'}>{transaction?.amount.symbol} amount</label>
+              <label className={TextColor.Secondary + 'text-sm'}>{newTransaction.amount.symbol} amount</label>
               <input
                 className={InputClass.Text}
                 type='number'
@@ -48,6 +48,7 @@ export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) 
             <div className='grid grid-row-2'>
               <label className={TextColor.Secondary + 'text-sm'}>recipient</label>
               <select
+                name='recipient'
                 className={InputClass.Select}
                 value={newTransaction.user.id}
                 onChange={onChangeRecipient}
