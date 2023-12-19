@@ -4,8 +4,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authApi } from './domains/auth/authApi';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { authReducer } from './domains/auth/authSlice';
-import { usersApi } from './domains/user/usersApi';
-import { usersReducer } from './domains/user/usersSlice';
+import { userApi } from './domains/user/userApi';
+import { userReducer } from './domains/user/userSlice';
 import { modalReducer } from './shared/components/modals/modalSlice';
 
 export const store = configureStore({
@@ -15,10 +15,10 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     authState: authReducer,
 
-    [usersApi.reducerPath]: usersApi.reducer,
-    usersState: usersReducer,
+    [userApi.reducerPath]: userApi.reducer,
+    userState: userReducer,
   },
-  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(authApi.middleware).concat(usersApi.middleware),
+  middleware: getDefaultMiddleware => getDefaultMiddleware().concat(authApi.middleware).concat(userApi.middleware),
 });
 
 setupListeners(store.dispatch);

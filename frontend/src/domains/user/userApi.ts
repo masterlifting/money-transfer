@@ -18,8 +18,8 @@ import {
 
 const controller = 'users';
 
-export const usersApi = createApi({
-  reducerPath: `${controller}Api`,
+export const userApi = createApi({
+  reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({ baseUrl: constants.http.baseFetchUrl }),
   endpoints: builder => ({
     getRecepients: builder.query<WebApiResponseType<IUsersResponse>, IUsersGetRequest>({
@@ -57,4 +57,4 @@ export const usersApi = createApi({
 });
 
 export const { useLazyGetRecepientsQuery, useLazyGetBalanceQuery, useLazyGetTransactionsQuery, usePostTransactionMutation } =
-  usersApi;
+  userApi;

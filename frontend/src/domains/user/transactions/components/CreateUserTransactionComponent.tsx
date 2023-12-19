@@ -15,8 +15,17 @@ interface ITransactionProps {
 }
 
 export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) => {
-  const { isLoading, newTransaction, recepients, validationResult, closeModal, onChangeAmount, onChangeRecipient, onSubmit } =
-    useCreateUserTransaction(user, transaction);
+  const {
+    isLoading,
+    newTransaction,
+    recepients,
+    validationResult,
+    closeModal,
+    onChangeAmount,
+    onChangeRecipient,
+    onChangeDescription,
+    onSubmit,
+  } = useCreateUserTransaction(user, transaction);
 
   return (
     <form onSubmit={onSubmit}>
@@ -39,7 +48,6 @@ export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) 
             <div className='grid grid-row-2'>
               <label className={TextColor.Secondary + 'text-sm'}>recipient</label>
               <select
-                title='Choose a recipient'
                 className={InputClass.Select}
                 value={newTransaction.user.id}
                 onChange={onChangeRecipient}
@@ -56,6 +64,15 @@ export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) 
                 ))}
               </select>
             </div>
+          </div>
+          <div className='grid grid-row-2'>
+            <label className={TextColor.Secondary + 'text-sm'}>description</label>
+            <textarea
+              className={InputClass.Text}
+              placeholder='Description'
+              value={newTransaction.description}
+              onChange={onChangeDescription}
+            />
           </div>
           <div className='flex justify-end gap-2'>
             <button className={ButtonClass.Secondary} onClick={closeModal}>

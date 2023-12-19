@@ -4,13 +4,13 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { authActions } from '../../domains/auth/authSlice';
-import { usersActions } from '../../domains/user/usersSlice';
+import { userActions } from '../../domains/user/userSlice';
 import { modalActions } from '../components/modals/modalSlice';
 
 const actions = {
   ...modalActions,
   ...authActions,
-  ...usersActions,
+  ...userActions,
 };
 
 export const useAppActions = () => {

@@ -11,7 +11,7 @@ interface ITransactionDetailsProps {
 export const ShowUserTransactionDetails = ({ transactionId, description }: ITransactionDetailsProps) => {
   return (
     <div className={`${TextColor.Secondary} p-2 text-sm`}>
-      {description ? <p>{description}</p> : <p>Additional details for the transaction: {transactionId}</p>}
+      {description ? <p>{description}</p> : <p>Here we can show the details of the transaction with id: {transactionId}</p>}
     </div>
   );
 };

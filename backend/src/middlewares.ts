@@ -20,3 +20,9 @@ export const errorHandling = (err: any, _: Request, res: Response, next: NextFun
     res.status(500).send({ error: err.message });
   }
 };
+
+export const headerSettings = (_: Request, res: Response, next: NextFunction) => {
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+};

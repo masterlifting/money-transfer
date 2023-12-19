@@ -3,10 +3,10 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { IUserBalance, IUserTransaction } from '../interfaces';
 import { IUser } from '../../../../shared/interfaces';
-import { IAuthResponse, IUserBalanceResponse, IUserTransactionsResponse, IUsersResponse } from '../../../../shared/interfacesDto';
+import { IUserBalanceResponse, IUserTransactionsResponse, IUsersResponse } from '../../../../shared/interfacesDto';
 
 interface IUserState {
-  userId?: string;
+  userEmail?: string;
   recepients: IUser[];
   balance?: IUserBalance;
   transactionsTotalCount: number;
@@ -19,16 +19,16 @@ const initialState: IUserState = {
   transactionsTotalCount: 0,
 };
 
-export const usersSlice = createSlice({
-  name: 'usersSlice',
+export const userSlice = createSlice({
+  name: 'userSlice',
   initialState,
   reducers: {
-    setUserIdState: (state, action: PayloadAction<IAuthResponse>) => {
-      state.userId = action.payload.user.id;
+    setUserEmailState: (state, action: PayloadAction<string>) => {
+      state.userEmail = action.payload;
     },
     setRecepientsState: (state, action: PayloadAction<IUsersResponse>) => {
-      if (state.userId) {
-        state.recepients = action.payload.users.filter(x => x.id !== state.userId);
+      if (state.userEmail) {
+        state.recepients = action.payload.users.filter(x => x.email !== state.userEmail);
       } else {
         state.recepients = action.payload.users;
       }
@@ -49,5 +49,5 @@ export const usersSlice = createSlice({
   },
 });
 
-export const usersActions = usersSlice.actions;
-export const usersReducer = usersSlice.reducer;
+export const userActions = userSlice.actions;
+export const userReducer = userSlice.reducer;

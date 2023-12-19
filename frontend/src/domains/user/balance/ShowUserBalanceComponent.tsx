@@ -6,11 +6,11 @@ import { useAppActions } from '../../../shared/hooks/useAppActions';
 import { TextColor } from '../../../shared/styles/colors';
 import { useValidateApiResult } from '../../../shared/hooks/useValidateApiResult';
 import { Error } from '../../../shared/components/errors/ErrorComponent';
-import { useLazyGetBalanceQuery } from '../usersApi';
+import { useLazyGetBalanceQuery } from '../userApi';
 
 export const ShowUserBalance = () => {
   const { user } = useAppSelector(x => x.authState);
-  const { balance, transactionsTotalCount } = useAppSelector(x => x.usersState);
+  const { balance, transactionsTotalCount } = useAppSelector(x => x.userState);
 
   const { setUserBalanceState } = useAppActions();
 

@@ -7,11 +7,11 @@ import { useEffect, useState } from 'react';
 import { useAppActions } from '../../../shared/hooks/useAppActions';
 import { useAppSelector } from '../../../shared/hooks/useAppSelector';
 import { useValidateApiResult } from '../../../shared/hooks/useValidateApiResult';
-import { useLazyGetRecepientsQuery, useLazyGetTransactionsQuery, usePostTransactionMutation } from '../usersApi';
+import { useLazyGetRecepientsQuery, useLazyGetTransactionsQuery, usePostTransactionMutation } from '../userApi';
 import { IUserTransactionRequest } from '../../../../../shared/interfacesDto';
 
 export const useGetUserTransactions = (user: IUser) => {
-  const { transactions, transactionsTotalCount } = useAppSelector(x => x.usersState);
+  const { transactions, transactionsTotalCount } = useAppSelector(x => x.userState);
 
   const { openModal, setTransactionsState } = useAppActions();
 
@@ -63,7 +63,7 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
         },
   );
 
-  const { recepients } = useAppSelector(x => x.usersState);
+  const { recepients } = useAppSelector(x => x.userState);
   const { closeModal, setRecepientsState, setRecepientState, setTransactionsTotalCountState } = useAppActions();
 
   const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: true });
@@ -124,6 +124,11 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
     return setNewTransaction({ ...newTransaction, user: { ...newTransaction.user, id: event.target.value } });
   };
 
+  const onChangeDescription = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    resetCommitTransactionState();
+    return setNewTransaction({ ...newTransaction, description: event.target.value });
+  };
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     validationResult.isValid && commitTransaction({ user, transaction: newTransaction });
@@ -140,6 +145,7 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
 
     onChangeAmount,
     onChangeRecipient,
+    onChangeDescription,
 
     onSubmit,
   };

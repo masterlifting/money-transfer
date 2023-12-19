@@ -4,7 +4,7 @@ import express, { Application } from 'express';
 import authRouter from './domains/auth/authRoutes';
 import cors from 'cors';
 import usersRouter from './domains/users/usersRoutes';
-import { errorHandling } from './middlewares';
+import { errorHandling, headerSettings } from './middlewares';
 import morgan from 'morgan';
 
 const app: Application = express();
@@ -21,6 +21,8 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use(headerSettings);
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', usersRouter);

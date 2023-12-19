@@ -12,12 +12,15 @@ import { useValidateApiResult } from '../../shared/hooks/useValidateApiResult';
 export const useAuthorize = () => {
   const navigate = useNavigate();
   const { user } = useAppSelector(x => x.authState);
+  const { setUserEmailState } = useAppActions();
 
   useEffect(() => {
     if (!user) {
       navigate('/login');
+    } else {
+      setUserEmailState(user.email);
     }
-  }, [user, navigate]);
+  }, [user, navigate, setUserEmailState]);
 
   return { user };
 };
@@ -67,12 +70,12 @@ const useSubmitUser = (authType: AuthType, user: IAuthRequest, confirmedPassword
   const useUserSubmitMutation = authType === 'Login' ? useLoginUserMutation : useRegisterUserMutation;
 
   const navigate = useNavigate();
-  const { setAuthState, setUserIdState } = useAppActions();
+  const { setAuthState, setUserEmailState } = useAppActions();
 
   const [submitUser, { isLoading, data, error, reset: resetValidationResult }] = useUserSubmitMutation();
   const submitValidationResulrt = useValidateApiResult(data, error, autUser => {
     setAuthState(autUser);
-    setUserIdState(autUser);
+    setUserEmailState(autUser.user.email);
     navigate('/');
   });
 

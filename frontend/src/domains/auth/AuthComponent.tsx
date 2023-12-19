@@ -36,6 +36,7 @@ export const Auth = ({ authType }: IAuthUserProps) => {
       <div className='flex flex-col items-center'>
         <input
           className={InputClass.Text}
+          name='email'
           type='email'
           placeholder='email'
           value={user.email}
@@ -44,6 +45,7 @@ export const Auth = ({ authType }: IAuthUserProps) => {
         />
         <input
           className={InputClass.Text}
+          name='password'
           type='password'
           placeholder='password'
           value={user.password}
@@ -53,6 +55,7 @@ export const Auth = ({ authType }: IAuthUserProps) => {
         {authType === 'Register' && (
           <input
             className={InputClass.Text}
+            name='repeat-password'
             type='password'
             placeholder='repeat password'
             required={true}
