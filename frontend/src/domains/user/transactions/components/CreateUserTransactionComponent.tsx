@@ -38,6 +38,8 @@ export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) 
             <div className='grid grid-row-2'>
               <label className={TextColor.Secondary + 'text-sm'}>{newTransaction.amount.symbol} amount</label>
               <input
+                title='Amount'
+                name='amount'
                 className={InputClass.Text}
                 type='number'
                 placeholder='Amount'
@@ -48,6 +50,7 @@ export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) 
             <div className='grid grid-row-2'>
               <label className={TextColor.Secondary + 'text-sm'}>recipient</label>
               <select
+                title='Transfer to'
                 name='recipient'
                 className={InputClass.Select}
                 value={newTransaction.user.id}
@@ -69,6 +72,8 @@ export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) 
           <div className='grid grid-row-2'>
             <label className={TextColor.Secondary + 'text-sm'}>description</label>
             <textarea
+              title='Description for the transaction'
+              name='description'
               className={InputClass.Text}
               placeholder='Description'
               value={newTransaction.description}

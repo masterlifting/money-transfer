@@ -37,6 +37,7 @@ export const Auth = ({ authType }: IAuthUserProps) => {
         <input
           className={InputClass.Text}
           name='email'
+          title='Email'
           type='email'
           placeholder='email'
           value={user.email}
@@ -46,6 +47,7 @@ export const Auth = ({ authType }: IAuthUserProps) => {
         <input
           className={InputClass.Text}
           name='password'
+          title='Password'
           type='password'
           placeholder='password'
           value={user.password}
@@ -56,6 +58,7 @@ export const Auth = ({ authType }: IAuthUserProps) => {
           <input
             className={InputClass.Text}
             name='repeat-password'
+            title='Repeat password'
             type='password'
             placeholder='repeat password'
             required={true}

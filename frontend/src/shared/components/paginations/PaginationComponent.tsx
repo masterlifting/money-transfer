@@ -36,6 +36,8 @@ export const Paginator = ({ totalItemsCount, pageItemsCount, state, setPaginaton
       <div className='flex flex-col-2 px-2 gap-1 items-center'>
         {pageItemsCount === state.pageItemsCount && (
           <select
+            name='pageItemsCount'
+            title='Records per page'
             className='cursor-pointer'
             value={state.pageItemsCount}
             onChange={event => {
