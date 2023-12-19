@@ -2,9 +2,9 @@
 
 import { HandledError } from '../../shred/errorTypes';
 import { IUser, IUserBalance, IUserCreate, IUserTransaction, IUserTransactionCreate, IUserTransactions } from '../interfaces';
-import { IAmount, IDataFilter } from '../../interfaces';
+import { IDataFilter } from '../../interfaces';
 import { v4 as guid } from 'uuid';
-import { SortingDirectionType, UserTransactionType } from '../../types';
+import { SortingDirectionType } from '../../types';
 
 interface IUserState extends IUser {
   balance: IUserBalance;

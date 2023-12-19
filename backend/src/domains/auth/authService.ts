@@ -5,7 +5,7 @@ import { IAuthRequest, IAuthResponse, IWebApiSuccessResponse } from '../../inter
 import { usersRepository } from '../users/usersRepository';
 import { v4 as guid } from 'uuid';
 
-export const authServices = {
+export const authService = {
   login: (request: IAuthRequest): IWebApiSuccessResponse<IAuthResponse> => {
     const user = usersRepository.getByEmail(request.email);
 
