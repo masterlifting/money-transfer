@@ -24,7 +24,7 @@ export const ShowUserTransaction = ({ user, transaction }: ITransactionProps) =>
   return (
     <div className='border-b-2 border-gray'>
       {transaction.type === 'Outcome' ? (
-        <Modal id={transaction.id} title={`Repeat transfer for ${transaction.user.email}`} onClose={closeModal}>
+        <Modal id={transaction.id} title='Repeat money transfer' onClose={closeModal}>
           <CreateUserTransaction user={user} transaction={transaction} />
         </Modal>
       ) : null}

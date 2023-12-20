@@ -1,14 +1,14 @@
 /** @format */
 
-import { ValidationResultType } from '../../../../../shared/types';
-import { IUser, IUserTransaction } from '../../interfaces';
-import { ISorting, IPagination } from '../../../../../shared/interfaces';
 import { useEffect, useState } from 'react';
+import { ValidationResultType } from '../../../../../shared/types';
+import { ISorting, IPagination } from '../../../../../shared/interfaces';
+import { IUserTransactionRequest } from '../../../../../shared/interfacesDto';
+import { IUser, IUserTransaction } from '../../interfaces';
 import { useAppActions } from '../../../shared/hooks/useAppActions';
 import { useAppSelector } from '../../../shared/hooks/useAppSelector';
 import { useValidateApiResult } from '../../../shared/hooks/useValidateApiResult';
 import { useLazyGetRecepientsQuery, useLazyGetTransactionsQuery, usePostTransactionMutation } from '../userApi';
-import { IUserTransactionRequest } from '../../../../../shared/interfacesDto';
 
 export const useGetUserTransactions = (user: IUser) => {
   const { transactions, transactionsTotalCount } = useAppSelector(x => x.userState);
@@ -119,9 +119,14 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
     return setNewTransaction({ ...newTransaction, amount: { ...newTransaction.amount, value: +event.target.value } });
   };
 
-  const onChangeRecipient = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const searchRecepientEmails = (email: string) => {
+    return recepients.filter(x => x.email.toLowerCase().includes(email.toLowerCase())).map(x => x.email);
+  };
+
+  const onChangeRecipient = (email?: string) => {
     resetCommitTransactionState();
-    return setNewTransaction({ ...newTransaction, user: { ...newTransaction.user, id: event.target.value } });
+    const user = recepients.find(x => x.email === email);
+    return setNewTransaction({ ...newTransaction, user: user ? user : { id: '', email: '' } });
   };
 
   const onChangeDescription = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -141,7 +146,8 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
     validationResult,
 
     newTransaction,
-    recepients,
+
+    searchRecepientEmails,
 
     onChangeAmount,
     onChangeRecipient,

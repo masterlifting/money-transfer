@@ -28,8 +28,8 @@ export const ShowUserBalance = () => {
     <Error error={validationResult} />
   ) : (
     <span className={`${TextColor.Warning} font-bold`}>
-      {balance?.amount.symbol}
       {balance?.amount.value}
+      {balance?.amount.symbol}
     </span>
   );
 };

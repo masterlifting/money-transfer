@@ -15,7 +15,7 @@ export const TopBar = () => {
   return (
     <nav className='h-14 bg-gray-800 flex justify-between items-center px-5 shadow-md'>
       <Link to='/' className='text-xl font-bold text-white hover:text-gray-300'>
-        internal money
+        Internal Money
       </Link>
       <div className='flex gap-2'>
         {user ? (

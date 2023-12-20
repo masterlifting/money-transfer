@@ -8,6 +8,7 @@ import { InputClass } from '../../../../shared/styles/input';
 import { useCreateUserTransaction } from '../userUserTransactionsHooks';
 import { SubmitButton } from '../../../../shared/components/buttons/SubmitButtonComponent';
 import { TextColor } from '../../../../shared/styles/colors';
+import { AutoComplete } from '../../../../shared/components/dropdowns/AutoCompleteComponent';
 
 interface ITransactionProps {
   user: IUser;
@@ -18,8 +19,8 @@ export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) 
   const {
     isLoading,
     newTransaction,
-    recepients,
     validationResult,
+    searchRecepientEmails,
     closeModal,
     onChangeAmount,
     onChangeRecipient,
@@ -41,24 +42,12 @@ export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) 
           onChange={onChangeAmount}
         />
         <span className={`${TextColor.Secondary} my-1 py-1`}>{newTransaction.amount.symbol}</span>
-        <select
-          name='recipient'
-          title='Transfer to'
-          className={InputClass.Select}
-          value={newTransaction.user.id}
-          onChange={onChangeRecipient}
-          placeholder='Choose a recipient'
-        >
-          <option style={{ color: 'red' }} value=''>
-            Choose a recipient
-          </option>
-
-          {recepients.map(x => (
-            <option key={x.id} value={x.id}>
-              {x.email}
-            </option>
-          ))}
-        </select>
+        <AutoComplete
+          title='recipient'
+          state={newTransaction.user.email}
+          setState={onChangeRecipient}
+          searchFunc={searchRecepientEmails}
+        />
       </div>
       <textarea
         className={InputClass.Text}

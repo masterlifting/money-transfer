@@ -7,9 +7,9 @@ import { SvgIcon } from '../icons/SvgIconComponent';
 import { SvgIcons } from '../icons/SvgIcons';
 
 interface SubmitButtonProps {
+  name: string;
   isLoading?: boolean;
   validationResult: ValidationResultType;
-  name: string;
 }
 
 export const SubmitButton = ({ isLoading, validationResult, name }: SubmitButtonProps) => {
