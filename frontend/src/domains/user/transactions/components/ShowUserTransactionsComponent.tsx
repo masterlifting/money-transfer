@@ -1,5 +1,6 @@
 /** @format */
 
+import React from 'react';
 import { Error } from '../../../../shared/components/errors/ErrorComponent';
 import { CircleLoader } from '../../../../shared/components/loaders/CircleLoaderComponents';
 import { Modal } from '../../../../shared/components/modals/ModalComponent';
@@ -7,7 +8,6 @@ import { Paginator } from '../../../../shared/components/paginations/PaginationC
 import { SortingField } from '../../../../shared/components/sortings/SortingFieldComponent';
 import { ButtonClass } from '../../../../shared/styles/button';
 import { IUser } from '../../../interfaces';
-import React from 'react';
 import { CreateUserTransaction } from './CreateUserTransactionComponent';
 import { useGetUserTransactions } from '../userUserTransactionsHooks';
 import { ShowUserTransaction } from './ShowUserTransactionComponent';
@@ -45,7 +45,12 @@ export const ShowUserTransactions = ({ user }: ITransactionProps) => {
         <h1 className='align-middle text-xl font-bold'>
           {transactionsTotalCount} {transactionsTotalCount === 1 ? 'Transaction' : 'Transactions'}
         </h1>
-        <button title='Make a new money transfer' className={ButtonClass.Primary} onClick={() => openModal(modalTitle)}>
+        <button
+          type='button'
+          title='Make a new money transfer'
+          className={ButtonClass.Primary}
+          onClick={() => openModal(modalTitle)}
+        >
           New
         </button>
       </div>

@@ -1,12 +1,12 @@
 /** @format */
 
+import React from 'react';
 import { AuthType } from '../../../../shared/types';
 import { Error } from '../../shared/components/errors/ErrorComponent';
 import { InputClass } from '../../shared/styles/input';
 import { useAuth } from './authHooks';
-import { ButtonClass } from '../../shared/styles/button';
 import { CircleLoader } from '../../shared/components/loaders/CircleLoaderComponents';
-import React from 'react';
+import { SubmitButton } from '../../shared/components/buttons/SubmitButtonComponent';
 
 interface IAuthUserProps {
   authType: AuthType;
@@ -40,9 +40,9 @@ export const Auth = ({ authType }: IAuthUserProps) => {
           title='Email'
           type='email'
           placeholder='email'
+          autoComplete='email'
           value={user.email}
           onChange={onChangeEmail}
-          autoComplete='email'
         />
         <input
           className={InputClass.Text}
@@ -50,33 +50,26 @@ export const Auth = ({ authType }: IAuthUserProps) => {
           title='Password'
           type='password'
           placeholder='password'
+          autoComplete='new-password'
           value={user.password}
           onChange={onChangePassword}
-          autoComplete='new-password'
         />
         {authType === 'Register' && (
           <input
+            required={true}
             className={InputClass.Text}
             name='repeat-password'
             title='Repeat password'
             type='password'
             placeholder='repeat password'
-            required={true}
+            autoComplete='current-password'
             value={confirmedPassword}
             onChange={onChangeConfirmedPassword}
-            autoComplete='current-password'
           />
         )}
       </div>
       <div className='flex justify-end'>
-        <button
-          type='submit'
-          title={!validationResult.isValid ? 'Fill in all fields' : undefined}
-          disabled={!validationResult.isValid}
-          className={validationResult.isValid ? ButtonClass.Success : ButtonClass.Disable}
-        >
-          {authType}
-        </button>
+        <SubmitButton validationResult={validationResult} name={authType} />
       </div>
     </form>
   );

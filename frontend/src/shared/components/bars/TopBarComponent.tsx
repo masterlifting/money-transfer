@@ -1,9 +1,9 @@
 /** @format */
 
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { SvgIcon } from '../icons/SvgIconComponent';
 import { SvgIcons } from '../icons/SvgIcons';
-import React from 'react';
 import { useAppSelector } from '../../hooks/useAppSelector';
 import { useAppActions } from '../../hooks/useAppActions';
 import { ShowUserBalance } from './../../../domains/user/balance/ShowUserBalanceComponent';

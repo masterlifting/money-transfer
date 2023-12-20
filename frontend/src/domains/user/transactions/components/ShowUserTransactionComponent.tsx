@@ -1,12 +1,12 @@
 /** @format */
 
+import React from 'react';
 import { UserTransactionStatusType } from '../../../../../../shared/types';
 import { IUserTransaction, IUser } from '../../../interfaces';
 import { useState } from 'react';
 import { Modal } from '../../../../shared/components/modals/ModalComponent';
 import { SvgIcon } from '../../../../shared/components/icons/SvgIconComponent';
 import { SvgIcons } from '../../../../shared/components/icons/SvgIcons';
-import React from 'react';
 import { TextColor } from '../../../../shared/styles/colors';
 import { useAppActions } from '../../../../shared/hooks/useAppActions';
 import { CreateUserTransaction } from './CreateUserTransactionComponent';
@@ -23,9 +23,11 @@ export const ShowUserTransaction = ({ user, transaction }: ITransactionProps) =>
 
   return (
     <div className='border-b-2 border-gray'>
-      <Modal id={transaction.id} title={`Repeat transfer for ${transaction.user.email}`} onClose={closeModal}>
-        <CreateUserTransaction user={user} transaction={transaction} />
-      </Modal>
+      {transaction.type === 'Outcome' ? (
+        <Modal id={transaction.id} title={`Repeat transfer for ${transaction.user.email}`} onClose={closeModal}>
+          <CreateUserTransaction user={user} transaction={transaction} />
+        </Modal>
+      ) : null}
 
       <div
         className='grid grid-cols-[20%_15%_10%_35%_15%_5%] gap-2 py-1 cursor-pointer hover:bg-gray-100'

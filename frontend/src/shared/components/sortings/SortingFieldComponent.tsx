@@ -5,7 +5,7 @@ import { TextColor } from '../../styles/colors';
 import { ISorting } from '../../../../../shared/interfaces';
 
 interface ISortingFieldProps {
-  name: string;
+  name: string; // name of the field will be used for sorting on the backend
   state: ISorting;
   setState: (config: ISorting) => void;
 }
