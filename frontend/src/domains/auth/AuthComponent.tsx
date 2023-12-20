@@ -5,7 +5,6 @@ import { AuthType } from '../../../../shared/types';
 import { Error } from '../../shared/components/errors/ErrorComponent';
 import { InputClass } from '../../shared/styles/input';
 import { useAuth } from './authHooks';
-import { CircleLoader } from '../../shared/components/loaders/CircleLoaderComponents';
 import { SubmitButton } from '../../shared/components/buttons/SubmitButtonComponent';
 
 interface IAuthUserProps {
@@ -27,9 +26,7 @@ export const Auth = ({ authType }: IAuthUserProps) => {
     onSubmit,
   } = useAuth(authType);
 
-  return isLoading ? (
-    <CircleLoader />
-  ) : (
+  return (
     <form onSubmit={onSubmit} className='w-80 absolute rounded-md left-1/2 top-1/3 transform -translate-x-1/2 -translate-y-1/3'>
       <h1 className='text-2xl font-bold mb-2'>{authType}</h1>
       {!validationResult.isValid && <Error error={validationResult} />}
@@ -69,7 +66,7 @@ export const Auth = ({ authType }: IAuthUserProps) => {
         )}
       </div>
       <div className='flex justify-end'>
-        <SubmitButton validationResult={validationResult} name={authType} />
+        <SubmitButton isLoading={isLoading} validationResult={validationResult} name={authType} />
       </div>
     </form>
   );

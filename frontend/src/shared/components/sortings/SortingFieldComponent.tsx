@@ -1,7 +1,7 @@
 /** @format */
 
 import React from 'react';
-import { TextColor } from '../../styles/colors';
+import { HoveredTextColor } from '../../styles/colors';
 import { ISorting } from '../../../../../shared/interfaces';
 
 interface ISortingFieldProps {
@@ -20,7 +20,7 @@ export const SortingField = ({ name, state, setState }: ISortingFieldProps) => {
           direction: state.direction === 'asc' ? 'desc' : 'asc',
         })
       }
-      className={`cursor-pointer ${state.fieldName === name && TextColor.Primary}`}
+      className={HoveredTextColor.Primary}
     >
       {state.fieldName === name ? (state.direction === 'asc' ? '▲' : '▼') : ''}
       {name}
