@@ -20,7 +20,7 @@ export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) 
     isLoading,
     newTransaction,
     validationResult,
-    searchRecepientEmails,
+    searchRecipientEmails,
     closeModal,
     onChangeAmount,
     onChangeRecipient,
@@ -46,7 +46,7 @@ export const CreateUserTransaction = ({ user, transaction }: ITransactionProps) 
           title='recipient'
           state={newTransaction.user.email}
           setState={onChangeRecipient}
-          searchFunc={searchRecepientEmails}
+          searchFunc={searchRecipientEmails}
         />
       </div>
       <textarea

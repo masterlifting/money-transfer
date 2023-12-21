@@ -22,7 +22,7 @@ export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({ baseUrl: constants.http.baseFetchUrl }),
   endpoints: builder => ({
-    getRecepients: builder.query<WebApiResponseType<IUsersResponse>, IUsersGetRequest>({
+    getRecipients: builder.query<WebApiResponseType<IUsersResponse>, IUsersGetRequest>({
       query: request => ({
         headers: { Authorization: request.token },
         method: constants.http.methods.GET,
@@ -56,5 +56,5 @@ export const userApi = createApi({
   }),
 });
 
-export const { useLazyGetRecepientsQuery, useLazyGetBalanceQuery, useLazyGetTransactionsQuery, usePostTransactionMutation } =
+export const { useLazyGetRecipientsQuery, useLazyGetBalanceQuery, useLazyGetTransactionsQuery, usePostTransactionMutation } =
   userApi;

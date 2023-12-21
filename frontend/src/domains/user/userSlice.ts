@@ -7,14 +7,14 @@ import { IUserBalanceResponse, IUserTransactionsResponse, IUsersResponse } from 
 
 interface IUserState {
   userEmail?: string;
-  recepients: IUser[];
+  recipients: IUser[];
   balance?: IUserBalance;
   transactionsTotalCount: number;
   transactions: IUserTransaction[];
 }
 
 const initialState: IUserState = {
-  recepients: [],
+  recipients: [],
   transactions: [],
   transactionsTotalCount: 0,
 };
@@ -26,15 +26,15 @@ export const userSlice = createSlice({
     setUserEmailState: (state, action: PayloadAction<string>) => {
       state.userEmail = action.payload;
     },
-    setRecepientsState: (state, action: PayloadAction<IUsersResponse>) => {
+    setRecipientsState: (state, action: PayloadAction<IUsersResponse>) => {
       if (state.userEmail) {
-        state.recepients = action.payload.users.filter(x => x.email !== state.userEmail);
+        state.recipients = action.payload.users.filter(x => x.email !== state.userEmail);
       } else {
-        state.recepients = action.payload.users;
+        state.recipients = action.payload.users;
       }
     },
-    setRecepientState: (state, action: PayloadAction<IUser>) => {
-      state.recepients = [action.payload];
+    setRecipientState: (state, action: PayloadAction<IUser>) => {
+      state.recipients = [action.payload];
     },
     setUserBalanceState: (state, action: PayloadAction<IUserBalanceResponse>) => {
       state.balance = action.payload.balance;

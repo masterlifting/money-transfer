@@ -8,7 +8,7 @@ import { IUser, IUserTransaction } from '../../interfaces';
 import { useAppActions } from '../../../shared/hooks/useAppActions';
 import { useAppSelector } from '../../../shared/hooks/useAppSelector';
 import { useValidateApiResult } from '../../../shared/hooks/useValidateApiResult';
-import { useLazyGetRecepientsQuery, useLazyGetTransactionsQuery, usePostTransactionMutation } from '../userApi';
+import { useLazyGetRecipientsQuery, useLazyGetTransactionsQuery, usePostTransactionMutation } from '../userApi';
 
 export const useGetUserTransactions = (user: IUser) => {
   const { transactions, transactionsTotalCount } = useAppSelector(x => x.userState);
@@ -63,14 +63,14 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
         },
   );
 
-  const { recepients } = useAppSelector(x => x.userState);
-  const { closeModal, setRecepientsState, setRecepientState, setTransactionsTotalCountState } = useAppActions();
+  const { recipients } = useAppSelector(x => x.userState);
+  const { closeModal, setRecipientsState, setRecipientState, setTransactionsTotalCountState } = useAppActions();
 
   const [validationResult, setValidationResult] = useState<ValidationResultType>({ isValid: true });
 
-  const [getRecepients, { isLoading: isApiRecepientsLoading, data: apiRecepientsResult, error: apiRecepientsError }] =
-    useLazyGetRecepientsQuery();
-  const recepientsValidationResult = useValidateApiResult(apiRecepientsResult, apiRecepientsError, setRecepientsState);
+  const [getRecipients, { isLoading: isApiRecipientsLoading, data: apiRecipientsResult, error: apiRecipientsError }] =
+    useLazyGetRecipientsQuery();
+  const recipientsValidationResult = useValidateApiResult(apiRecipientsResult, apiRecipientsError, setRecipientsState);
 
   const [
     commitTransaction,
@@ -88,8 +88,8 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
 
   // Validation
   useEffect(() => {
-    if (!recepientsValidationResult.isValid) {
-      return setValidationResult(recepientsValidationResult);
+    if (!recipientsValidationResult.isValid) {
+      return setValidationResult(recipientsValidationResult);
     }
 
     if (!newTransactionValidationResult.isValid) {
@@ -103,29 +103,30 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
     }
 
     return setValidationResult({ isValid: true });
-  }, [recepientsValidationResult, newTransactionValidationResult, newTransaction]);
+  }, [recipientsValidationResult, newTransactionValidationResult, newTransaction]);
 
   // Fetch recipients for the transaction
   useEffect(() => {
     if (!transaction) {
-      getRecepients({ token: user.token });
+      getRecipients({ token: user.token });
     } else {
-      setRecepientState(transaction.user);
+      setRecipientState(transaction.user);
     }
-  }, [getRecepients, setRecepientState, transaction, user.token]);
+  }, [getRecipients, setRecipientState, transaction, user.token]);
 
   const onChangeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     resetCommitTransactionState();
     return setNewTransaction({ ...newTransaction, amount: { ...newTransaction.amount, value: +event.target.value } });
   };
 
-  const searchRecepientEmails = (email: string) => {
-    return recepients.filter(x => x.email.toLowerCase().includes(email.toLowerCase())).map(x => x.email);
+  const searchRecipientEmails = (email: string) => {
+    //TODO: use the backend to search for recipients
+    return recipients.filter(x => x.email.toLowerCase().includes(email.toLowerCase())).map(x => x.email);
   };
 
   const onChangeRecipient = (email?: string) => {
     resetCommitTransactionState();
-    const user = recepients.find(x => x.email === email);
+    const user = recipients.find(x => x.email === email);
     return setNewTransaction({ ...newTransaction, user: user ? user : { id: '', email: '' } });
   };
 
@@ -142,12 +143,12 @@ export const useCreateUserTransaction = (user: IUser, transaction: IUserTransact
   return {
     closeModal: () => closeModal(),
 
-    isLoading: isApiRecepientsLoading || isApiNewTransactionLoading,
+    isLoading: isApiRecipientsLoading || isApiNewTransactionLoading,
     validationResult,
 
     newTransaction,
 
-    searchRecepientEmails,
+    searchRecipientEmails,
 
     onChangeAmount,
     onChangeRecipient,

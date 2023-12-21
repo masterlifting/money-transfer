@@ -33,6 +33,9 @@ export interface ISorting {
 }
 
 export interface IDataFilter {
+  include?: {
+    [key: string]: any;
+  };
   pageNumber?: number;
   pageItemsCount?: PaginationPageItemsCountType;
   sortingFieldName?: string;
