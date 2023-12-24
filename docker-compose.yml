@@ -4,7 +4,7 @@ version: '3'
 
 services:
   frontend:
-    image: internal_money/frontend
+    image: money-transfer/frontend
     container_name: frontend
     build:
       context: .
@@ -15,7 +15,7 @@ services:
       - backend
 
   backend:
-    image: internal_money/backend
+    image: money-transfer/backend
     container_name: backend
     build:
       context: .

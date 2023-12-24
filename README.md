@@ -1,104 +1,62 @@
 <!-- @format -->
 
-# This is a WEB application for the task 'LEARN-8126' of the 'SharpDevelopers' company
+# Frontend Developer Portfolio Web Application
 
-#### The application is written in React and TypeScript
+## Overview
 
-#### The link of the technical task for the application is https://docs.google.com/document/d/1NMfvzJq173mqQwrMq5-s5PqQ-c6kZE1ZqhTbruGsv80/edit
+This web application showcases my skills as a Frontend Developer. It is built using Node.js, React, and TypeScript with a focus on:
 
-#### I was focusing on the following points:
+- **Backend and Frontend Integration**: Using Node.js, Express for the backend, and React, Redux Toolkit for the frontend.
+- **Functional Programming**: Adherence to functional programming principles.
+- **Responsive Design**: Ensuring compatibility with various screen sizes.
+- **Rendering Optimization**: Aiming to minimize unnecessary rendering.
+- **Features**: Includes sorting, pagination, basic authorization/authentication, and input validation.
+- **Component Libraries**: Developed without reliance on external component libraries.
 
-- The application consists of a backend and a frontend.
-- The application is written using Node.js, TypeScript, React, and Redux Toolkit.
-- The application is written in a functional style.
-- The application features a responsive design.
-- The application should minimize rendering.
-- The application includes sorting and pagination features.
-- The application implements simple authorization and authentication.
-- The application incorporates simple validation.
-- The application does not use external component libraries.
+## Running the Application
 
-## Run the application
+### Using Docker
 
-### If you have the Docker installed on your machine, use the following commands:
+1. **Clone the repository**:
+   `git clone https://github.com/masterlifting/money-transfer`
+2. **Navigate to the repository**:
+   `cd money-transfer`
+3. **Start the application**:
+   `docker-compose -p money-transfer up -d --build`
+4. **Stop the application**:
+   `docker-compose -p money-transfer down -v`
 
-- Clone the repository
+### Without Docker
 
-  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react`
+1. **Check Node.js installation**: Run `node -v` and `npm -v`. Install from [Node.js](https://nodejs.org/en/download/) if necessary.
+2. **Clone the repository**:
+   `git clone https://github.com/masterlifting/money-transfer`
+3. **Backend Setup**:
 
-- Go to the root directory of the repository
+- **Navigate to the backend directory**: `cd backend`
+- **Install dependencies**: `npm install`
+- **Start the backend**: `npm start`
 
-  `cd sharpdevelopers`
+4. **Frontend Setup**:
 
-- Run the application from the root directory of the repository
+- **Navigate to the frontend directory**: `cd frontend`
+- **Install dependencies**: `npm install`
+- **Start the frontend**: `npm start`
 
-  `docker-compose -p internal_money up -d --build`
+_The backend will be accessible at http://localhost:5000, and the frontend at http://localhost:3000._
 
-- Stop the application
+## Using the Application
 
-  `docker-compose -p internal_money down -v`
+### Pages
 
-### If you do not want to use the Docker, use the following commands:
+- **Home** (`/`): Accessible post-authorization.
+- **Login** (`/login`)
+- **Register** (`/register`): New users receive a $500 Welcome bonus.
 
-- Ensure that you have the Node.js installed on your machine
+### Home Page Features
 
-  `node -v`
+- **Transaction List**: User transactions with sorting and pagination.
+- **Transaction Form**: Create or repeat transactions.
+- **User Details**: Username, balance, and login/logout or register options.
 
-  `npm -v`
-
-- If you do not have the Node.js installed, please install it from the https://nodejs.org/en/download/
-
-- Clone the repository
-
-  `git clone https://github.com/masterlifting/sharpdevelopers/ -b dev-react`
-
-#### Backend
-
-- Go to the 'backend' directory
-
-  `cd backend`
-
-- Install the dependencies
-
-  `npm install`
-
-- Run the application
-
-  `npm start`
-
-#### Frontend
-
-- Go to the 'frontend' directory
-
-  `cd frontend`
-
-- Install the dependencies
-
-  `npm install`
-
-- Run the application
-
-  `npm start`
-
-### The backend will be available on the http://localhost:5000
-
-### The frontend will be available on the http://localhost:3000
-
-## Use the application
-
-### The application has the following pages:
-
-- The 'Home' page by default using the '/' route
-- The 'Login' page using the '/login' route
-- The 'Register' page using the '/register' route
-
-### The 'Home' page has the following features:
-
-- The authorization is required to access the 'Home' page
-- For the registration, the user gets 500$ on the balance as a Welcome bonus
-- The 'Home' page has a list of the users' transactions
-- The 'Home' page has a sorting and pagination of the users' transactions
-- The 'Home' page has a form to create a new transaction or repeat the existing one
-- The username, balance, and login/logout icons or a register button on the top bar can be seen.
-
-#### To create a new transaction, please register two users and log in with the first user. Then, you can complete a new transaction or repeat the existing one.
+**Note**: For transaction functionality, register two users and log in with one.

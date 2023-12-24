@@ -1,6 +1,6 @@
 {
-  "short_name": "im",
-  "name": "Internal Money Sample",
+  "short_name": "mt",
+  "name": "money transfer",
   "icons": [
     {
       "src": "favicon.ico",
