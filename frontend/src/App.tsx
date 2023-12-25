@@ -1,11 +1,11 @@
 /** @format */
 
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { TopBar } from './layouts/bars/TopBarComponent';
 import { Home } from './pages/Home';
 import { UserLogin } from './pages/UserLogin';
-import { TopBar } from './shared/components/bars/TopBarComponent';
 import { UserRegister } from './pages/UserRegister';
-import React from 'react';
 
 export const App = () => (
   <>
