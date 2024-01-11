@@ -24,7 +24,7 @@ This application showcases my general skills as a Fullstack Developer. It is bui
 1. **Clone the repository**:
    `git clone https://github.com/masterlifting/money-transfer`
 2. **Navigate to the repository**:
-   `cd money-transfer`
+   `cd money-transfer/.docker-compose`
 3. **Start the application**:
    `docker-compose -p money-transfer up -d --build`
 4. **Stop the application**:
@@ -37,13 +37,13 @@ This application showcases my general skills as a Fullstack Developer. It is bui
    `git clone https://github.com/masterlifting/money-transfer`
 3. **Backend Setup**:
 
-- **Navigate to the backend directory**: `cd backend`
+- **Navigate to the backend directory**: `cd src/backend`
 - **Install dependencies**: `npm install`
 - **Start the backend**: `npm start`
 
 4. **Frontend Setup**:
 
-- **Navigate to the frontend directory**: `cd frontend`
+- **Navigate to the frontend directory**: `cd src/frontend`
 - **Install dependencies**: `npm install`
 - **Start the frontend**: `npm start`
 
